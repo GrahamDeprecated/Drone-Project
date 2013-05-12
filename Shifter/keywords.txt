@@ -1,0 +1,28 @@
+#######################################################
+#  keywords.txt - keywords file for the Shifter library
+
+#  Created by Adam Meyer of bildr
+
+#  Released as MIT license
+
+#######################################################
+
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Shifter	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+write	KEYWORD2
+setPin	KEYWORD2
+clear	KEYWORD2
+setAll	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
