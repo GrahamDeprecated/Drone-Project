@@ -15,3 +15,5 @@ drone_proj.cpp.o: In function `digi_batt::init(digi_pins*, short, short)':
 digi_write.ino:213: undefined reference to `Wire'
 digi_write.ino:213: undefined reference to `Wire'
 digi_write.ino:213: undefined reference to `TwoWire::begin()'
+
+A cut-down version to show these errors more clearly is included in the directory "Problemtest"
