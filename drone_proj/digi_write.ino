@@ -1,20 +1,11 @@
-/*
- Copyright (C) 2013  Peter Lotts
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 // See here for bit changing: http://stackoverflow.com/questions/47981/how-do-you-set-clear-and-toggle-a-single-bit-in-c
+#define USEWIRE 1 /*0 for on*/
 
-#include "Shifter\Shifter.h"
-#include "Shifter\Shifter.cpp"
-#include "QueueList\QueueList.h"
+#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Shifter\Shifter.h"
+#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Shifter\Shifter.cpp"
+#include "M:\School\Durham\Electronics Club\Drone\drone_proj\QueueList\QueueList.h"
+#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Timer\Timer.cpp"
+#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Timer\Event.cpp"
 
 uint8_t change_bit(uint8_t val, short bit_num, bool bitval)
 {
@@ -197,33 +188,45 @@ void digi_serial::read(String *container, short num_chars=0) // Null-terminated 
 	container+='\0';
 }
 
-
 #if (DRONE == 0)
 #else
+	// Crack to make "Wire" object work. It probably wasn't linking properly, but this seems to fix it
+	extern "C"
+	{
+		#include <..\..\..\..\..\libraries\Wire\utility\twi.h>
+		#include <..\..\..\..\..\libraries\Wire\utility\twi.c>
+	}
 	#include <..\..\..\..\..\libraries\Wire\Wire.h>
-				digi_batt::digi_batt(digi_pins *pins, short alert_pin, short alert_percent, void (*onalert)())
+	#include <..\..\..\..\..\libraries\Wire\Wire.cpp>
+				digi_batt::digi_batt(digi_pins *pins, short alert_pin, void (*onalert)())
 	{
 		_onalert=onalert;
-		init(pins, alert_pin, alert_percent);
+		init(pins, alert_pin);
 	}
-				digi_batt::digi_batt(digi_pins *pins, short alert_pin, short alert_percent)
+				digi_batt::digi_batt(digi_pins *pins, short alert_pin)
 	{
 		_onalert=NULL;
-		init(pins, alert_pin, alert_percent);
+		init(pins, alert_pin);
 	}
-	void		digi_batt::init(digi_pins *pins, short alert_pin, short alert_percent)
+	void		digi_batt::init(digi_pins *pins, short alert_pin)
 	{
 		_alert_pin=alert_pin;
 		_pins=pins;
-		_current_drone=SP_CHR_2;
-		_current_contr=SP_CHR_4;
+		_current_drone='?';
+		_current_contr='?';
 
 		_pins->setio(alert_pin,true);
 		_pins->set(alert_pin,true);
 		attachInterrupt(alert_pin,alert_inter,FALLING);
-
-		Wire.begin();  // Start I2C
-		delay(100);
+	}
+	void		digi_batt::setup(short alert_percent)
+	{
+		#if (USEWIRE == 0)
+		_pins->set(13,true); delay(1000); _pins->set(13,false);
+			Wire.begin();  // Start I2C
+			delay(100);
+			_pins->set(13,true); delay(1000); _pins->set(13,false);
+		#endif
 		configMAX17043(alert_percent);  // Configure the MAX17043's alert percentage
 		qsMAX17043();  // restart fuel-gauge calculations
 
@@ -235,7 +238,8 @@ void digi_serial::read(String *container, short num_chars=0) // Null-terminated 
 		_bound_ch3=ap + (100-ap)/4 * 3;	// 4 bar
 		_bound_ch4=ap + (100-ap)/4 * 4;	// 5 bar
 
-		//_timer.every(5000,update);
+		update();
+		_timer.every(5000,update);
 	}
 	void		digi_batt::alert_inter()
 	{
@@ -247,10 +251,10 @@ void digi_serial::read(String *container, short num_chars=0) // Null-terminated 
 			_onalert();
 		}
 	}
-	void		digi_batt::update(float per)
+	void		digi_batt::update()
 	{
-		_percentage_contr = per;/*percentMAX17043();*/
-		//_voltage_contr = (float) vcellMAX17043() * 1/800;  // vcell reports battery in 1.25mV increments
+		_percentage_contr = percentMAX17043();
+		_voltage_contr = (float) vcellMAX17043() * 1/800;  // vcell reports battery in 1.25mV increments
 
 		short pcnt=_percentage_contr;
 		if		((pcnt <= _bound_ch4) && (pcnt > _bound_ch3))	{ _current_contr=SP_CHR_4; }
@@ -278,10 +282,14 @@ void digi_serial::read(String *container, short num_chars=0) // Null-terminated 
 	*/
 	unsigned int digi_batt::vcellMAX17043()
 	{
-		unsigned int vcell;
-		vcell = i2cRead16(0x02);
-		vcell = vcell >> 4;  // last 4 bits of vcell are nothing
-		return vcell;
+		#if (USEWIRE == 0)
+			unsigned int vcell;
+			vcell = i2cRead16(0x02);
+			vcell = vcell >> 4;  // last 4 bits of vcell are nothing
+			return vcell;
+		#else
+			return 12960;
+		#endif
 	}
 	/*
 	percentMAX17043() returns a float value of the battery percentage
@@ -289,12 +297,17 @@ void digi_serial::read(String *container, short num_chars=0) // Null-terminated 
 	*/
 	float		digi_batt::percentMAX17043()
 	{
-		unsigned int soc;
-		float percent;
-		soc = i2cRead16(0x04);  // Read SOC register of MAX17043
-		percent = (byte) (soc >> 8);  // High byte of SOC is percentage
-		percent += ((float)((byte)soc))/256;  // Low byte is 1/256%
-		return percent;
+		#if (USEWIRE == 0)
+			unsigned int soc;
+			float percent;
+			soc = i2cRead16(0x04);  // Read SOC register of MAX17043
+			percent = (byte) (soc >> 8);  // High byte of SOC is percentage
+			percent += ((float)((byte)soc))/256;  // Low byte is 1/256%
+			return percent;
+		#else
+			int x=millis()/600;
+			if (x > 100) { return 100; } else { return x; }
+		#endif
 	}
 	/* 
 	configMAX17043(byte percent) configures the config register of
@@ -304,15 +317,17 @@ void digi_serial::read(String *container, short num_chars=0) // Null-terminated 
 	*/
 	void		digi_batt::configMAX17043(byte percent)
 	{
-		if ((percent >= 32)||(percent == 0))  // Anything 32 or greater will set to 32%
-		{
-			i2cWrite16(0x9700, 0x0C);
-		}
-		else
-		{
-			byte percentBits = 32 - percent;
-			i2cWrite16((0x9700 | percentBits), 0x0C);
-		}
+		#if (USEWIRE == 0)
+			if ((percent >= 32)||(percent == 0))  // Anything 32 or greater will set to 32%
+			{
+				i2cWrite16(0x9700, 0x0C);
+			}
+			else
+			{
+				byte percentBits = 32 - percent;
+				i2cWrite16((0x9700 | percentBits), 0x0C);
+			}
+		#endif
 	}
 	/* 
 	qsMAX17043() issues a quick-start command to the MAX17043.
@@ -324,7 +339,9 @@ void digi_serial::read(String *container, short num_chars=0) // Null-terminated 
 	*/
 	void		digi_batt::qsMAX17043()
 	{
-		i2cWrite16(0x4000, 0x06);  // Write a 0x4000 to the MODE register
+		#if (USEWIRE == 0)
+			i2cWrite16(0x4000, 0x06);  // Write a 0x4000 to the MODE register
+		#endif
 	}
 	/* 
 	i2cRead16(unsigned char address) reads a 16-bit value beginning
@@ -750,18 +767,25 @@ void digi_lcd::write8bits(uint8_t value)
 /************ extra functions written by me *************/
 digi_lcd *digi_lcd::write_row(String text,bool bottom_row,bool print_batt)
 {
-	setCursor(0,bottom_row);
-	if (print_batt)
-	{
-		print(pad_str(text,15));
-		setCursor(15,bottom_row);
-		print(_batt->current_char(bottom_row));
-	}
-	else
-	{
-		print(pad_str(text,16));
-	}
+	_rows[bottom_row]=text;
+	_print_batt[bottom_row]=print_batt;
+	update();
 	return this;
+}
+digi_lcd	*digi_lcd::update()
+{
+	for (short n=0; n < 2; n++)
+	{
+		setCursor(0,n);
+		if (_print_batt[n])
+		{
+			print(pad_str(_rows[n],15) + _batt->current_char(n));
+		}
+		else
+		{
+			print(pad_str(_rows[n],16));
+		}
+	}
 }
 String digi_lcd::pad_str(String start,int length)
 {

@@ -1,21 +1,3 @@
-/*
- drone_proj - main code for controlling an aerial drone
- Copyright (C) 2013  Peter Lotts
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- GNU General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #include <stdint.h>
 #include <..\..\..\..\..\libraries\Wire\Wire.h>
 #include "pindefs.h"
@@ -27,12 +9,15 @@ digi_rf rf(&pins, RF_IN_BIT_1, RF_IN_BIT_2, RF_IN_BIT_3, RF_IN_BIT_4, RF_IN_INTE
 digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 
 #if (DRONE == 1)
-	digi_batt batt(&pins,BATT_ALERT, MAX17043_ALERT_PERCENT);
+	digi_batt batt(&pins,BATT_ALERT);
 	digi_lcd lcd(&pins,&batt,LCD_REG_SELECT,LCD_ENABLE,LCD_D4,LCD_D5,LCD_D6,LCD_D7);
 	void rf_is_up();
 
 	void setup()
 	{
+		pins.setio(13,false)->set(13,true); delay(1000); pins.set(13,false);
+		batt.setup(MAX17043_ALERT_PERCENT);
+		pins.set(13,true); delay(1000); pins.set(13,false);
 		lcd.begin(16,2);
 		lcd.write_row("DS CCF Drone",false) -> write_row("Initializing...",true);
 		// Perform initial setup here
@@ -58,11 +43,10 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 
 	void loop()
 	{
-		batt.update(100); delay(1000);
-		batt.update(80); delay(1000);
-		batt.update(60); delay(1000);
-		batt.update(40); delay(1000);
-		batt.update(20); delay(1000);
+		for (;;)
+		{
+			batt.update(); lcd.update(); delay(1000);
+		}
 	}
 #else
 	void setup()

@@ -1,21 +1,9 @@
-/*
- Copyright (C) 2013  Peter Lotts
-
- This program is free software: you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation, either version 3 of the License, or
- (at your option) any later version.
-
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
 #define NUM_PINS 100
 #define ARD_PINS 13
 //#define SER_BUF_BITS 8*20
-#include "QueueList\QueueList.h"
-#include "Shifter\Shifter.h"
-#include "Timer\Timer.h"
+#include "M:\School\Durham\Electronics Club\Drone\drone_proj\QueueList\QueueList.h"
+#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Shifter\Shifter.h"
+#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Timer\Timer.h"
 
 class digi_pins
 {
@@ -60,11 +48,12 @@ class digi_batt
 {
 	public:
 		// CGRAM addresses 0-4 will be used
-		digi_batt(digi_pins *pins, short alert_pin, short alert_percent, void (*onalert)());
-		digi_batt(digi_pins *pins, short alert_pin, short alert_percent);
-		void init(digi_pins *pins, short alert_pin, short alert_percent);
+		digi_batt(digi_pins *pins, short alert_pin, void (*onalert)());
+		digi_batt(digi_pins *pins, short alert_pin);
+		void init(digi_pins *pins, short alert_pin);
 		char current_char(bool drone);
-		static void update(float per);
+		static void update();
+		void		setup(short alert_percent);
 	private:
 		static unsigned int vcellMAX17043();
 		static float		percentMAX17043();
@@ -87,7 +76,7 @@ class digi_batt
 		static short	_bound_ch2;
 		static short	_bound_ch3;
 		static short	_bound_ch4;
-		//Timer			_timer;
+		Timer			_timer;
 };
 #endif
 
@@ -128,8 +117,9 @@ class digi_lcd : public Print
 		virtual size_t write(uint8_t);
 		void command(uint8_t);
 
-		digi_lcd *write_row(String text,bool top_row,bool print_batt=true);
-		String pad_str(String start,int length);
+		digi_lcd	*write_row(String text,bool bottom_row,bool print_batt=true);
+		String		pad_str(String start,int length);
+		digi_lcd	*update();
   
 		using Print::write;
 	private:
@@ -149,10 +139,12 @@ class digi_lcd : public Print
 
 		uint8_t _initialized;
 
-		uint8_t _numlines,_currline;
+		uint8_t		_numlines,_currline;
 
-		digi_pins *_pins_class;
-		digi_batt *_batt;
+		digi_pins	*_pins_class;
+		digi_batt	*_batt;
+		String		_rows[2];
+		bool		_print_batt[2];
 };
 class digi_rf
 {
