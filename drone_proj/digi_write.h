@@ -1,3 +1,15 @@
+/*
+ Copyright (C) 2013  Peter Lotts
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #define NUM_PINS 100
 #define ARD_PINS 13
 //#define SER_BUF_BITS 8*20
