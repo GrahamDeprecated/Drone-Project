@@ -1,18 +1,18 @@
 // See here for bit changing: http://stackoverflow.com/questions/47981/how-do-you-set-clear-and-toggle-a-single-bit-in-c
 #define USEWIRE 1 /*0 for on*/
 
-#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Shifter\Shifter.h"
-#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Shifter\Shifter.cpp"
-#include "M:\School\Durham\Electronics Club\Drone\drone_proj\QueueList\QueueList.h"
-#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Timer\Timer.cpp"
-#include "M:\School\Durham\Electronics Club\Drone\drone_proj\Timer\Event.cpp"
+#include "..\Shifter\Shifter.h"
+#include "..\Shifter\Shifter.cpp"
+#include "..\QueueList\QueueList.h"
+#include "..\Timer\Timer.cpp"
+#include "..\Timer\Event.cpp"
 
-uint8_t change_bit(uint8_t val, short bit_num, bool bitval)
+uint8_t			change_bit(uint8_t val, short bit_num, bool bitval)
 {
     return (val & ~(1 << bit_num)) | (bitval << bit_num);
 }
 // b0=MSB
-uint8_t bits2int(bool b0, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7)
+uint8_t			bits2int(bool b0, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, bool b7)
 {
 	// Uses LSB first
 	uint8_t ret=0;
@@ -27,11 +27,11 @@ uint8_t bits2int(bool b0, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6, 
 	return ret;
 }
 
-digi_pins::digi_pins(Shifter *shift)
+				digi_pins::digi_pins(Shifter *shift)
 {
 	digi_pins(shift,"");
 }
-digi_pins::digi_pins(Shifter *shift, String do_not_change)
+				digi_pins::digi_pins(Shifter *shift, String do_not_change)
 {
 
 	for (int x=0; x < NUM_PINS; x++)
@@ -45,7 +45,7 @@ digi_pins::digi_pins(Shifter *shift, String do_not_change)
 	_shifts->clear();
 	_shifts->write();
 }
-digi_pins *digi_pins::set(short pin_id, bool ishigh /*false=low*/, bool write_out)
+digi_pins	*	digi_pins::set(short pin_id, bool ishigh /*false=low*/, bool write_out)
 {
 	if ((pin_id < NUM_PINS) && (_pinvals[pin_id] != ishigh))
 	{
@@ -58,7 +58,7 @@ digi_pins *digi_pins::set(short pin_id, bool ishigh /*false=low*/, bool write_ou
 	}
 	return this;
 }
-void digi_pins::write()
+void			digi_pins::write()
 {
 		for (int j=0; j < NUM_PINS; j++)
 		{
@@ -83,7 +83,7 @@ void digi_pins::write()
 		}
 //	#endif
 }
-bool digi_pins::read(short pin_id)
+bool			digi_pins::read(short pin_id)
 {
 	if (pin_id >= 60)
 	{
@@ -91,7 +91,7 @@ bool digi_pins::read(short pin_id)
 	}
 	return (digitalRead(pin_id) == 1);
 }
-digi_pins *digi_pins::setio(short pin_id, bool input)
+digi_pins	*	digi_pins::setio(short pin_id, bool input)
 {
 	if (pin_id < 60)
 	{
@@ -110,18 +110,18 @@ digi_pins *digi_pins::setio(short pin_id, bool input)
 }
 
 
-digi_serial::digi_serial(digi_pins* pins_class, short tx_pin, short rx_pin, short rx_inter, short tx_inter, bool activate_now)
+				digi_serial::digi_serial(digi_pins* pins_class, short tx_pin, short rx_pin, short rx_inter, short tx_inter, bool activate_now)
 {
 	_tx_inter=tx_inter;
 	setup(pins_class, tx_pin, rx_pin, rx_inter);
 	if (activate_now) { activate(); }
 }
-digi_serial::digi_serial(digi_pins* pins_class, short tx_pin, short rx_pin, short rx_inter, bool activate_now)
+				digi_serial::digi_serial(digi_pins* pins_class, short tx_pin, short rx_pin, short rx_inter, bool activate_now)
 {
 	setup(pins_class, tx_pin, rx_pin, rx_inter);
 	if (activate_now) { activate(); }
 }
-void digi_serial::setup(digi_pins* pins_class, short tx_pin, short rx_pin, short rx_inter)
+void			digi_serial::setup(digi_pins* pins_class, short tx_pin, short rx_pin, short rx_inter)
 {
 	_pins=pins_class;
 	_tx_pin=tx_pin;
@@ -129,11 +129,11 @@ void digi_serial::setup(digi_pins* pins_class, short tx_pin, short rx_pin, short
 	_rx_inter=rx_inter;
 	_write_busy=false;
 }
-void digi_serial::activate()
+void			digi_serial::activate()
 {
 	attachInterrupt(_rx_inter,this->inter,RISING);
 }
-void digi_serial::write(int data)
+void			digi_serial::write(int data)
 {
 	if (_write_busy == false)
 	{
@@ -159,27 +159,27 @@ void digi_serial::write(int data)
 		write(data);
 	}
 }
-void digi_serial::write(String data)
+void			digi_serial::write(String data)
 {
 	for (unsigned short y=0; y < data.length(); y++)
 	{
 		write(data[y]);
 	}
 }
-void digi_serial::inter()
+void			digi_serial::inter()
 {
 	/*_in_buf_pos++;
 	_in_buffer[_in_buf_pos]=_pins->read(_rx_pin);*/
 	_in_queue.push(_pins->read(_rx_pin));
 }
-void digi_serial::read(int *container, short num_bits)
+void			digi_serial::read(int *container, short num_bits)
 {
 	for (short n=0; n < num_bits; n++)
 	{
 		*container |= _in_queue.pop() << n; // Set nth bit of container to the value in the queue
 	}
 }
-void digi_serial::read(String *container, short num_chars=0) // Null-terminated string
+void			digi_serial::read(String *container, short num_chars=0) // Null-terminated string
 {
 	for (int ch; ch != '\0'; read(&ch, 8))
 	{
@@ -402,23 +402,23 @@ void digi_serial::read(String *container, short num_chars=0) // Null-terminated 
 // can't assume that its in that state when a sketch starts (and the
 // LiquidCrystal constructor is called).
 
-digi_lcd::digi_lcd(digi_pins *pins_class, digi_batt *batt, uint8_t rs, uint8_t rw, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
+				digi_lcd::digi_lcd(digi_pins *pins_class, digi_batt *batt, uint8_t rs, uint8_t rw, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
 {
 	init(pins_class, batt, 0, rs, rw, enable, d0, d1, d2, d3, d4, d5, d6, d7);
 }
-digi_lcd::digi_lcd(digi_pins *pins_class, digi_batt *batt, uint8_t rs, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
+				digi_lcd::digi_lcd(digi_pins *pins_class, digi_batt *batt, uint8_t rs, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
 {
 	init(pins_class, batt, 0, rs, 255, enable, d0, d1, d2, d3, d4, d5, d6, d7);
 }
-digi_lcd::digi_lcd(digi_pins *pins_class, digi_batt *batt, uint8_t rs, uint8_t rw, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
+				digi_lcd::digi_lcd(digi_pins *pins_class, digi_batt *batt, uint8_t rs, uint8_t rw, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
 {
 	init(pins_class, batt, 1, rs, rw, enable, d0, d1, d2, d3, 0, 0, 0, 0);
 }
-digi_lcd::digi_lcd(digi_pins *pins_class, digi_batt *batt, uint8_t rs,  uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
+				digi_lcd::digi_lcd(digi_pins *pins_class, digi_batt *batt, uint8_t rs,  uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3)
 {
 	init(pins_class, batt, 1, rs, 255, enable, d0, d1, d2, d3, 0, 0, 0, 0);
 }
-void digi_lcd::init(digi_pins *pins_class, digi_batt *batt, uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
+void			digi_lcd::init(digi_pins *pins_class, digi_batt *batt, uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t enable, uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3, uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
 {
 	_pins_class=pins_class;
 	_batt=batt;
@@ -507,7 +507,7 @@ void digi_lcd::init(digi_pins *pins_class, digi_batt *batt, uint8_t fourbitmode,
 	nchar[7]=bits2int(0,0,0, 1,1,1,1,1);
 	createChar(SP_CHR_4 - 8,nchar);
 }
-void digi_lcd::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
+void			digi_lcd::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
 {
 	if (lines > 1)
 	{
@@ -593,17 +593,17 @@ void digi_lcd::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
 }
 
 /********** high level commands, for the user! */
-void digi_lcd::clear()
+void			digi_lcd::clear()
 {
 	command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
 	delayMicroseconds(2000);  // this command takes a long time!
 }
-void digi_lcd::home()
+void			digi_lcd::home()
 {
 	command(LCD_RETURNHOME);  // set cursor position to zero
 	delayMicroseconds(2000);  // this command takes a long time!
 }
-void digi_lcd::setCursor(uint8_t col, uint8_t row)
+void			digi_lcd::setCursor(uint8_t col, uint8_t row)
 {
 	int row_offsets[] = { 0x00, 0x40, 0x14, 0x54 };
 	if ( row >= _numlines )
@@ -614,74 +614,74 @@ void digi_lcd::setCursor(uint8_t col, uint8_t row)
 	command(LCD_SETDDRAMADDR | (col + row_offsets[row]));
 }
 // Turn the display on/off (quickly)
-void digi_lcd::noDisplay()
+void			digi_lcd::noDisplay()
 {
 	_displaycontrol &= ~LCD_DISPLAYON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
-void digi_lcd::display()
+void			digi_lcd::display()
 {
 	_displaycontrol |= LCD_DISPLAYON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
 // Turns the underline cursor on/off
-void digi_lcd::noCursor()
+void			digi_lcd::noCursor()
 {
 	_displaycontrol &= ~LCD_CURSORON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
-void digi_lcd::cursor()
+void			digi_lcd::cursor()
 {
 	_displaycontrol |= LCD_CURSORON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
 // Turn on and off the blinking cursor
-void digi_lcd::noBlink()
+void			digi_lcd::noBlink()
 {
 	_displaycontrol &= ~LCD_BLINKON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
-void digi_lcd::blink()
+void			digi_lcd::blink()
 {
 	_displaycontrol |= LCD_BLINKON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
 }
 // These commands scroll the display without changing the RAM
-void digi_lcd::scrollDisplayLeft(void)
+void			digi_lcd::scrollDisplayLeft(void)
 {
 	command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT);
 }
-void digi_lcd::scrollDisplayRight(void)
+void			digi_lcd::scrollDisplayRight(void)
 {
 	command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT);
 }
 // This is for text that flows Left to Right
-void digi_lcd::leftToRight(void)
+void			digi_lcd::leftToRight(void)
 {
 	_displaymode |= LCD_ENTRYLEFT;
 	command(LCD_ENTRYMODESET | _displaymode);
 }
 // This is for text that flows Right to Left
-void digi_lcd::rightToLeft(void)
+void			digi_lcd::rightToLeft(void)
 {
 	_displaymode &= ~LCD_ENTRYLEFT;
 	command(LCD_ENTRYMODESET | _displaymode);
 }
 // This will 'right justify' text from the cursor
-void digi_lcd::autoscroll(void)
+void			digi_lcd::autoscroll(void)
 {
 	_displaymode |= LCD_ENTRYSHIFTINCREMENT;
 	command(LCD_ENTRYMODESET | _displaymode);
 }
 // This will 'left justify' text from the cursor
-void digi_lcd::noAutoscroll(void)
+void			digi_lcd::noAutoscroll(void)
 {
 	_displaymode &= ~LCD_ENTRYSHIFTINCREMENT;
 	command(LCD_ENTRYMODESET | _displaymode);
 }
 // Allows us to fill the first 8 CGRAM locations
 // with custom characters
-void digi_lcd::createChar(uint8_t location, uint8_t charmap[])
+void			digi_lcd::createChar(uint8_t location, uint8_t charmap[])
 {
 	location &= 0x7; // we only have 8 locations 0-7
 	command(LCD_SETCGRAMADDR | (location << 3));
@@ -692,11 +692,11 @@ void digi_lcd::createChar(uint8_t location, uint8_t charmap[])
 }
 
 /*********** mid level commands, for sending data/cmds */
-inline void digi_lcd::command(uint8_t value)
+inline void		digi_lcd::command(uint8_t value)
 {
 	send(value, LOW);
 }
-inline size_t digi_lcd::write(uint8_t value)
+inline size_t	digi_lcd::write(uint8_t value)
 {
 	send(value, HIGH);
 	return 1; // assume sucess
@@ -705,7 +705,7 @@ inline size_t digi_lcd::write(uint8_t value)
 /************ low level data pushing commands **********/
 
 // write either command or data, with automatic 4/8-bit selection
-void digi_lcd::send(uint8_t value, uint8_t mode)
+void			digi_lcd::send(uint8_t value, uint8_t mode)
 {
 		//---digitalWrite(_rs_pin, mode);
 	_pins_class->set(_rs_pin,(mode == HIGH),false);
@@ -727,7 +727,7 @@ void digi_lcd::send(uint8_t value, uint8_t mode)
 		write4bits(value);
 	}
 }
-void digi_lcd::pulseEnable(void)
+void			digi_lcd::pulseEnable(void)
 {
 		//---digitalWrite(_enable_pin, LOW);
 	_pins_class->set(_enable_pin,false);
@@ -739,7 +739,7 @@ void digi_lcd::pulseEnable(void)
 	_pins_class->set(_enable_pin,false);
 	delayMicroseconds(100);   // commands need > 37us to settle
 }
-void digi_lcd::write4bits(uint8_t value)
+void			digi_lcd::write4bits(uint8_t value)
 {
 	for (int i = 0; i < 4; i++)
 	{
@@ -751,7 +751,7 @@ void digi_lcd::write4bits(uint8_t value)
 
 	pulseEnable();
 }
-void digi_lcd::write8bits(uint8_t value)
+void			digi_lcd::write8bits(uint8_t value)
 {
 	for (int i = 0; i < 8; i++)
 	{
@@ -765,14 +765,14 @@ void digi_lcd::write8bits(uint8_t value)
 }
 
 /************ extra functions written by me *************/
-digi_lcd *digi_lcd::write_row(String text,bool bottom_row,bool print_batt)
+digi_lcd	*	digi_lcd::write_row(String text,bool bottom_row,bool print_batt)
 {
 	_rows[bottom_row]=text;
 	_print_batt[bottom_row]=print_batt;
 	update();
 	return this;
 }
-digi_lcd	*digi_lcd::update()
+digi_lcd	*	digi_lcd::update()
 {
 	for (short n=0; n < 2; n++)
 	{
@@ -787,7 +787,7 @@ digi_lcd	*digi_lcd::update()
 		}
 	}
 }
-String digi_lcd::pad_str(String start,int length)
+String			digi_lcd::pad_str(String start,int length)
 {
 	int str_len=start.length();
 	if (str_len > length)
@@ -810,7 +810,7 @@ String digi_lcd::pad_str(String start,int length)
 
 
 
-digi_rf::digi_rf(digi_pins *pins, int in_d0, int in_d1, int in_d2, int in_d3, int in_inter, int out_d0, int out_d1, int out_d2, int out_d3)
+				digi_rf::digi_rf(digi_pins *pins, int in_d0, int in_d1, int in_d2, int in_d3, int in_inter, int out_d0, int out_d1, int out_d2, int out_d3)
 {
 	_pins=pins;
 }
@@ -824,13 +824,13 @@ digi_rf::digi_rf(digi_pins *pins, int in_d0, int in_d1, int in_d2, int in_d3, in
 
 	}
 #else
-	void digi_rf::activate(void (*onready)(), digi_lcd *screen)
+	void		digi_rf::activate(void (*onready)(), digi_lcd *screen)
 	{
 		_onload=onready;
 		_screen=screen;
 		attachInterrupt(_inter_in,negotiate,RISING);
 	}
-	void digi_rf::negotiate()
+	void		digi_rf::negotiate()
 	{
 		switch (_neg_status) // also represents # of transmission
 		{
@@ -859,7 +859,7 @@ digi_rf::digi_rf(digi_pins *pins, int in_d0, int in_d1, int in_d2, int in_d3, in
 		}
 	}
 #endif
-void digi_rf::read4(bool *out, int *offset)
+void			digi_rf::read4(bool *out, int *offset)
 {
 	for (int x=0; x < 4; x++)
 	{
@@ -867,7 +867,7 @@ void digi_rf::read4(bool *out, int *offset)
 		(*offset)++;
 	}
 }
-void digi_rf::write4(bool *in, int *offset)
+void			digi_rf::write4(bool *in, int *offset)
 {
 	for (int x=0; x < 4; x++)
 	{
@@ -876,7 +876,7 @@ void digi_rf::write4(bool *in, int *offset)
 	}
 	_pins->write();
 }
-void digi_rf::write4(bool *in)
+void			digi_rf::write4(bool *in)
 {
 	for (int x=0; x < 4; x++)
 	{
