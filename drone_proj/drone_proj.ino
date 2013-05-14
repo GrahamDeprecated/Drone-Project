@@ -1,5 +1,5 @@
-#include <stdint.h>
-#include <..\..\..\..\..\libraries\Wire\Wire.h>
+//#include <stdint.h>
+//#include <..\..\..\..\..\libraries\Wire\Wire.h>
 #include "pindefs.h"
 #include "digi_write.h"
 
