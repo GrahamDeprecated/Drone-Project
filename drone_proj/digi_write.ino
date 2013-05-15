@@ -1,3 +1,15 @@
+/*
+ Copyright (C) 2013  Peter Lotts
+
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 // See here for bit changing: http://stackoverflow.com/questions/47981/how-do-you-set-clear-and-toggle-a-single-bit-in-c
 #define USEWIRE 1 /*0 for on*/
 
@@ -7,7 +19,7 @@
 #include "C:\Users\Peter\Documents\GitHub\Drone\Timer\Timer.cpp"
 #include "C:\Users\Peter\Documents\GitHub\Drone\Timer\Event.cpp"
 
-uint8_t			change_bit(uint8_t val, short bit_num, bool bitval)
+int				change_bit(int val, short bit_num, bool bitval)
 {
     return (val & ~(1 << bit_num)) | (bitval << bit_num);
 }
@@ -25,6 +37,24 @@ uint8_t			bits2int(bool b0, bool b1, bool b2, bool b3, bool b4, bool b5, bool b6
 	ret=change_bit(ret,1,b6);
 	ret=change_bit(ret,0,b7);
 	return ret;
+}
+// start with MSB
+unsigned int	bits2int(bool *bitarr, int num_to_pass, int offset)
+{
+	int ret=0;
+	int total=num_to_pass;
+	for (; num_to_pass > 0; num_to_pass--)
+	{
+		ret=change_bit(ret, num_to_pass-1, bitarr[(offset + (total - num_to_pass)) ]);
+	}
+	return ret;
+}
+void			int2bits(unsigned int start, int num_to_pass, bool *out, int offset)
+{
+	for (int x=num_to_pass; x > 0; x--)
+	{
+		out[offset + x -1]= (start & ( 1 << (num_to_pass-x) )) >> (num_to_pass-x);
+	}
 }
 
 				digi_pins::digi_pins(Shifter *shift)
@@ -62,7 +92,7 @@ void			digi_pins::write()
 {
 		for (int j=0; j < NUM_PINS; j++)
 		{
-			if (j <= ARD_PINS)
+			if (j <= NUM_DIGITAL_PINS)
 			{
 				if (_no_changes.indexOf(String(j)) == -1)
 				{
@@ -90,6 +120,28 @@ bool			digi_pins::read(short pin_id)
 		return false;
 	}
 	return (digitalRead(pin_id) == 1);
+}
+bool			digi_pins::interrupt(short pin, void (*func)(), short type)
+{
+	short inter=pin-2;
+	if (func == NULL)
+	{
+		detachInterrupt(inter);
+		return true;
+	}
+	else
+	{
+		if (((String)ARD_INTERRUPTS).indexOf((String)inter) == -1)
+		{
+			return false;
+		}
+		else
+		{
+			attachInterrupt(inter, func, type);
+			return true;
+		}
+	}
+		
 }
 digi_pins	*	digi_pins::setio(short pin_id, bool input)
 {
@@ -131,7 +183,7 @@ void			digi_serial::setup(digi_pins* pins_class, short tx_pin, short rx_pin, sho
 }
 void			digi_serial::activate()
 {
-	attachInterrupt(_rx_inter,this->inter,RISING);
+	_pins->interrupt(_rx_inter,this->inter,RISING);
 }
 void			digi_serial::write(int data)
 {
@@ -217,7 +269,8 @@ void			digi_serial::read(String *container, short num_chars=0) // Null-terminate
 
 		_pins->setio(alert_pin,true);
 		_pins->set(alert_pin,true);
-		attachInterrupt(alert_pin,alert_inter,FALLING);
+		//attachInterrupt(alert_pin,alert_inter,FALLING);
+		_pins->interrupt(alert_pin,alert_inter,FALLING);
 	}
 	void		digi_batt::setup(short alert_percent)
 	{
@@ -425,6 +478,7 @@ void			digi_lcd::init(digi_pins *pins_class, digi_batt *batt, uint8_t fourbitmod
 	_rs_pin = rs;
 	_rw_pin = rw;
 	_enable_pin = enable;
+	_data_set=true; // allows switch_data() to work
   
 	_data_pins[0] = d0;
 	_data_pins[1] = d1;
@@ -507,7 +561,7 @@ void			digi_lcd::init(digi_pins *pins_class, digi_batt *batt, uint8_t fourbitmod
 	nchar[7]=bits2int(0,0,0, 1,1,1,1,1);
 	createChar(SP_CHR_4 - 8,nchar);
 }
-void			digi_lcd::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
+digi_lcd	*	digi_lcd::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
 {
 	if (lines > 1)
 	{
@@ -590,20 +644,24 @@ void			digi_lcd::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
 	_displaymode = LCD_ENTRYLEFT | LCD_ENTRYSHIFTDECREMENT;
 	// set the entry mode
 	command(LCD_ENTRYMODESET | _displaymode);
+
+	return this;
 }
 
 /********** high level commands, for the user! */
-void			digi_lcd::clear()
+digi_lcd	*	digi_lcd::clear()
 {
 	command(LCD_CLEARDISPLAY);  // clear display, set cursor position to zero
 	delayMicroseconds(2000);  // this command takes a long time!
+	return this;
 }
-void			digi_lcd::home()
+digi_lcd	*	digi_lcd::home()
 {
 	command(LCD_RETURNHOME);  // set cursor position to zero
 	delayMicroseconds(2000);  // this command takes a long time!
+	return this;
 }
-void			digi_lcd::setCursor(uint8_t col, uint8_t row)
+digi_lcd	*	digi_lcd::setCursor(uint8_t col, uint8_t row)
 {
 	int row_offsets[] = { 0x00, 0x40, 0x14, 0x54 };
 	if ( row >= _numlines )
@@ -612,76 +670,89 @@ void			digi_lcd::setCursor(uint8_t col, uint8_t row)
 	}
   
 	command(LCD_SETDDRAMADDR | (col + row_offsets[row]));
+	return this;
 }
 // Turn the display on/off (quickly)
-void			digi_lcd::noDisplay()
+digi_lcd	*	digi_lcd::noDisplay()
 {
 	_displaycontrol &= ~LCD_DISPLAYON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
+	return this;
 }
-void			digi_lcd::display()
+digi_lcd	*	digi_lcd::display()
 {
 	_displaycontrol |= LCD_DISPLAYON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
+	return this;
 }
 // Turns the underline cursor on/off
-void			digi_lcd::noCursor()
+digi_lcd	*	digi_lcd::noCursor()
 {
 	_displaycontrol &= ~LCD_CURSORON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
+	return this;
 }
-void			digi_lcd::cursor()
+digi_lcd	*	digi_lcd::cursor()
 {
 	_displaycontrol |= LCD_CURSORON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
+	return this;
 }
 // Turn on and off the blinking cursor
-void			digi_lcd::noBlink()
+digi_lcd	*	digi_lcd::noBlink()
 {
 	_displaycontrol &= ~LCD_BLINKON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
+	return this;
 }
-void			digi_lcd::blink()
+digi_lcd	*	digi_lcd::blink()
 {
 	_displaycontrol |= LCD_BLINKON;
 	command(LCD_DISPLAYCONTROL | _displaycontrol);
+	return this;
 }
 // These commands scroll the display without changing the RAM
-void			digi_lcd::scrollDisplayLeft(void)
+digi_lcd	*	digi_lcd::scrollDisplayLeft(void)
 {
 	command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVELEFT);
+	return this;
 }
-void			digi_lcd::scrollDisplayRight(void)
+digi_lcd	*	digi_lcd::scrollDisplayRight(void)
 {
 	command(LCD_CURSORSHIFT | LCD_DISPLAYMOVE | LCD_MOVERIGHT);
+	return this;
 }
 // This is for text that flows Left to Right
-void			digi_lcd::leftToRight(void)
+digi_lcd	*	digi_lcd::leftToRight(void)
 {
 	_displaymode |= LCD_ENTRYLEFT;
 	command(LCD_ENTRYMODESET | _displaymode);
+	return this;
 }
 // This is for text that flows Right to Left
-void			digi_lcd::rightToLeft(void)
+digi_lcd	*	digi_lcd::rightToLeft(void)
 {
 	_displaymode &= ~LCD_ENTRYLEFT;
 	command(LCD_ENTRYMODESET | _displaymode);
+	return this;
 }
 // This will 'right justify' text from the cursor
-void			digi_lcd::autoscroll(void)
+digi_lcd	*	digi_lcd::autoscroll(void)
 {
 	_displaymode |= LCD_ENTRYSHIFTINCREMENT;
 	command(LCD_ENTRYMODESET | _displaymode);
+	return this;
 }
 // This will 'left justify' text from the cursor
-void			digi_lcd::noAutoscroll(void)
+digi_lcd	*	digi_lcd::noAutoscroll(void)
 {
 	_displaymode &= ~LCD_ENTRYSHIFTINCREMENT;
 	command(LCD_ENTRYMODESET | _displaymode);
+	return this;
 }
 // Allows us to fill the first 8 CGRAM locations
 // with custom characters
-void			digi_lcd::createChar(uint8_t location, uint8_t charmap[])
+digi_lcd	*	digi_lcd::createChar(uint8_t location, uint8_t charmap[])
 {
 	location &= 0x7; // we only have 8 locations 0-7
 	command(LCD_SETCGRAMADDR | (location << 3));
@@ -689,6 +760,7 @@ void			digi_lcd::createChar(uint8_t location, uint8_t charmap[])
 	{
 		write(charmap[i]);
 	}
+	return this;
 }
 
 /*********** mid level commands, for sending data/cmds */
@@ -767,7 +839,7 @@ void			digi_lcd::write8bits(uint8_t value)
 /************ extra functions written by me *************/
 digi_lcd	*	digi_lcd::write_row(String text,bool bottom_row,bool print_batt)
 {
-	_rows[bottom_row]=text;
+	_rows[_data_set][bottom_row]=text;
 	_print_batt[bottom_row]=print_batt;
 	update();
 	return this;
@@ -779,13 +851,20 @@ digi_lcd	*	digi_lcd::update()
 		setCursor(0,n);
 		if (_print_batt[n])
 		{
-			print(pad_str(_rows[n],15) + _batt->current_char(n));
+			print(pad_str(_rows[_data_set][n],15) + _batt->current_char(n));
 		}
 		else
 		{
-			print(pad_str(_rows[n],16));
+			print(pad_str(_rows[_data_set][n],16));
 		}
 	}
+	return this;
+}
+digi_lcd	*	digi_lcd::switch_data()
+{
+	_data_set=!_data_set;
+	update();
+	return this;
 }
 String			digi_lcd::pad_str(String start,int length)
 {
@@ -807,7 +886,31 @@ String			digi_lcd::pad_str(String start,int length)
 		return start;
 	}
 }
+digi_lcd	*	digi_lcd::addbuzzer(short pin)
+{
+	_buzzer=pin;
+	_pins_class->setio(_buzzer,false);
+	return this;
+}
+digi_lcd	*	digi_lcd::buzz(int ms_on, int ms_off, int num_repeats)
+{
+	for (int n=0; n < num_repeats; n++)
+	{
+		_pins_class->set(_buzzer, true);
+		delay(ms_on);
+		_pins_class->set(_buzzer, false);
+		delay(ms_off);
+	}
+	return this;
+}
+digi_lcd	*	digi_lcd::buzz(int tune_id)
+{
+	switch (tune_id)
+	{
 
+	}
+	return this;
+}
 
 
 				digi_rf::digi_rf(digi_pins *pins, int in_d0, int in_d1, int in_d2, int in_d3, int in_inter, int out_d0, int out_d1, int out_d2, int out_d3)
@@ -824,11 +927,12 @@ String			digi_lcd::pad_str(String start,int length)
 
 	}
 #else
-	void		digi_rf::activate(void (*onready)(), digi_lcd *screen)
+	void		digi_rf::activate(void (*onready)(), digi_lcd *screen, bool gps_needed)
 	{
 		_onload=onready;
 		_screen=screen;
-		attachInterrupt(_inter_in,negotiate,RISING);
+		_gps_needed=gps_needed;
+		_pins->interrupt(_inter_in,negotiate,RISING);
 	}
 	void		digi_rf::negotiate()
 	{
@@ -842,10 +946,10 @@ String			digi_lcd::pad_str(String start,int length)
 					{
 						bool resp[4]={ true, false, false, true };
 						write4(resp);
-						_pins->write();
 						_neg_status=2;
 						_neg_status_2=0;
 					}
+					break;
 				}
 			case 2:
 				{
@@ -853,8 +957,47 @@ String			digi_lcd::pad_str(String start,int length)
 					read4(_neg_tmp_data,&_neg_status_2);
 					if ((_neg_tmp_data[0] == true) && (_neg_tmp_data[1] == false) && (_neg_tmp_data[2] == true) && (_neg_tmp_data[3] == true))
 					{
-						_screen->write_row("Enable GPS?",false) ->write_row(" Yes        No ",true);
+						write4( (_gps_needed ? rf_yes : rf_no) );
 					}
+					_neg_status=3;
+					_neg_status_2=0;
+					break;
+				}
+			case 3:
+			case 4:
+				{
+					// XOR system to check data is ok
+					read4(_neg_tmp_data,&_neg_status_2);
+					if (_neg_status_2 == 16) //transmission complete
+					{
+						bool out[16];
+						int2bits(0b1110010011010110 ^ bits2int(_neg_tmp_data,16), 16, out);  //binary only works in gcc, but we're using it
+						for (int off=0; off < 16;)
+						{
+							write4(out,&off);
+						}
+						_neg_status++;
+						_neg_status_2=0;
+					}
+					break;
+				}
+			case 5:
+				{
+					// Decision from drone about matching data
+					read4(_neg_tmp_data,&_neg_status_2);
+					if ((_neg_tmp_data[0] == rf_yes[0]) && (_neg_tmp_data[1] == rf_yes[1]) && (_neg_tmp_data[2] == rf_yes[2]) && (_neg_tmp_data[3] == rf_yes[3]))
+					{
+						// Communication is up and running
+						_onload();
+					}
+					else
+					{
+						// It didn't work. Throw error
+						_screen->write_row("Coms error!",false) ->write_row("Restart Drone",true);
+						_neg_status=1; // Reset process for re-start of drone
+						_neg_status_2=0;
+					}
+					break;
 				}
 		}
 	}

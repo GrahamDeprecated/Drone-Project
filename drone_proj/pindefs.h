@@ -13,8 +13,10 @@
 #define DRONE 1 /*0 for drone code, 1 for controller code*/
 
 
-#define rf_yes	0xF /*1111*/
-#define rf_no	0x9 /*1001*/
+//#define rf_yes	0xF /*1111*/
+bool rf_yes[]={ true ,true ,true ,true };
+//#define rf_no	0x9 /*1001*/
+bool rf_no[]= { true ,false,false,true };
 
 #if (DRONE == 0)
 
@@ -55,6 +57,7 @@
 	#define RAND_SEED_PIN 15 /*analog*/
 
 #else
+	#define ARD_INTERRUPTS "2,3," //end in ","
 
 	#define SHIFT_SERIAL 10
 	#define SHIFT_CLOCK  11
@@ -82,4 +85,11 @@
 	#define MAX17043_ADDRESS 0x36  // R/W =~ 0x6D/0x6C
 	#define MAX17043_ALERT_PERCENT 20 // max=32
 	#define BATT_ALERT 2
+
+	// Analog
+	#define JOYSTICK_1_H 0
+	// Digital
+	#define JOYSTICK_1_CLICK 12
+
+	#define BUZZER 3
 #endif
