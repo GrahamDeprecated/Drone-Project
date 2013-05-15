@@ -32,7 +32,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\Peter\Documents\GitHub\Drone\drone_proj\digi_write.ino" />
     <None Include="C:\Users\Peter\Documents\GitHub\Drone\drone_proj\drone_proj.ino" />
+    <None Include="drone_proj\digi_write.ino" />
   </ItemGroup>
 </Project>

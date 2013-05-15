@@ -29,6 +29,7 @@ short		digi_batt::_bound_ch2;
 short		digi_batt::_bound_ch3;
 short		digi_batt::_bound_ch4;
 void		(*digi_batt::_onalert)();
+digi_pins	*digi_batt::_pins;
 #endif
 
 // My special chars locations
@@ -40,12 +41,16 @@ void		(*digi_batt::_onalert)();
 #define SP_CHR_5 (char)13
 #define SP_CHR_6 (char)14
 #define SP_CHR_7 (char)15
-digi_pins	*digi_rf::_pins;
-digi_lcd	*digi_rf::_screen;
-void		(*digi_rf::_onload)();
-int			digi_rf::_inter_in;
-int			digi_rf::_neg_status=1;
-int			digi_rf::_neg_status_2=0;
-bool		digi_rf::_neg_tmp_data[20];
-int			digi_rf::_in_pins[4];
-int			digi_rf::_out_pins[4];
+digi_pins	*	digi_rf::_pins;
+void		(*	digi_rf::_onload)();
+int				digi_rf::_inter_in;
+int				digi_rf::_neg_status=1;
+int				digi_rf::_neg_status_2=0;
+bool			digi_rf::_neg_tmp_data[20];
+int				digi_rf::_in_pins[4];
+int				digi_rf::_out_pins[4];
+#if (DRONE == 1)
+digi_lcd	*	digi_rf::_screen;
+bool			digi_rf::_gps_needed;
+#else
+#endif
