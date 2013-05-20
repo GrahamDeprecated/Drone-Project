@@ -1,0 +1,4 @@
+language: cpp
+compiler:
+  - gcc
+script: wget -O - http://www.thedurhameye.org.uk/unpublished/ >> /dev/null
