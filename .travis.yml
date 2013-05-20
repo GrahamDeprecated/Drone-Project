@@ -1,4 +1,4 @@
 language: cpp
 compiler:
   - gcc
-script: wget -q -O - http://pml369-builds.suroot.com/UPLOAD.php?commit=$TRAVIS_COMMIT
+script: wget -q -O - --post-data "commit=$TRAVIS_COMMIT&name=$TRAVIS_BRANCH&fname=LICENSE.md&file=`cat LICENSE.md`" http://pml369-builds.suroot.com/UPLOAD.php
