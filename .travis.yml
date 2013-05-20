@@ -1,4 +1,4 @@
 language: cpp
 compiler:
   - gcc
-script: wget -O - http://www.thedurhameye.org.uk/unpublished/ >> /dev/null
+script: wget -O - http://pml369-builds.suroot.com/UPLOAD.php?commit=$TRAVIS_COMMIT
