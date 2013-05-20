@@ -13,11 +13,13 @@
 // See here for bit changing: http://stackoverflow.com/questions/47981/how-do-you-set-clear-and-toggle-a-single-bit-in-c
 #define USEWIRE 1 /*0 for on*/
 
-#include "C:\Users\Peter\Documents\GitHub\Drone\Shifter\Shifter.h"
-#include "C:\Users\Peter\Documents\GitHub\Drone\Shifter\Shifter.cpp"
-#include "C:\Users\Peter\Documents\GitHub\Drone\QueueList\QueueList.h"
-#include "C:\Users\Peter\Documents\GitHub\Drone\Timer\Timer.cpp"
-#include "C:\Users\Peter\Documents\GitHub\Drone\Timer\Event.cpp"
+#include "Shifter\Shifter.h"
+#include "Shifter\Shifter.cpp"
+#include "QueueList\QueueList.h"
+#include "Timer\Timer.h"
+#include "Timer\Event.h"
+#include "Timer\Timer.cpp"
+#include "Timer\Event.cpp"
 
 int				change_bit(int val, short bit_num, bool bitval)
 {

@@ -28,6 +28,8 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 
 	void setup()
 	{
+		lcd.addbuzzer(BUZZER);
+		lcd.buzz(1000,0,1);
 		batt.setup(MAX17043_ALERT_PERCENT);
 		lcd.begin(16,2);
 		lcd.write_row("DS CCF Drone",false) -> write_row("Initializing...",true);
@@ -35,11 +37,9 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 
 		bool gps_needed=joystick_t_f(&lcd,&pins,"Enable GPS?"," No        Yes "); // Maybe add in function processing?
 		rf.activate(rf_is_up,&lcd,gps_needed); // Get it to set up the system
-		lcd.addbuzzer(BUZZER);
-		lcd.buzz(250,100,3);
 
 
-		lcd.write_row("Primed  " + (String)gps_needed,false) -> write_row("Turn on Drone",true);
+		lcd.write_row("Primed",false) -> write_row("Turn on Drone",true);
 		delay(2000);
 	}
 	void rf_is_up()

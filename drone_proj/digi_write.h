@@ -11,9 +11,9 @@
 */
 
 #define NUM_PINS 100
-#include "C:\Users\Peter\Documents\GitHub\Drone\QueueList\QueueList.h"
-#include "C:\Users\Peter\Documents\GitHub\Drone\Shifter\Shifter.h"
-#include "C:\Users\Peter\Documents\GitHub\Drone\Timer\Timer.h"
+#include "QueueList\QueueList.h"
+#include "Shifter\Shifter.h"
+#include "Timer\Timer.h"
 
 class digi_pins
 {
