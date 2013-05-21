@@ -16,5 +16,5 @@ function up_fin()
 
 up_file drone_proj.vcxproj
 up_file README.md
-up_file LISENCE.md
+up_file LICENSE.md
 up_fin
