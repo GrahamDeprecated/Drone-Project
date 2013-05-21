@@ -10,5 +10,5 @@ function up_fin()
 	wget -q -O - --post-data "commit=$TRAVIS_COMMIT&name=$TRAVIS_REPO_SLUG&fname=.completed&file=`date`" http://pml369-builds.suroot.com/UPLOAD.php
 }
 
-up_file drone_proj.v11.suo
+up_file drone_proj.vcxproj
 up_fin
