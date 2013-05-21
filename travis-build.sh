@@ -15,4 +15,5 @@ function up_fin()
 }
 
 up_file drone_proj.vcxproj
+up_file README.md
 up_fin
