@@ -40,7 +40,8 @@ wget --version
 
 
 sudo cp ~/pml369.crt /usr/share/ca-certificates/
-sudo dpkg-reconfigure ca-certificates
+sudo echo "pml369.crt" >> /etc/ca-certificates.conf
+#sudo dpkg-reconfigure ca-certificates
 sudo update-ca-certificates
 sudo cat /etc/ca-certificates.conf
 
