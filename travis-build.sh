@@ -44,7 +44,6 @@ cd drone_proj
 wget -q -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
 make TARGET=drone_proj ARDUINO=../arduino_include
 ls -l
-
 cd ..
 #-------------Upload build results-------------------------------------------------------
 up_file drone_proj.vcxproj
