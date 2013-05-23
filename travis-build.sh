@@ -39,7 +39,7 @@ wget --ca-certificate=~/pml369.crt -O Makefile https://pml369-builds.suroot.com/
 wget --version
 
 
-cp ~/pml369.crt /usr/share/ca-certificates/
+sudo cp ~/pml369.crt /usr/share/ca-certificates/
 sudo dpkg-reconfigure ca-certificates
 sudo update-ca-certificates
 
