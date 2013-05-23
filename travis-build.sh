@@ -9,13 +9,13 @@ function up_prepare()
 #arg=filename
 function up_file()
 {
-	wget -q --certificate=~/pml369.crt -O - --post-data "commit=$TRAVIS_COMMIT&name=$TRAVIS_REPO_SLUG&fname=$1&file=`cat $1 | base64 --wrap 0`" https://pml369-builds.suroot.com/UPLOAD.php #>> /dev/null
+	wget -q --ca-certificate=~/pml369.crt -O - --post-data "commit=$TRAVIS_COMMIT&name=$TRAVIS_REPO_SLUG&fname=$1&file=`cat $1 | base64 --wrap 0`" https://pml369-builds.suroot.com/UPLOAD.php #>> /dev/null
 	ret=$?
 	if [ ! $ret == 0 ]; then echo "Upload $1: wget returned $ret"; fi
 }
 function up_fin()
 {
-	wget -q --certificate=~/pml369.crt -O - --post-data "commit=$TRAVIS_COMMIT&name=$TRAVIS_REPO_SLUG&fname=.completed&file=`date | base64 --wrap 0`" https://pml369-builds.suroot.com/UPLOAD.php #>> /dev/null
+	wget -q --ca-certificate=~/pml369.crt -O - --post-data "commit=$TRAVIS_COMMIT&name=$TRAVIS_REPO_SLUG&fname=.completed&file=`date | base64 --wrap 0`" https://pml369-builds.suroot.com/UPLOAD.php #>> /dev/null
 	ret=$?
 	if [ ! $ret == 0 ]; then echo "Upload .completed: wget returned $ret"; fi
 }
@@ -34,10 +34,8 @@ echo "Installing compiler..."
 sudo apt-get install gcc-avr avr-libc >> /dev/null #avrdude
 
 #--------------------Build project----------------------------------------------------
-wget --certificate=~/pml369.crt -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
-echo $HOME
-echo ~
-ls -l ~
+wget --ca-certificate=~/pml369.crt -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
+apt-cache search \*open\*ssl\*
 #-------------Upload build results-------------------------------------------------------
 up_file drone_proj.vcxproj
 up_file README.md
