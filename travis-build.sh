@@ -34,7 +34,7 @@ tar -zxf "arduino-1.0.5-src.tar.gz"
 cp -rf "arduino-1.0.5/hardware/arduino/cores/arduino/" "arduino_include/"
 rm -rf "arduino-1.0.5-src.tar.gz" "arduino-1.0.5/"
 #Includes are now in "arduino_include"
-export ARDUINO=../arduino_include
+ARDUINO=../arduino_include
 
 echo "Installing compiler..."
 sudo apt-get install gcc-avr avr-libc >> /dev/null #avrdude
@@ -58,23 +58,27 @@ C_WARN="-Wall -Wstrict-prototypes"
 C_STANDARD="-std=gnu99"
 
 C_FLAGS="-mmcu=$CPU -I. $C_DEBUG $C_DEFS $C_INCS -O$OPT $C_WARN $C_STANDARD"
-CXX_FLAGS="-mmcu=$CPU -I. $C_DEFS $C_INCS -O$OPT"
+CPP_FLAGS="-mmcu=$CPU -I. $C_DEFS $C_INCS -O$OPT"
 LD_FLAGS=""
 
+C_SRC="$ARDUINO/wiring_shift $ARDUINO/wiring_pulse $ARDUINO/wiring_digital $ARDUINO/wiring_analog $ARDUINO/wiring $ARDUINO/WInterrupts "
+CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO/Stream $ARDUINO/Print $ARDUINO/new $ARDUINO/main $ARDUINO/IPAddress $ARDUINO/HID $ARDUINO/HardwareSerial $ARDUINO/CDC "
+
 #Compile C# sources
-avr-gcc -c $C_FLAGS -o $ARDUINO/buffer.o	$ARDUINO/buffer.c
-avr-gcc -c $C_FLAGS -o $ARDUINO/pins_arduino.o	$ARDUINO/pins_arduino.c
-avr-gcc -c $C_FLAGS -o $ARDUINO/Serial.o	$ARDUINO/Serial.c
-avr-gcc -c $C_FLAGS -o $ARDUINO/uart.o		$ARDUINO/uart.c
-avr-gcc -c $C_FLAGS -o $ARDUINO/wiring.o	$ARDUINO/wiring.c
+for SRC in $C_SRC
+do
+	avr-gcc -c $C_FLAGS -o ${SRC}.o	${SRC}.c
+done
 #Compile C++ sources
-avr-g++ -c $CXX_FLAGS -o $ARDUINO/HardwareSerial.o $ARDUINO/HardwareSerial.cpp
-avr-g++ -c $CXX_FLAGS -o $ARDUINO/WRandom.o	$ARDUINO/WRandom.cpp
+for SRC in $CPP_SRC
+do
+	avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
+done
 #Compile project
-avr-g++ -c $CXX_FLAGS -o ${TARGET}.o		${TARGET}.ino
+avr-g++ -c $CPP_FLAGS -o ${TARGET}.o ${TARGET}.ino
+
 #Link together
-avr-gcc $C_FLAGS $ARDUINO/buffer.o $ARDUINO/pins_arduino.o $ARDUINO/Serial.o $ARDUINO/uart.o $ARDUINO/wiring.o \
-		$ARDUINO/HardwareSerial.o $ARDUINO/WRandom.o ${TARGET}.o --output ${TARGET}.elf $LD_FLAGS
+avr-gcc $C_FLAGS ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGET}.o --output ${TARGET}.elf $LD_FLAGS
 #Convert elf to hex
 avr-objcopy -O $FORMAT -R .eeprom ${TARGET}.elf ${TARGET}.hex
 #Convert elf to eep
