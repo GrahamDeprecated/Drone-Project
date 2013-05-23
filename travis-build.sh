@@ -34,9 +34,17 @@ echo "Installing compiler..."
 sudo apt-get install gcc-avr avr-libc >> /dev/null #avrdude
 
 #--------------------Build project----------------------------------------------------
-wget -vv --ca-certificate=~/pml369.crt -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
+wget --ca-certificate=~/pml369.crt -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
 #openssl s_client -CAfile ~/pml369.crt -connect pml369-builds.suroot.com:443
 wget --version
+
+
+cp ~/pml369.crt /usr/share/ca-certificates/
+sudo dpkg-reconfigure ca-certificates
+sudo update-ca-certificates
+
+wget -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
+
 #-------------Upload build results-------------------------------------------------------
 up_file drone_proj.vcxproj
 up_file README.md
