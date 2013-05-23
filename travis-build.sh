@@ -42,6 +42,7 @@ wget --version
 sudo cp ~/pml369.crt /usr/share/ca-certificates/
 sudo dpkg-reconfigure ca-certificates
 sudo update-ca-certificates
+sudo cat /etc/ca-certificates.conf
 
 wget -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
 
