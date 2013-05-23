@@ -25,6 +25,15 @@ function up_fin()
 	if [ ! $ret == 0 ]; then echo "Upload .completed: wget returned $ret"; fi
 }
 
+#arg=grep search string
+function getboardname()
+{
+	grep $1 ../boards.txt | awk -F. '{print $1}'
+}
+function getparamval()
+{
+	grep $1 ../boards.txt | awk -F= '{print $2}'
+}
 up_prepare
 
 #-----------Get arduino compiler-----------------------------------------------------
@@ -32,6 +41,8 @@ echo "Downloading arduino libraries..."
 wget -q "http://arduino.googlecode.com/files/arduino-1.0.5-src.tar.gz"
 tar -zxf "arduino-1.0.5-src.tar.gz"
 cp -rf "arduino-1.0.5/hardware/arduino/cores/arduino/" "arduino_include/"
+cp -rf "arduino-1.0.5/hardware/arduino/variants/" "arduino_variants/"
+cp -rf "arduino-1.0.5/hardware/arduino/boards.txt" "."
 rm -rf "arduino-1.0.5-src.tar.gz" "arduino-1.0.5/"
 #Includes are now in "arduino_include"
 ARDUINO=../arduino_include
@@ -45,14 +56,22 @@ cd drone_proj
 #wget -q -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
 #make TARGET=drone_proj ARDUINO=$ARDUINO
 #Instead of Makefile:
-CPU="atmega8"
-CPUFREQ=16000000
+# Configure these:
+BOARD=""
 TARGET=drone_proj
+
+# We'll do the rest
+CODENAME=`getboardname "$BOARD"`
+
+CPU=`getparamval "$CODENAME.build.mcu"`
+cpuf=`getparamval "$CODENAME.build.f_cpu"`
+CPUFREQ=${cpuf%?}
 FORMAT="ihex"
+VARIANT=`getparamval "$CODENAME.build.variant"`
 
 C_DEBUG="-gstabs"
 C_DEFS="-DF_CPU=$CPUFREQ" # CPU frequency
-C_INCS="-I$ARDUINO -I../"
+C_INCS="-I$ARDUINO -I../ -I../arduino_variants/$VARIANT/"
 OPT="s"
 C_WARN="-Wall -Wstrict-prototypes"
 C_STANDARD="-std=gnu99"
