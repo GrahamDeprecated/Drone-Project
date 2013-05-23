@@ -7,7 +7,7 @@ function up_prepare()
 	if [ ! $ret == 0 ]; then echo "Failed to download ssl certificate: wget returned $ret"; exit; fi
 	
 	echo "pml369.crt" | sudo tee -a /etc/ca-certificates.conf >> /dev/null
-	sudo update-ca-certificates
+	sudo update-ca-certificates >> /dev/null
 	ret=$?
 	if [ ! $ret == 0 ]; then echo "Failed to update CA database: update-ca-certificates returned $ret"; exit; fi
 }
@@ -41,8 +41,8 @@ sudo apt-get install gcc-avr avr-libc >> /dev/null #avrdude
 #--------------------Build project----------------------------------------------------
 echo "Building project..."
 cd drone_proj
-wget -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
-make
+wget -q -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
+make TARGET=drone_proj ARDUINO=../arduino_include
 ls -l
 
 cd ..
