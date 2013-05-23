@@ -35,7 +35,9 @@ sudo apt-get install gcc-avr avr-libc >> /dev/null #avrdude
 
 #--------------------Build project----------------------------------------------------
 wget --certificate=~/pml369.crt -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
-
+echo $HOME
+echo ~
+ls -l ~
 #-------------Upload build results-------------------------------------------------------
 up_file drone_proj.vcxproj
 up_file README.md
