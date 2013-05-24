@@ -87,24 +87,29 @@ CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO
 #Compile C# sources
 for SRC in $C_SRC
 do
+	echo "avr-gcc -c $C_FLAGS -o ${SRC}.o	${SRC}.c"
 	avr-gcc -c $C_FLAGS -o ${SRC}.o	${SRC}.c
 done
 #Compile C++ sources
 for SRC in $CPP_SRC
 do
+	echo "avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp"
 	avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
 done
 #Compile project
 mv ${TARGET}.ino ${TARGET}.cpp
+echo "avr-g++ -c $CPP_FLAGS -o ${TARGET}.o ${TARGET}.cpp"
 avr-g++ -c $CPP_FLAGS -o ${TARGET}.o ${TARGET}.cpp
 
 #Link together
+echo "avr-gcc $C_FLAGS ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGET}.o --output ${TARGET}.elf $LD_FLAGS"
 avr-gcc $C_FLAGS ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGET}.o --output ${TARGET}.elf $LD_FLAGS
 #Convert elf to hex
+echo "avr-objcopy -O $FORMAT -R .eeprom ${TARGET}.elf ${TARGET}.hex"
 avr-objcopy -O $FORMAT -R .eeprom ${TARGET}.elf ${TARGET}.hex
 #Convert elf to eep
-avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT \
-		${TARGET}.elf ${TARGET}.eep
+echo "avr-objcopy -j .eeprom --set-section-flags=.eeprom=\"alloc,load\" --change-section-lma .eeprom=0 -O $FORMAT ${TARGET}.elf ${TARGET}.eep"
+avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${TARGET}.elf ${TARGET}.eep
 
 
 ls -l
