@@ -13,6 +13,7 @@
 // See here for bit changing: http://stackoverflow.com/questions/47981/how-do-you-set-clear-and-toggle-a-single-bit-in-c
 #define USEWIRE 1 /*0 for on*/
 
+#include "digi_write.h"
 #include "Shifter/Shifter.h"
 #include "Shifter/Shifter.cpp"
 #include "QueueList/QueueList.h"
