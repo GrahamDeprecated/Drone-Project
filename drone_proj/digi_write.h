@@ -190,8 +190,6 @@ class digi_rf
 		#endif
 };
 
-#include "statics.h"
-
 // Some global helper functions
 extern int			change_bit(int val, short bit_num, bool bitval);
 // b0=MSB

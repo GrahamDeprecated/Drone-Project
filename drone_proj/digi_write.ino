@@ -14,6 +14,8 @@
 #define USEWIRE 1 /*0 for on*/
 
 #include "digi_write.h"
+#include "statics.h"
+
 #include "Shifter/Shifter.h"
 #include "Shifter/Shifter.cpp"
 #include "QueueList/QueueList.h"
