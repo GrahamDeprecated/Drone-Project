@@ -11,7 +11,6 @@
 */
 
 #include <stdlib.h>
-#include "pindefs.h"
 #include "digi_write.h"
 
 Shifter shifts2(SHIFT_SERIAL, SHIFT_LATCH, SHIFT_CLOCK, 1 /*Number of shift regiusters in chain*/);

@@ -14,6 +14,7 @@
 #include "QueueList/QueueList.h"
 #include "Shifter/Shifter.h"
 #include "Timer/Timer.h"
+#include "pindefs.h"
 
 class digi_pins
 {
