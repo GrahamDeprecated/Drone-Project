@@ -95,7 +95,8 @@ do
 	avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
 done
 #Compile project
-avr-g++ -c $CPP_FLAGS -o ${TARGET}.o ${TARGET}.ino
+mv ${TARGET}.ino ${TARGET}.cpp
+avr-g++ -c $CPP_FLAGS -o ${TARGET}.o ${TARGET}.cpp
 
 #Link together
 avr-gcc $C_FLAGS ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGET}.o --output ${TARGET}.elf $LD_FLAGS
