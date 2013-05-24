@@ -248,11 +248,11 @@ void			digi_serial::read(String *container, short num_chars=0) // Null-terminate
 	// Crack to make "Wire" object work. It probably wasn't linking properly, but this seems to fix it
 	extern "C"
 	{
-		#include <..\..\..\..\..\libraries\Wire\utility\twi.h>
-		#include <..\..\..\..\..\libraries\Wire\utility\twi.c>
+		#include <Wire/utility/twi.h>
+		#include <Wire/utility/twi.c>
 	}
-	#include <..\..\..\..\..\libraries\Wire\Wire.h>
-	#include <..\..\..\..\..\libraries\Wire\Wire.cpp>
+	#include <Wire/Wire.h>
+	#include <Wire/Wire.cpp>
 				digi_batt::digi_batt(digi_pins *pins, short alert_pin, void (*onalert)())
 	{
 		_onalert=onalert;

@@ -73,7 +73,7 @@ VARIANT=`getparamval "$CODENAME.build.variant"`
 
 C_DEBUG="-gstabs"
 C_DEFS="-DF_CPU=$CPUFREQ -DARDUINO=110"
-C_INCS="-I$ARDUINO -I../ -I../arduino-1.0.5/hardware/arduino/variants/$VARIANT/"
+C_INCS="-I$ARDUINO -I../ -I../arduino-1.0.5/hardware/arduino/variants/$VARIANT/ -I../arduino-1.0.5/libraries/"
 OPT="s"
 C_WARN="-Wall -Wstrict-prototypes"
 C_STANDARD="-std=gnu99"
