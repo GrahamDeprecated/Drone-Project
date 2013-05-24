@@ -72,7 +72,7 @@ FORMAT="ihex"
 VARIANT=`getparamval "$CODENAME.build.variant"`
 
 C_DEBUG="-gstabs"
-C_DEFS="-DF_CPU=$CPUFREQ" # CPU frequency
+C_DEFS="-DF_CPU=$CPUFREQ -DARDUINO=110"
 C_INCS="-I$ARDUINO -I../ -I../arduino_variants/$VARIANT/"
 OPT="s"
 C_WARN="-Wall -Wstrict-prototypes"
