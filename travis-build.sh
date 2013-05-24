@@ -59,7 +59,8 @@ cd drone_proj
 # Configure these:
 
 BOARD="Uno"
-TARGET="drone_proj"
+TARGETS="drone_proj digi_write "
+FINAL_NAME="drone"
 
 # We'll do the rest
 CODENAME=`getboardname "$BOARD"`
@@ -85,31 +86,33 @@ C_SRC="$ARDUINO/wiring_shift $ARDUINO/wiring_pulse $ARDUINO/wiring_digital $ARDU
 CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO/Stream $ARDUINO/Print $ARDUINO/new $ARDUINO/main $ARDUINO/IPAddress $ARDUINO/HID $ARDUINO/HardwareSerial $ARDUINO/CDC "
 
 #Compile C# sources
-for SRC in $C_SRC
-do
-	echo -e "building ${SRC}.c \t\tto ${SRC}.o"
-	avr-gcc -c $C_FLAGS -o ${SRC}.o	${SRC}.c
-done
+	for SRC in $C_SRC
+	do
+		echo -e "building ${SRC}.c \t\tto ${SRC}.o"
+		avr-gcc -c $C_FLAGS -o ${SRC}.o	${SRC}.c
+	done
 #Compile C++ sources
-for SRC in $CPP_SRC
-do
-	echo -e "building ${SRC}.cpp \t\tto ${SRC}.o"
-	avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
-done
-#Compile project
-mv ${TARGET}.ino ${TARGET}.cpp
-echo -e "building ${TARGET}.cpp \t\tto ${TARGET}.o"
-avr-g++ -c $CPP_FLAGS -o ${TARGET}.o ${TARGET}.cpp
-
+	for SRC in $CPP_SRC
+	do
+		echo -e "building ${SRC}.cpp \t\tto ${SRC}.o"
+		avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
+	done
+#Compile project files
+	for SRC in $TARGETS
+	do
+		mv ${SRC}.ino ${SRC}.cpp
+		echo -e "building ${SRC}.ino \t\tto ${SRC}.o"
+		avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
+	done
 #Link together
-echo -e "linking ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGET}.o \t\tto ${TARGET}.elf"
-avr-gcc $C_FLAGS ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGET}.o --output ${TARGET}.elf $LD_FLAGS
+	echo -e "linking ${C_SRC// /.o } ${CPP_SRC// /.o } ${FINAL_NAME}.o \t\tto ${FINAL_NAME}.elf"
+	avr-gcc $C_FLAGS ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGETS// /.o } --output ${FINAL_NAME}.elf $LD_FLAGS
 #Convert elf to hex
-echo -e "objcopying ${TARGET}.elf \t\tto ${TARGET}.hex"
-avr-objcopy -O $FORMAT -R .eeprom ${TARGET}.elf ${TARGET}.hex
+	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.hex"
+	avr-objcopy -O $FORMAT -R .eeprom ${FINAL_NAME}.elf ${FINAL_NAME}.hex
 #Convert elf to eep
-echo -e "objcopying ${TARGET}.elf \t\tto ${TARGET}.eep"
-avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${TARGET}.elf ${TARGET}.eep
+	echo -e "objcopying ${TARGET}.elf \t\tto ${TARGET}.eep"
+	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${FINAL_NAME}.elf ${FINAL_NAME}.eep
 
 
 ls -l
