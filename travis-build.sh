@@ -55,7 +55,6 @@ echo "Building project..."
 cd drone_proj
 #wget -q -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
 #make TARGET=drone_proj ARDUINO=$ARDUINO
-#Instead of Makefile:
 # Configure these:
 
 BOARD="Uno"
