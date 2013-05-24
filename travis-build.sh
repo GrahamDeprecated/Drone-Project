@@ -87,28 +87,28 @@ CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO
 #Compile C# sources
 for SRC in $C_SRC
 do
-	echo "building ${SRC}.c to ${SRC}.o"
+	echo -e "building ${SRC}.c \t\tto ${SRC}.o"
 	avr-gcc -c $C_FLAGS -o ${SRC}.o	${SRC}.c
 done
 #Compile C++ sources
 for SRC in $CPP_SRC
 do
-	echo "building ${SRC}.cpp to ${SRC}.o"
+	echo -e "building ${SRC}.cpp \t\tto ${SRC}.o"
 	avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
 done
 #Compile project
 mv ${TARGET}.ino ${TARGET}.cpp
-echo "building ${TARGET}.cpp to ${TARGET}.o"
+echo -e "building ${TARGET}.cpp \t\tto ${TARGET}.o"
 avr-g++ -c $CPP_FLAGS -o ${TARGET}.o ${TARGET}.cpp
 
 #Link together
-echo "linking ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGET}.o to ${TARGET}.elf"
+echo -e "linking ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGET}.o \t\tto ${TARGET}.elf"
 avr-gcc $C_FLAGS ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGET}.o --output ${TARGET}.elf $LD_FLAGS
 #Convert elf to hex
-echo "objcopying ${TARGET}.elf ${TARGET}.hex"
+echo -e "objcopying ${TARGET}.elf \t\tto ${TARGET}.hex"
 avr-objcopy -O $FORMAT -R .eeprom ${TARGET}.elf ${TARGET}.hex
 #Convert elf to eep
-echo "objcopying ${TARGET}.elf ${TARGET}.eep"
+echo -e "objcopying ${TARGET}.elf \t\tto ${TARGET}.eep"
 avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${TARGET}.elf ${TARGET}.eep
 
 
