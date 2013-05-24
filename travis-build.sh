@@ -54,7 +54,6 @@ sudo apt-get install gcc-avr avr-libc >> /dev/null #avrdude
 echo "Building project..."
 cd drone_proj
 #wget -q -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
-#make TARGET=drone_proj ARDUINO=$ARDUINO
 # Configure these:
 
 BOARD="Uno"
