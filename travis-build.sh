@@ -57,6 +57,7 @@ cd drone_proj
 #make TARGET=drone_proj ARDUINO=$ARDUINO
 #Instead of Makefile:
 # Configure these:
+
 BOARD="Uno"
 TARGET="drone_proj"
 
