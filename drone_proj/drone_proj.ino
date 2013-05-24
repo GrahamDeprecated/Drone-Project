@@ -23,6 +23,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	digi_batt batt(&pins,BATT_ALERT);
 	digi_lcd lcd(&pins,&batt,LCD_REG_SELECT,LCD_ENABLE,LCD_D4,LCD_D5,LCD_D6,LCD_D7);
 	void rf_is_up();
+	void launch();
 	// Default is left (false)
 	bool joystick_t_f(digi_lcd *screen, digi_pins *pins, String top_message, String options);
 
