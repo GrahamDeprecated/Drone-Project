@@ -28,11 +28,11 @@ function up_fin()
 #arg=grep search string
 function getboardname()
 {
-	grep $1 ../boards.txt | awk -F. '{print $1}'
+	grep $1 ../arduino-1.0.5/hardware/arduino/boards.txt | awk -F. '{print $1}'
 }
 function getparamval()
 {
-	grep $1 ../boards.txt | awk -F= '{print $2}'
+	grep $1 ../arduino-1.0.5/hardware/arduino/boards.txt | awk -F= '{print $2}'
 }
 up_prepare
 
@@ -40,12 +40,12 @@ up_prepare
 echo "Downloading arduino libraries..."
 wget -q "http://arduino.googlecode.com/files/arduino-1.0.5-src.tar.gz"
 tar -zxf "arduino-1.0.5-src.tar.gz"
-cp -rf "arduino-1.0.5/hardware/arduino/cores/arduino/" "arduino_include/"
-cp -rf "arduino-1.0.5/hardware/arduino/variants/" "arduino_variants/"
-cp -rf "arduino-1.0.5/hardware/arduino/boards.txt" "."
-rm -rf "arduino-1.0.5-src.tar.gz" "arduino-1.0.5/"
+#cp -rf "arduino-1.0.5/hardware/arduino/cores/arduino/" "arduino_include/"
+#cp -rf "arduino-1.0.5/hardware/arduino/variants/" "arduino_variants/"
+#cp -rf "arduino-1.0.5/hardware/arduino/boards.txt" "."
+#rm -rf "arduino-1.0.5-src.tar.gz" "arduino-1.0.5/"
 #Includes are now in "arduino_include"
-ARDUINO=../arduino_include
+ARDUINO=../arduino-1.0.5/hardware/arduino/cores/arduino/
 
 echo "Installing compiler..."
 sudo apt-get install gcc-avr avr-libc >> /dev/null #avrdude
@@ -73,7 +73,7 @@ VARIANT=`getparamval "$CODENAME.build.variant"`
 
 C_DEBUG="-gstabs"
 C_DEFS="-DF_CPU=$CPUFREQ -DARDUINO=110"
-C_INCS="-I$ARDUINO -I../ -I../arduino_variants/$VARIANT/"
+C_INCS="-I$ARDUINO -I../ -I../arduino-1.0.5/hardware/arduino/variants/$VARIANT/"
 OPT="s"
 C_WARN="-Wall -Wstrict-prototypes"
 C_STANDARD="-std=gnu99"
