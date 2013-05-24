@@ -12,12 +12,6 @@
 
 #define DRONE 1 /*0 for drone code, 1 for controller code*/
 
-
-//#define rf_yes	0xF /*1111*/
-bool rf_yes[]={ true ,true ,true ,true };
-//#define rf_no	0x9 /*1001*/
-bool rf_no[]= { true ,false,false,true };
-
 #if (DRONE == 0)
 
 	#define RF_IN_BIT_1 26

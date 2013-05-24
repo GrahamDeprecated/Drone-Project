@@ -10,6 +10,11 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//#define rf_yes	0xF /*1111*/
+bool rf_yes[]={ true ,true ,true ,true };
+//#define rf_no	0x9 /*1001*/
+bool rf_no[]= { true ,false,false,true };
+
 digi_pins*	digi_serial::_pins;
 short		digi_serial::_tx_pin;
 short		digi_serial::_rx_pin;
