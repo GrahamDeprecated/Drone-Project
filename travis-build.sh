@@ -57,8 +57,8 @@ cd drone_proj
 #make TARGET=drone_proj ARDUINO=$ARDUINO
 #Instead of Makefile:
 # Configure these:
-BOARD=""
-TARGET=drone_proj
+BOARD="Uno"
+TARGET="drone_proj"
 
 # We'll do the rest
 CODENAME=`getboardname "$BOARD"`
