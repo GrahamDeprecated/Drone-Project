@@ -64,16 +64,24 @@ FINAL_NAME="drone"
 
 # We'll do the rest
 CODENAME=`getboardname "$BOARD"`
-
 CPU=`getparamval "$CODENAME.build.mcu"`
 cpuf=`getparamval "$CODENAME.build.f_cpu"`
 CPUFREQ=${cpuf%?}
 FORMAT="ihex"
 VARIANT=`getparamval "$CODENAME.build.variant"`
 
+LIB_DIR="../arduino-1.0.5/libraries"
+ARD_LIBRARIES="Wire WiFi TFT Stepper SPI SoftwareSerial Servo SD Robot_Motor Robot_Control LiquidCrystal GSM Firmdata Ethernet Esplora EEPROM "
+ARD_LIB_INCS=""
+for LIB in $ARD_LIBRARIES
+	do
+	ARD_LIB_INCS="$ARD_LIB_INCS -I$LIB_DIR/$LIB/ -I$LIB_DIR/$LIB/utility/"
+done
+
+
 C_DEBUG="-gstabs"
 C_DEFS="-DF_CPU=$CPUFREQ -DARDUINO=110"
-C_INCS="-I$ARDUINO -I../ -I../arduino-1.0.5/hardware/arduino/variants/$VARIANT/ -I../arduino-1.0.5/libraries/"
+C_INCS="-I$ARDUINO -I../ -I../arduino-1.0.5/hardware/arduino/variants/$VARIANT/ $ARD_LIB_INCS"
 OPT="s"
 C_WARN="-Wall -Wstrict-prototypes"
 C_STANDARD="-std=gnu99"
@@ -87,19 +95,19 @@ CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO
 
 #Compile C# sources
 	for SRC in $C_SRC
-	do
+		do
 		echo -e "building ${SRC}.c \t\tto ${SRC}.o"
 		avr-gcc -c $C_FLAGS -o ${SRC}.o	${SRC}.c
 	done
 #Compile C++ sources
 	for SRC in $CPP_SRC
-	do
+		do
 		echo -e "building ${SRC}.cpp \t\tto ${SRC}.o"
 		avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
 	done
 #Compile project files
 	for SRC in $TARGETS
-	do
+		do
 		mv ${SRC}.ino ${SRC}.cpp
 		echo -e "building ${SRC}.ino \t\tto ${SRC}.o"
 		avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
