@@ -119,14 +119,15 @@ CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO
 	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.hex"
 	avr-objcopy -O $FORMAT -R .eeprom ${FINAL_NAME}.elf ${FINAL_NAME}.hex
 #Convert elf to eep
-	echo -e "objcopying ${TARGET}.elf \t\tto ${TARGET}.eep"
+	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.eep"
 	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${FINAL_NAME}.elf ${FINAL_NAME}.eep
 
 
 ls -l
 cd ..
 #-------------Upload build results-------------------------------------------------------
-up_file drone_proj.vcxproj
+up_file drone.hex
+up_file drone.eep
 up_file README.md
 up_file LICENSE.md
 up_fin
