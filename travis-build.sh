@@ -52,13 +52,13 @@ sudo apt-get install gcc-avr avr-libc >> /dev/null #avrdude
 
 #--------------------Build project----------------------------------------------------
 echo "Building project..."
-cd drone_proj
+#cd drone_proj
 #wget -q -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
 # Configure these:
 
 BOARD="Uno"
-TARGETS="drone_proj digi_write "
-FINAL_NAME="drone"
+TARGETS="drone_proj/drone_proj drone_proj/digi_write "
+FINAL_NAME="build/uno/drone"
 
 # We'll do the rest
 CODENAME=`getboardname "$BOARD"`
@@ -68,7 +68,7 @@ CPUFREQ=${cpuf%?}
 FORMAT="ihex"
 VARIANT=`getparamval "$CODENAME.build.variant"`
 
-LIB_DIR="../arduino-1.0.5/libraries"
+LIB_DIR="arduino-1.0.5/libraries"
 ARD_LIBRARIES="Wire WiFi TFT Stepper SPI SoftwareSerial Servo SD Robot_Motor Robot_Control LiquidCrystal GSM Firmdata Ethernet Esplora EEPROM "
 ARD_LIB_INCS=""
 for LIB in $ARD_LIBRARIES
@@ -79,7 +79,7 @@ done
 
 C_DEBUG="-gstabs"
 C_DEFS="-DF_CPU=$CPUFREQ -DARDUINO=110"
-C_INCS="-I$ARDUINO -I../ -I../arduino-1.0.5/hardware/arduino/variants/$VARIANT/ $ARD_LIB_INCS"
+C_INCS="-I$ARDUINO -Iarduino-1.0.5/hardware/arduino/variants/$VARIANT/ $ARD_LIB_INCS"
 OPT="s"
 C_WARN="-Wall -Wstrict-prototypes"
 C_STANDARD="-std=gnu99"
@@ -120,12 +120,9 @@ CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO
 	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.eep"
 	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${FINAL_NAME}.elf ${FINAL_NAME}.eep
 
-
-ls -l
-cd ..
 #-------------Upload build results-------------------------------------------------------
-up_file drone.hex
-up_file drone.eep
-up_file README.md
-up_file LICENSE.md
+cd build
+up_file uno/drone.hex
+up_file ../README.md
+up_file ../LICENSE.md
 up_fin
