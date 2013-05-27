@@ -128,7 +128,7 @@ for PAIR in $2 # eg: "Uno->drone-uno#-DDRONE=1"
 		avr-gcc $C_FLAGS ${C_SRC//:/.o }.o ${CPP_SRC//:/.o }.o ${TARGETS//:/.o }.o --output ${FINAL_NAME}.elf $LD_FLAGS
 	#Convert elf to hex
 		echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.hex"
-		avr-objcopy -O $FORMAT -R .eeprom ${FINAL_NAME}.elf ${FINAL_NAME}.hex
+		avr-objcopy --strip-unneeded --strip-debug -O $FORMAT -R .eeprom ${FINAL_NAME}.elf ${FINAL_NAME}.hex
 	#Convert elf to eep
 	#	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.eep"
 	#	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma \
