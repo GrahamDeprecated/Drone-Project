@@ -96,7 +96,7 @@ C_SRC=`find $ARDUINO -maxdepth 1 | grep "\.c" | grep -v "\.cpp" | awk -F. '{prin
 CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | awk -F. '{print $1}'`
 find $ARDUINO -maxdepth 1 
 find $ARDUINO -maxdepth 1 | grep "\.cpp"
-find $ARDUINO -maxdepth 1 | grep "\.cpp" | awk '/./' | awk -F. '{field=$NF}; END {print field}'
+find $ARDUINO -maxdepth 1 | grep "\.cpp" | rev | cut -d '.' -f 2- | rev
 
 #Compile C# sources
 	for SRC in $C_SRC
