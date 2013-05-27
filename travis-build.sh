@@ -123,7 +123,7 @@ CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO
 
 #-------------Upload build results-------------------------------------------------------
 cd build
-up_file uno/drone.hex
+up_file drone-uno.hex
 up_file ../README.md
 up_file ../LICENSE.md
 up_fin
