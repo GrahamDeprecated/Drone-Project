@@ -91,12 +91,9 @@ CPP_FLAGS="-mmcu=$CPU -I. $C_DEFS $C_INCS -O$OPT"
 LD_FLAGS=""
 
 #C_SRC="$ARDUINO/wiring_shift $ARDUINO/wiring_pulse $ARDUINO/wiring_digital $ARDUINO/wiring_analog $ARDUINO/wiring $ARDUINO/WInterrupts "
-C_SRC=`find $ARDUINO -maxdepth 1 | grep "\.c" | grep -v "\.cpp" | awk -F. '{print $1}'`
+C_SRC=`find $ARDUINO -maxdepth 1 | grep "\.c" | grep -v "\.cpp" | rev | cut -d '.' -f 2- | rev`
 #CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO/Stream $ARDUINO/Print $ARDUINO/new $ARDUINO/main $ARDUINO/IPAddress $ARDUINO/HID $ARDUINO/HardwareSerial $ARDUINO/CDC "
-CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | awk -F. '{print $1}'`
-find $ARDUINO -maxdepth 1 
-find $ARDUINO -maxdepth 1 | grep "\.cpp"
-find $ARDUINO -maxdepth 1 | grep "\.cpp" | rev | cut -d '.' -f 2- | rev
+CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | rev | cut -d '.' -f 2- | rev`
 
 #Compile C# sources
 	for SRC in $C_SRC
