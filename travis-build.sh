@@ -28,11 +28,11 @@ function up_fin()
 #arg=grep search string
 function getboardname()
 {
-	grep $1 ../arduino-1.0.5/hardware/arduino/boards.txt | awk -F. '{print $1}'
+	grep $1 $ARDUINO/../../boards.txt | awk -F. '{print $1}'
 }
 function getparamval()
 {
-	grep $1 ../arduino-1.0.5/hardware/arduino/boards.txt | awk -F= '{print $2}'
+	grep $1 $ARDUINO/../../boards.txt | awk -F= '{print $2}'
 }
 up_prepare
 
@@ -45,7 +45,7 @@ tar -zxf "arduino-1.0.5-src.tar.gz"
 #cp -rf "arduino-1.0.5/hardware/arduino/boards.txt" "."
 #rm -rf "arduino-1.0.5-src.tar.gz" "arduino-1.0.5/"
 #Includes are now in "arduino_include"
-ARDUINO=../arduino-1.0.5/hardware/arduino/cores/arduino/
+ARDUINO=arduino-1.0.5/hardware/arduino/cores/arduino
 
 echo "Installing compiler..."
 sudo apt-get install gcc-avr avr-libc >> /dev/null #avrdude
@@ -68,7 +68,7 @@ CPUFREQ=${cpuf%?}
 FORMAT="ihex"
 VARIANT=`getparamval "$CODENAME.build.variant"`
 
-LIB_DIR="arduino-1.0.5/libraries"
+LIB_DIR="$ARDUINO/../../../../libraries"
 ARD_LIBRARIES="Wire WiFi TFT Stepper SPI SoftwareSerial Servo SD Robot_Motor Robot_Control LiquidCrystal GSM Firmdata Ethernet Esplora EEPROM "
 ARD_LIB_INCS=""
 for LIB in $ARD_LIBRARIES
@@ -79,7 +79,7 @@ done
 
 C_DEBUG="-gstabs"
 C_DEFS="-DF_CPU=$CPUFREQ -DARDUINO=110"
-C_INCS="-I$ARDUINO -Iarduino-1.0.5/hardware/arduino/variants/$VARIANT/ $ARD_LIB_INCS"
+C_INCS="-I$ARDUINO -I$ARDUINO/../../variants/$VARIANT/ $ARD_LIB_INCS"
 OPT="s"
 C_WARN="-Wall -Wstrict-prototypes"
 C_STANDARD="-std=gnu99"
