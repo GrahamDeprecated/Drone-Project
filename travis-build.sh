@@ -69,12 +69,14 @@ CPUFREQ=${cpuf%?}
 FORMAT="ihex"
 VARIANT=`getparamval "$CODENAME.build.variant"`
 
-IFS=":"
+myifs=":"
+oldifs=$IFS
 
 LIB_DIR="$ARDUINO/../../../../libraries"
 #ARD_LIBRARIES="Wire WiFi TFT Stepper SPI SoftwareSerial Servo SD Robot_Motor Robot_Control LiquidCrystal GSM Firmdata Ethernet Esplora EEPROM "
 ARD_LIBRARIES=`ls $LIB_DIR | sed ':a;N;\$!ba;s/\n/:/g'`
 ARD_LIB_INCS=""
+IFS=$myifs
 for LIB in $ARD_LIBRARIES
 	do
 	ARD_LIB_INCS="$ARD_LIB_INCS -I$LIB_DIR/$LIB/ -I$LIB_DIR/$LIB/utility/"
@@ -98,20 +100,26 @@ C_SRC=`find $ARDUINO -maxdepth 1 | grep "\.c" | grep -v "\.cpp" | rev | cut -d '
 CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | rev | cut -d '.' -f 2- | rev | sed ':a;N;\$!ba;s/\n/:/g'`
 
 #Compile C# sources
+	IFS=$myifs
 	for SRC in $C_SRC
 		do
+		unset IFS
 		echo -e "building ${SRC}.c \t\tto ${SRC}.o"
 		avr-gcc -c $C_FLAGS -o ${SRC}.o	${SRC}.c
 	done
 #Compile C++ sources
+	IFS=$myifs
 	for SRC in $CPP_SRC
 		do
+		unset IFS
 		echo -e "building ${SRC}.cpp \t\tto ${SRC}.o"
 		avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
 	done
 #Compile project files
+	IFS=$myifs
 	for SRC in $TARGETS
 		do
+		unset IFS
 		mv ${SRC}.ino ${SRC}.cpp
 		echo -e "building ${SRC}.ino \t\tto ${SRC}.o"
 		avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
