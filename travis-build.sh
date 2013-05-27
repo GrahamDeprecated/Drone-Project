@@ -115,8 +115,8 @@ CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | rev | cut -d '.' -f 2- | rev
 		avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
 	done
 #Link together
-	echo -e "linking ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGETS// /.o } \t\tto ${FINAL_NAME}.elf"
-	avr-gcc $C_FLAGS ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGETS// /.o } --output ${FINAL_NAME}.elf $LD_FLAGS
+	echo -e "linking ${C_SRC//\n/.o } ${CPP_SRC//\n/.o } ${TARGETS// /.o } \t\tto ${FINAL_NAME}.elf"
+	avr-gcc $C_FLAGS ${C_SRC//\n/.o } ${CPP_SRC//\n/.o } ${TARGETS// /.o } --output ${FINAL_NAME}.elf $LD_FLAGS
 #Convert elf to hex
 	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.hex"
 	avr-objcopy -O $FORMAT -R .eeprom ${FINAL_NAME}.elf ${FINAL_NAME}.hex
