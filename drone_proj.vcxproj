@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7071BE1E-2ABF-42CB-A4A8-A7AE88A4DA36}</ProjectGuid>
+    <ProjectGuid>{FBC171ED-3AF3-4575-84FE-402BEAA34182}</ProjectGuid>
     <RootNamespace>drone_proj</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -39,38 +39,29 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(IncludePath);C:\Users\Peter\Documents\GitHub\Drone;</IncludePath>
+    <IncludePath>C:\Users\Peter\Documents\GitHub\Drone; $(HOMEDRIVE)$(HOMEPATH)\Documents\GitHub; D:\boost\Win32\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Peter\Documents\Arduino\arduino-1.0.4\hardware\arduino\cores\arduino;C:\Users\Peter\Documents\Arduino\arduino-1.0.4\hardware\arduino\variants\standard;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\avr\include\;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\avr\include\avr\;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\avr\;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Peter\Documents\Arduino\arduino-1.0.4\hardware\arduino\cores\arduino;C:\Users\Peter\Documents\Arduino\arduino-1.0.4\hardware\arduino\variants\mega;C:\Users\Peter\Documents\Arduino\arduino-1.0.4\libraries\Wire;C:\Users\Peter\Documents\Arduino\arduino-1.0.4\libraries\Wire\utility;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\avr\include\;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\avr\include\avr\;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\avr\;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>C:\Users\Peter\Documents\GitHub\Drone\Visual Micro\.drone_proj.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <PreprocessorDefinitions>__AVR_ATmega328P__;_VMDEBUG=1;ARDUINO=104;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__AVR_ATmega2560__;ARDUINO=104;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PreBuildEvent>
-      <Command>
-      </Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\Peter\Documents\Arduino\arduino-1.0.4\hardware\arduino\cores\arduino;C:\Users\Peter\Documents\Arduino\arduino-1.0.4\hardware\arduino\variants\standard;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\avr\include\;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\avr\include\avr\;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\avr\;c:\users\peter\documents\arduino\arduino-1.0.4\hardware\tools\avr\lib\gcc\avr\4.3.2\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <ForcedIncludeFiles>M:\School\Durham\Electronics club\Drone\drone_proj\Visual Micro\.drone_proj.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <IgnoreStandardIncludePath>true</IgnoreStandardIncludePath>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>__AVR_ATmega328P__;ARDUINO=104;__AVR__;F_CPU=16000000L;__cplusplus;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -79,26 +70,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="C:\Users\Peter\Documents\GitHub\Drone\drone_proj\digi_write.h" />
-    <ClInclude Include="C:\Users\Peter\Documents\GitHub\Drone\drone_proj\LCD_defs.h" />
-    <ClInclude Include="C:\Users\Peter\Documents\GitHub\Drone\drone_proj\pindefs.h" />
-    <ClInclude Include="C:\Users\Peter\Documents\GitHub\Drone\drone_proj\statics.h" />
     <ClInclude Include="Visual Micro\.drone_proj.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="C:\Users\Peter\Documents\GitHub\Drone\drone_proj\drone_proj.ino">
-      <FileType>CppCode</FileType>
-    </None>
-    <None Include="drone_proj\digi_write.ino">
-      <FileType>CppCode</FileType>
-    </None>
+    <None Include="drone_proj\drone_proj.ino" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties arduino.board.name="uno" arduino.board.desc="Arduino Uno" arduino.board.property_bag="uno.name=Arduino Uno&#xD;&#xA;uno.upload.protocol=arduino&#xD;&#xA;uno.upload.maximum_size=32256&#xD;&#xA;uno.upload.speed=115200&#xD;&#xA;uno.bootloader.low_fuses=0xff&#xD;&#xA;uno.bootloader.high_fuses=0xde&#xD;&#xA;uno.bootloader.extended_fuses=0x05&#xD;&#xA;uno.bootloader.path=optiboot&#xD;&#xA;uno.bootloader.file=optiboot_atmega328.hex&#xD;&#xA;uno.bootloader.unlock_bits=0x3F&#xD;&#xA;uno.bootloader.lock_bits=0x0F&#xD;&#xA;uno.build.mcu=atmega328p&#xD;&#xA;uno.build.f_cpu=16000000L&#xD;&#xA;uno.build.core=arduino&#xD;&#xA;uno.build.variant=standard&#xD;&#xA;" arduino.build.mcu="atmega328p" arduino.build.f_cpu="16000000L" arduino.build.core="arduino" arduino.upload.protocol="arduino" arduino.upload.speed="115200" arduino.upload.maximum_size="32256" arduino.upload.port="COM8" VM.DebugExt.AGaugeExample.Enabled="0" VM.DebugExt.AGaugeExample.Visible="0" />
-    </VisualStudio>
-  </ProjectExtensions>
 </Project>

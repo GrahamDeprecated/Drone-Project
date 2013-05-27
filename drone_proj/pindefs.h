@@ -10,7 +10,9 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#define DRONE 0 /*0 for drone code, 1 for controller code*/
+#ifndef DRONE
+#define DRONE 0 /*0 for drone code, 1 for controller code*/
+#endif
 
 #if (DRONE == 0)
 
