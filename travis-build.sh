@@ -135,7 +135,7 @@ CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | rev | cut -d '.' -f 2- | rev
 #	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${FINAL_NAME}.elf ${FINAL_NAME}.eep
 
 #-------------Upload build results-------------------------------------------------------
-up_file $FINAL_NAME.hex `awk -F/ '{print $2}'`.hex
+up_file $FINAL_NAME.hex `echo $FINAL_NAME | awk -F/ '{print $2}'`.hex
 up_file README.md README.md
 up_file LICENSE.md LICENSE.md
 up_fin
