@@ -94,7 +94,9 @@ LD_FLAGS=""
 C_SRC=`find $ARDUINO -maxdepth 1 | grep "\.c" | grep -v "\.cpp" | awk -F. '{print $1}'`
 #CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO/Stream $ARDUINO/Print $ARDUINO/new $ARDUINO/main $ARDUINO/IPAddress $ARDUINO/HID $ARDUINO/HardwareSerial $ARDUINO/CDC "
 CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | awk -F. '{print $1}'`
-echo  "$C_SRC and $CPP_SRC"
+find $ARDUINO -maxdepth 1 
+find $ARDUINO -maxdepth 1 | grep "\.cpp"
+find $ARDUINO -maxdepth 1 | grep "\.cpp" | awk -F. '{print $1}'
 
 #Compile C# sources
 	for SRC in $C_SRC
