@@ -56,7 +56,7 @@ echo "Building project..."
 #wget -q -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
 # Configure these:
 
-TARGETS=$1	# eg: "drone_proj/drone_proj drone_proj/digi_write "
+TARGETS=$1	# eg: "drone_proj/drone_proj:drone_proj/digi_write"
 BOARD=$2	# eg: "Uno"
 FINAL_NAME=build/$3	# eg: "drone-uno"
 mkdir build/
@@ -69,9 +69,11 @@ CPUFREQ=${cpuf%?}
 FORMAT="ihex"
 VARIANT=`getparamval "$CODENAME.build.variant"`
 
+IFS=":"
+
 LIB_DIR="$ARDUINO/../../../../libraries"
 #ARD_LIBRARIES="Wire WiFi TFT Stepper SPI SoftwareSerial Servo SD Robot_Motor Robot_Control LiquidCrystal GSM Firmdata Ethernet Esplora EEPROM "
-ARD_LIBRARIES=`ls $LIB_DIR`
+ARD_LIBRARIES=`ls $LIB_DIR | sed ':a;N;\$!ba;s/\n/:/g'`
 ARD_LIB_INCS=""
 for LIB in $ARD_LIBRARIES
 	do
@@ -91,9 +93,9 @@ CPP_FLAGS="-mmcu=$CPU -I. $C_DEFS $C_INCS -O$OPT"
 LD_FLAGS=""
 
 #C_SRC="$ARDUINO/wiring_shift $ARDUINO/wiring_pulse $ARDUINO/wiring_digital $ARDUINO/wiring_analog $ARDUINO/wiring $ARDUINO/WInterrupts "
-C_SRC=`find $ARDUINO -maxdepth 1 | grep "\.c" | grep -v "\.cpp" | rev | cut -d '.' -f 2- | rev`
+C_SRC=`find $ARDUINO -maxdepth 1 | grep "\.c" | grep -v "\.cpp" | rev | cut -d '.' -f 2- | rev | sed ':a;N;\$!ba;s/\n/:/g'`
 #CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO/Stream $ARDUINO/Print $ARDUINO/new $ARDUINO/main $ARDUINO/IPAddress $ARDUINO/HID $ARDUINO/HardwareSerial $ARDUINO/CDC "
-CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | rev | cut -d '.' -f 2- | rev`
+CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | rev | cut -d '.' -f 2- | rev | sed ':a;N;\$!ba;s/\n/:/g'`
 
 #Compile C# sources
 	for SRC in $C_SRC
@@ -115,8 +117,8 @@ CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | rev | cut -d '.' -f 2- | rev
 		avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
 	done
 #Link together
-	echo -e "linking ${C_SRC//\n/.o } ${CPP_SRC//\n/.o } ${TARGETS// /.o } \t\tto ${FINAL_NAME}.elf"
-	avr-gcc $C_FLAGS ${C_SRC//\n/.o } ${CPP_SRC//\n/.o } ${TARGETS// /.o } --output ${FINAL_NAME}.elf $LD_FLAGS
+	echo -e "linking ${C_SRC//:/.o } ${CPP_SRC//:/.o } ${TARGETS//:/.o } \t\tto ${FINAL_NAME}.elf"
+	avr-gcc $C_FLAGS ${C_SRC//:/.o } ${CPP_SRC//:/.o } ${TARGETS//:/.o } --output ${FINAL_NAME}.elf $LD_FLAGS
 #Convert elf to hex
 	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.hex"
 	avr-objcopy -O $FORMAT -R .eeprom ${FINAL_NAME}.elf ${FINAL_NAME}.hex
