@@ -59,6 +59,7 @@ echo "Building project..."
 BOARD="Uno"
 TARGETS="drone_proj/drone_proj drone_proj/digi_write "
 FINAL_NAME="build/uno/drone"
+mkdir -p "build/uno"
 
 # We'll do the rest
 CODENAME=`getboardname "$BOARD"`
@@ -111,7 +112,7 @@ CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO
 		avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
 	done
 #Link together
-	echo -e "linking ${C_SRC// /.o } ${CPP_SRC// /.o } ${FINAL_NAME}.o \t\tto ${FINAL_NAME}.elf"
+	echo -e "linking ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGETS// /.o } \t\tto ${FINAL_NAME}.elf"
 	avr-gcc $C_FLAGS ${C_SRC// /.o } ${CPP_SRC// /.o } ${TARGETS// /.o } --output ${FINAL_NAME}.elf $LD_FLAGS
 #Convert elf to hex
 	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.hex"
