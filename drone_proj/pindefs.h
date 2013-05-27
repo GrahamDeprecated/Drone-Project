@@ -10,7 +10,7 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#define DRONE 1 /*0 for drone code, 1 for controller code*/
+#define DRONE 0 /*0 for drone code, 1 for controller code*/
 
 #if (DRONE == 0)
 
@@ -49,6 +49,12 @@
 	#define BATT_LEVEL 0 /*analog*/
 
 	#define RAND_SEED_PIN 15 /*analog*/
+
+	#define ARD_INTERRUPTS "2,3,18,19,20,21" //end in ","
+
+	#define SHIFT_SERIAL 50
+	#define SHIFT_CLOCK  51
+	#define SHIFT_LATCH  52
 
 #else
 	#define ARD_INTERRUPTS "2,3," //end in ","

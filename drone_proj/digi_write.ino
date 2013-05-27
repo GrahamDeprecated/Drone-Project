@@ -433,7 +433,6 @@ void			digi_serial::read(String *container, short num_chars=0) // Null-terminate
 		Wire.write((byte)(data & 0x00FF));
 		Wire.endTransmission();
 	}
-#endif
 
 
 #include <stdio.h>
@@ -916,18 +915,18 @@ digi_lcd	*	digi_lcd::buzz(int tune_id)
 	}
 	return this;
 }
-
+#endif
 
 				digi_rf::digi_rf(digi_pins *pins, int in_d0, int in_d1, int in_d2, int in_d3, int in_inter, int out_d0, int out_d1, int out_d2, int out_d3)
 {
 	_pins=pins;
 }
 #if (DRONE == 0)
-	void digi_rf::activate(void (*onready)(), digi_lcd *screen)
+	void		digi_rf::activate(void (*onready)(bool gps_needed))
 	{
 
 	}
-	void digi_rf::negotiate()
+	void		digi_rf::negotiate()
 	{
 
 	}

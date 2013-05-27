@@ -88,7 +88,6 @@ class digi_batt
 		static short	_bound_ch3;
 		static short	_bound_ch4;
 };
-#endif
 
 // Adapted from LiquidCrystal.h (mostly copied)
 #include <inttypes.h>
@@ -163,11 +162,16 @@ class digi_lcd : public Print
 		bool			_data_set;
 		short			_buzzer;
 };
+#endif
 class digi_rf
 {
 	public:
 						digi_rf(digi_pins *pins, int in_d0, int in_d1, int in_d2, int in_d3, int in_inter, int out_d0, int out_d1, int out_d2, int out_d3);
+		#if (DRONE == 1)
 		void			activate(void (*onready)(), digi_lcd *screen, bool gps_needed);
+		#else
+		void			activate(void (*onready)(bool gps_needed));
+		#endif
 	private:
 		static void		negotiate();
 		static void		read4(bool *out, int *offset);
