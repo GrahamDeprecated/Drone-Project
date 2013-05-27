@@ -58,8 +58,8 @@ echo "Building project..."
 
 BOARD="Uno"
 TARGETS="drone_proj/drone_proj drone_proj/digi_write "
-FINAL_NAME="build/uno/drone"
-mkdir -p "build/uno"
+FINAL_NAME="build/drone-uno"
+mkdir build/
 
 # We'll do the rest
 CODENAME=`getboardname "$BOARD"`
