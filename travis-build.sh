@@ -90,13 +90,13 @@ for PAIR in $2 # eg: "Uno->drone-uno#-DDRONE=1"
 	C_DEBUG="-gstabs"
 	C_DEFS="-DF_CPU=$CPUFREQ -DARDUINO=110"
 	C_INCS="-I$ARDUINO -I$ARDUINO/../../variants/$VARIANT/ $ARD_LIB_INCS"
-	OPT="s"
+	C_OPTIMISATION="-Os -fdata-sections -ffunction-sections"
 	C_WARN="-Wall -Wstrict-prototypes"
 	C_STANDARD="-std=gnu99"
 	
 	C_FLAGS="-mmcu=$CPU -I. $C_DEBUG $C_DEFS $C_INCS -O$OPT $C_WARN $C_STANDARD $BUILD_OPTS"
-	CPP_FLAGS="-mmcu=$CPU -I. $C_DEFS $C_INCS -O$OPT $BUILD_OPTS"
-	LD_FLAGS=""
+	CPP_FLAGS="-mmcu=$CPU -I. $C_DEFS $C_INCS $C_OPTIMISATION $BUILD_OPTS"
+	LD_FLAGS="-Wl,--gc-sections"
 	
 	#Compile C# sources
 		IFS=$myifs
@@ -128,7 +128,8 @@ for PAIR in $2 # eg: "Uno->drone-uno#-DDRONE=1"
 		avr-gcc $C_FLAGS ${C_SRC//:/.o }.o ${CPP_SRC//:/.o }.o ${TARGETS//:/.o }.o --output ${FINAL_NAME}.elf $LD_FLAGS
 	#Convert elf to hex
 		echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.hex"
-		avr-objcopy --strip-unneeded --strip-debug -O $FORMAT -R .eeprom ${FINAL_NAME}.elf ${FINAL_NAME}.hex
+		# maybe add --strip-unneeded --strip-debug 
+		avr-objcopy -O $FORMAT -R .eeprom ${FINAL_NAME}.elf ${FINAL_NAME}.hex
 	#Convert elf to eep
 	#	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.eep"
 	#	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma \
