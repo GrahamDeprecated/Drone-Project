@@ -100,11 +100,13 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 #else
 	void setup()
 	{
-
+		pins.setio(13,false);
 	}
 
 	void loop()
 	{
-
+		pins.set(13,true);
+		delay(1000);
+		pins.set(13,false);
 	}
 #endif
