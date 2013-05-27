@@ -30,11 +30,11 @@ function up_fin()
 #arg=grep search string
 function getboardname()
 {
-	grep $1 $ARDUINO/../../boards.txt | awk -F. '{print $1}'
+	grep "$1" "$ARDUINO/../../boards.txt" | awk -F. '{print $1}'
 }
 function getparamval()
 {
-	grep $1 $ARDUINO/../../boards.txt | awk -F= '{print $2}'
+	grep "$1" "$ARDUINO/../../boards.txt" | awk -F= '{print $2}'
 }
 up_prepare
 
@@ -77,7 +77,7 @@ for PAIR in $2 # eg: "Uno->drone-uno#-DDRONE=1"
 	PART2=`echo $PAIR | awk -F"->" '{print $2}'` # eg: "drone-uno#-DDRONE=1"
 	FINAL_NAME=build/`echo $PART2 | awk -F"#" '{print $1}'`	# eg: "drone-uno"
 	BUILD_OPTS=`echo $PART2 | awk -F"#" '{print $2}'`	# eg: "-DDRONE=1"
-	echo "Building project for $BOARD..."
+	echo -e "\n\nBuilding project for $BOARD..."
 
 	# We'll do the rest
 	CODENAME=`getboardname "$BOARD"`
