@@ -119,7 +119,7 @@ for PAIR in $2 # eg: "Uno->drone-uno#-DDRONE=1"
 		for SRC in $TARGETS
 			do
 			unset IFS
-			mv ${SRC}.ino ${SRC}.cpp
+			cp ${SRC}.ino ${SRC}.cpp
 			echo -e "building ${SRC}.ino \t\tto ${SRC}.o"
 			avr-g++ -c $CPP_FLAGS -o ${SRC}.o ${SRC}.cpp
 		done
