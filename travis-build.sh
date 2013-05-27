@@ -11,10 +11,10 @@ function up_prepare()
 	ret=$?
 	if [ ! $ret == 0 ]; then echo "Failed to update CA database: update-ca-certificates returned $ret"; exit; fi
 }
-#arg=filename
+#arg1=filename here, arg2=filename on server
 function up_file()
 {
-	wget -q -O - --post-data "commit=$TRAVIS_COMMIT&name=$TRAVIS_REPO_SLUG&fname=$1&file=`cat $1 | base64 --wrap 0`" https://pml369-builds.suroot.com/UPLOAD.php #>> /dev/null
+	wget -q -O - --post-data "commit=$TRAVIS_COMMIT&name=$TRAVIS_REPO_SLUG&fname=$2&file=`cat $1 | base64 --wrap 0`" https://pml369-builds.suroot.com/UPLOAD.php #>> /dev/null
 	ret=$?
 	if [ ! $ret == 0 ]; then echo "Upload $1: wget returned $ret"; fi
 }
@@ -122,8 +122,7 @@ CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO
 	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${FINAL_NAME}.elf ${FINAL_NAME}.eep
 
 #-------------Upload build results-------------------------------------------------------
-cd build
-up_file drone-uno.hex
-up_file ../README.md
-up_file ../LICENSE.md
+up_file $FINAL_NAME.hex drone-uno.hex
+up_file README.md README.md
+up_file LICENSE.md LICENSE.md
 up_fin
