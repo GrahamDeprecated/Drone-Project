@@ -56,9 +56,9 @@ echo "Building project..."
 #wget -q -O Makefile https://pml369-builds.suroot.com/travis-makefile-arduino
 # Configure these:
 
-BOARD="Uno"
-TARGETS="drone_proj/drone_proj drone_proj/digi_write "
-FINAL_NAME="build/drone-uno"
+TARGETS=$1	# eg: "drone_proj/drone_proj drone_proj/digi_write "
+BOARD=$2	# eg: "Uno"
+FINAL_NAME=build/$3	# eg: "drone-uno"
 mkdir build/
 
 # We'll do the rest
@@ -70,7 +70,8 @@ FORMAT="ihex"
 VARIANT=`getparamval "$CODENAME.build.variant"`
 
 LIB_DIR="$ARDUINO/../../../../libraries"
-ARD_LIBRARIES="Wire WiFi TFT Stepper SPI SoftwareSerial Servo SD Robot_Motor Robot_Control LiquidCrystal GSM Firmdata Ethernet Esplora EEPROM "
+#ARD_LIBRARIES="Wire WiFi TFT Stepper SPI SoftwareSerial Servo SD Robot_Motor Robot_Control LiquidCrystal GSM Firmdata Ethernet Esplora EEPROM "
+ARD_LIBRARIES=`ls $LIB_DIR`
 ARD_LIB_INCS=""
 for LIB in $ARD_LIBRARIES
 	do
@@ -89,8 +90,10 @@ C_FLAGS="-mmcu=$CPU -I. $C_DEBUG $C_DEFS $C_INCS -O$OPT $C_WARN $C_STANDARD"
 CPP_FLAGS="-mmcu=$CPU -I. $C_DEFS $C_INCS -O$OPT"
 LD_FLAGS=""
 
-C_SRC="$ARDUINO/wiring_shift $ARDUINO/wiring_pulse $ARDUINO/wiring_digital $ARDUINO/wiring_analog $ARDUINO/wiring $ARDUINO/WInterrupts "
-CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO/Stream $ARDUINO/Print $ARDUINO/new $ARDUINO/main $ARDUINO/IPAddress $ARDUINO/HID $ARDUINO/HardwareSerial $ARDUINO/CDC "
+#C_SRC="$ARDUINO/wiring_shift $ARDUINO/wiring_pulse $ARDUINO/wiring_digital $ARDUINO/wiring_analog $ARDUINO/wiring $ARDUINO/WInterrupts "
+C_SRC=`find $ARDUINO -maxdepth 1 | grep "\.c" | grep -v "\.cpp" | awk -F. '{print $1}'`
+#CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO/Stream $ARDUINO/Print $ARDUINO/new $ARDUINO/main $ARDUINO/IPAddress $ARDUINO/HID $ARDUINO/HardwareSerial $ARDUINO/CDC "
+CPP_SRC=`find $ARDUINO -maxdepth 1 | grep "\.cpp" | awk -F. '{print $1}'`
 
 #Compile C# sources
 	for SRC in $C_SRC
@@ -118,11 +121,11 @@ CPP_SRC="$ARDUINO/WString $ARDUINO/WMath $ARDUINO/USBCore $ARDUINO/Tone $ARDUINO
 	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.hex"
 	avr-objcopy -O $FORMAT -R .eeprom ${FINAL_NAME}.elf ${FINAL_NAME}.hex
 #Convert elf to eep
-	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.eep"
-	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${FINAL_NAME}.elf ${FINAL_NAME}.eep
+#	echo -e "objcopying ${FINAL_NAME}.elf \t\tto ${FINAL_NAME}.eep"
+#	avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" --change-section-lma .eeprom=0 -O $FORMAT ${FINAL_NAME}.elf ${FINAL_NAME}.eep
 
 #-------------Upload build results-------------------------------------------------------
-up_file $FINAL_NAME.hex drone-uno.hex
+up_file $FINAL_NAME.hex `awk -F/ '{print $2}'`.hex
 up_file README.md README.md
 up_file LICENSE.md LICENSE.md
 up_fin

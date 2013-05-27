@@ -1,4 +1,4 @@
 language: cpp
 compiler:
   - gcc
-script: chmod +x ./travis-build.sh && ./travis-build.sh
+script: chmod +x ./travis-build.sh && ./travis-build.sh "drone_proj/drone_proj drone_proj/digi_write " "Uno" "drone-uno"
