@@ -9,3 +9,4 @@ before_script:
   - chmod +x ./travis-build.sh
 script:
   - ./travis-build.sh "drone_proj/drone_proj:drone_proj/digi_write" "Uno->drone-uno#-DDRONE=1:Mega 2560->drone-mega-2560#-DDRONE=0"
+
