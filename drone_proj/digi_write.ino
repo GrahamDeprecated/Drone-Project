@@ -136,7 +136,7 @@ bool			digi_pins::interrupt(short pin, void (*func)(), short type)
 	}
 	else
 	{
-		if (((String)ARD_INTERRUPTS).indexOf((String)inter) == -1)
+		if (((String)ARD_INTERRUPTS).indexOf((String)pin) == -1)
 		{
 			return false;
 		}
