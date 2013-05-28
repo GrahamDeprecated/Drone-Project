@@ -11,7 +11,7 @@
 */
 
 #ifndef DRONE
-#define DRONE 0 /*0 for drone code, 1 for controller code*/
+#define DRONE 1 /*0 for drone code, 1 for controller code*/
 #endif
 
 #if (DRONE == 0)

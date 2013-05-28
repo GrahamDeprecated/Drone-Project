@@ -26,6 +26,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	// Default is left (false)
 	bool joystick_t_f(digi_lcd *screen, digi_pins *pins, String top_message, String options);
 	void newdata();
+	String tmp="";
 	void newdata()
 	{
 		/*if ((pins.read(6) == pins.read(11)) && (pins.read(5) == pins.read(10)) && (pins.read(4) == pins.read(9)) && (pins.read(3) == pins.read(8)))
@@ -36,11 +37,15 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		{
 			pins.set(13,false);
 		}*/
-		Serial.print(pins.read(6));
-		Serial.print(pins.read(5));
-		Serial.print(pins.read(4));
-		Serial.print(pins.read(3));
-		Serial.println(" Done receiving");
+		tmp+=48+pins.read(6);
+		tmp+=48+pins.read(5);
+		tmp+=48+pins.read(4);
+		tmp+=48+pins.read(3);
+		if (tmp.length() == 8)
+		{
+			Serial.println(tmp + " Done receiving");
+			tmp="";
+		}
 	}
 
 	void setup()
@@ -141,7 +146,21 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			pins.set(39,(nextval[1] == 49));
 			pins.set(35,(nextval[2] == 49));
 			pins.set(31,(nextval[3] == 49));
-			Serial.println("Written data");
+			Serial.println("Written data part 1");
+			pins.set(43,false);
+			pins.set(39,false);
+			pins.set(35,false);
+			pins.set(31,false);
+
+			pins.set(43,(nextval[4] == 49));
+			pins.set(39,(nextval[5] == 49));
+			pins.set(35,(nextval[6] == 49));
+			pins.set(31,(nextval[7] == 49));
+			Serial.println("Written data part 2");
+			pins.set(43,false);
+			pins.set(39,false);
+			pins.set(35,false);
+			pins.set(31,false);
 		}
 	}
 #endif
