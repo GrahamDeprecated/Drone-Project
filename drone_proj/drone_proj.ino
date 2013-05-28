@@ -36,10 +36,10 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		{
 			pins.set(13,false);
 		}*/
-		Serial.print(48+pins.read(6));
-		Serial.print(48+pins.read(5));
-		Serial.print(48+pins.read(4));
-		Serial.print(48+pins.read(3));
+		Serial.print(pins.read(6));
+		Serial.print(pins.read(5));
+		Serial.print(pins.read(4));
+		Serial.print(pins.read(3));
 		Serial.println(" Done receiving");
 	}
 
@@ -61,6 +61,8 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		pins.setio(6,true)->setio(5,true)->setio(4,true)->setio(3,true)->setio(2,true)->setio(11,true)->setio(10,true)->setio(9,true)->setio(8,true)->interrupt(2,newdata,RISING);
 		pins.setio(13,false);
 		Serial.begin(9600);
+		Serial.print((char)27);
+		Serial.print("[2J");
 		Serial.println("Startup");
 	}
 	void rf_is_up()
@@ -123,6 +125,8 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	{
 		pins.setio(31,false)->setio(35,false)->setio(39,false)->setio(43,false);
 		Serial.begin(9600);
+		Serial.print((char)27);
+		Serial.print("[2J");
 		Serial.println("Startup");
 	}
 
