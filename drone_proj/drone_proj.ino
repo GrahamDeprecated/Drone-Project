@@ -37,10 +37,10 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		{
 			pins.set(13,false);
 		}*/
-		tmp+=48+pins.read(6);
-		tmp+=48+pins.read(5);
-		tmp+=48+pins.read(4);
-		tmp+=48+pins.read(3);
+		tmp+=(char)(48+pins.read(6));
+		tmp+=(char)(48+pins.read(5));
+		tmp+=(char)(48+pins.read(4));
+		tmp+=(char)(48+pins.read(3));
 		if (tmp.length() == 8)
 		{
 			Serial.println(tmp + " Done receiving");
