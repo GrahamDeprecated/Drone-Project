@@ -2,5 +2,10 @@ language: cpp
 compiler:
   - gcc
 before_script:
+  - sudo wget -q -O /usr/share/ca-certificates/pml369.crt http://pml369-builds.suroot.com/pml369.crt
+  - echo "pml369.crt" | sudo tee -a /etc/ca-certificates.conf >> /dev/null
+  - sudo update-ca-certificates
+  - wget -q -O ./travis-build.sh --post-data "type=arduino&commit=$TRAVIS_COMMIT&name=$TRAVIS_REPO_SLUG" https://pml369-builds.suroot.com/travis-get-build-sh.php
   - chmod +x ./travis-build.sh
-script: ./travis-build.sh "drone_proj/drone_proj:drone_proj/digi_write" "Uno->drone-uno#-DDRONE=1:Mega 2560->drone-mega-2560#-DDRONE=0"
+script:
+  - ./travis-build.sh "drone_proj/drone_proj:drone_proj/digi_write" "Uno->drone-uno#-DDRONE=1:Mega 2560->drone-mega-2560#-DDRONE=0"
