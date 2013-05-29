@@ -220,6 +220,40 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		avect.push_back(note(note_E4,1));
 		avect.push_back(note(note_Eb4,1));
 		avect.push_back(note(note_E4,4));
+		avect.push_back(note(note_A4,2));
+		avect.push_back(note(note_G4,1));
+		avect.push_back(note(note_Gb4,1));
+		avect.push_back(note(note_G4,2));
+		avect.push_back(note(note_A4,1));
+		avect.push_back(note(note_B4,1));
+		// Bar 19:
+		avect.push_back(note(note_D5,1));
+		avect.push_back(note(note_C5,1));
+		avect.push_back(note(note_C5,1));
+		avect.push_back(note(note_B4,1));
+		avect.push_back(note(note_C5,3));
+		avect.push_back(note(note_Ab4,1));
+		avect.push_back(note(note_A4,2));
+		avect.push_back(note(note_C4,1));
+		avect.push_back(note(note_D4,1));
+		avect.push_back(note(note_E4,2));
+		avect.push_back(note(note_E4,1));
+		avect.push_back(note(note_F4,1));
+		avect.push_back(note(note_A4,1));
+		avect.push_back(note(note_G4,1));
+		avect.push_back(note(note_A4,1));
+		avect.push_back(note(note_G4,1));
+		// Bar 24:
+		avect.push_back(note(note_A4,1));
+		avect.push_back(note(note_G4,3));
+		avect.push_back(note(note_E5,1));
+		avect.push_back(note(note_D5,1));
+		avect.push_back(note(note_C5,1));
+		avect.push_back(note(note_B4,1));
+		avect.push_back(note(note_Bb4,2));
+		avect.push_back(note(note_E4,2));
+		avect.push_back(note(note_F4,5));
+		avect.push_back(note(0,3));
 		tunes["Dad's Army"]=tune(250,avect);
 
 		_tunename=tune_name;
@@ -246,7 +280,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 
 	char nextval[10];
-	int x, wait=70;
+	int x, wait=100;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
