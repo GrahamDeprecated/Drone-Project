@@ -209,7 +209,10 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		for (int x=0; x < (14*100); x++)
 		{
 			_tunetimer.update();
+			delay(10);
 		}
+		Serial.println("End of loop");
+		noTone(4);
 	}
 
 	char nextval[10];
