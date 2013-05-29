@@ -170,6 +170,7 @@ class Vector {
 			delay_ms=ms_between;
 			notes=thenotes;
 		}
+		tune() {} 
 	};
 	Timer _tunetimer;
 	int _tunepin;
