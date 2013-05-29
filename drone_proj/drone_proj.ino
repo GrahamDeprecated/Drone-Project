@@ -152,6 +152,10 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			delay_ms=ms_between;
 			notes=thenotes;
 		}
+		tune(int ms_between)
+		{
+			delay_ms=ms_between;
+		}
 		tune() {} 
 	};
 	Timer _tunetimer;
@@ -187,75 +191,157 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 	void playtune(String tune_name, int pin)
 	{
-		avect.push_back(note(note_A4,2));
-		avect.push_back(note(note_C4,1));
-		avect.push_back(note(note_D4,1));
-		avect.push_back(note(note_E4,2));
-		avect.push_back(note(note_E4,1));
-		avect.push_back(note(note_F4,1));
-		avect.push_back(note(note_A4,1));
-		avect.push_back(note(note_G4,1));
-		avect.push_back(note(note_A4,1));
-		avect.push_back(note(note_G4,1));
-		avect.push_back(note(note_A4,1));
-		avect.push_back(note(note_G4,3));
-		// Bar 9:
-		avect.push_back(note(note_A4,1));
-		avect.push_back(note(note_G4,1));
-		avect.push_back(note(note_Gb4,1));
-		avect.push_back(note(note_G4,1));
-		avect.push_back(note(note_A4,2));
-		avect.push_back(note(note_G4,2));
-		avect.push_back(note(note_C4,6));
-		avect.push_back(note(0,2));
-		avect.push_back(note(note_G4,2));
-		avect.push_back(note(note_F4,1));
-		avect.push_back(note(note_E4,1));
-		// Bar 14:
-		avect.push_back(note(note_G4,2));
-		avect.push_back(note(note_F4,1));
-		avect.push_back(note(note_D4,1));
-		avect.push_back(note(note_F4,1));
-		avect.push_back(note(note_E4,1));
-		avect.push_back(note(note_E4,1));
-		avect.push_back(note(note_Eb4,1));
-		avect.push_back(note(note_E4,4));
-		avect.push_back(note(note_A4,2));
-		avect.push_back(note(note_G4,1));
-		avect.push_back(note(note_Gb4,1));
-		avect.push_back(note(note_G4,2));
-		avect.push_back(note(note_A4,1));
-		avect.push_back(note(note_B4,1));
-		// Bar 19:
-		avect.push_back(note(note_D5,1));
-		avect.push_back(note(note_C5,1));
-		avect.push_back(note(note_C5,1));
-		avect.push_back(note(note_B4,1));
-		avect.push_back(note(note_C5,3));
-		avect.push_back(note(note_Ab4,1));
-		avect.push_back(note(note_A4,2));
-		avect.push_back(note(note_C4,1));
-		avect.push_back(note(note_D4,1));
-		avect.push_back(note(note_E4,2));
-		avect.push_back(note(note_E4,1));
-		avect.push_back(note(note_F4,1));
-		avect.push_back(note(note_A4,1));
-		avect.push_back(note(note_G4,1));
-		avect.push_back(note(note_A4,1));
-		avect.push_back(note(note_G4,1));
-		// Bar 24:
-		avect.push_back(note(note_A4,1));
-		avect.push_back(note(note_G4,3));
-		avect.push_back(note(note_E5,1));
-		avect.push_back(note(note_D5,1));
-		avect.push_back(note(note_C5,1));
-		avect.push_back(note(note_B4,1));
-		avect.push_back(note(note_Bb4,2));
-		avect.push_back(note(note_E4,2));
-		avect.push_back(note(note_F4,5));
-		avect.push_back(note(0,3));
-		tunes["Dad's Army"]=tune(250,avect);
+		tunes["Dad's Army"]=tune(250); //Crotchets
+			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_C4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_D4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_E4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,3));
+			// Bar 9:
+			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_Gb4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_C4,6));
+			tunes["Dad's Army"].notes.push_back(note(0,2));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
+			// Bar 14:
+			tunes["Dad's Army"].notes.push_back(note(note_G4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_D4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_Eb4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_E4,4));
+			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_Gb4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_B4,1));
+			// Bar 19:
+			tunes["Dad's Army"].notes.push_back(note(note_D5,1));
+			tunes["Dad's Army"].notes.push_back(note(note_C5,1));
+			tunes["Dad's Army"].notes.push_back(note(note_C5,1));
+			tunes["Dad's Army"].notes.push_back(note(note_B4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_C5,3));
+			tunes["Dad's Army"].notes.push_back(note(note_Ab4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_C4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_D4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_E4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
+			// Bar 24:
+			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_G4,3));
+			tunes["Dad's Army"].notes.push_back(note(note_E5,1));
+			tunes["Dad's Army"].notes.push_back(note(note_D5,1));
+			tunes["Dad's Army"].notes.push_back(note(note_C5,1));
+			tunes["Dad's Army"].notes.push_back(note(note_B4,1));
+			tunes["Dad's Army"].notes.push_back(note(note_Bb4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_E4,2));
+			tunes["Dad's Army"].notes.push_back(note(note_F4,5));
+			tunes["Dad's Army"].notes.push_back(note(0,3));
 
+		tunes["God Save the Queen"]=tune(125); //Semi-quavers
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_D3,6));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,6));
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,4));
+			// Bar 5:
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_D3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,6));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
+			// Bar 9:
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,6));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,6));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,4));
+			// Bar 13:
+			tunes["God Save the Queen"].notes.push_back(note(note_C4,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,1));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,1));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,6));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,4));
+			// Bar 17:
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,6));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,6));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_C4,2));
+			tunes["God Save the Queen"].notes.push_back(note(note_B3,1));
+			tunes["God Save the Queen"].notes.push_back(note(note_A3,1));
+			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_E3,4));
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,12));
+		
 		_tunename=tune_name;
 		_tunepin=pin;
 		_tuneindex=0;
@@ -275,12 +361,18 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			_tunetimer.update();
 			delay(10);
 		}
+		playtune("God Save the Queen",4);
+		for (int x=0; x < (30*100); x++)
+		{
+			_tunetimer.update();
+			delay(10);
+		}
 		Serial.println("End of loop");
 		noTone(4);
 	}
 
 	char nextval[10];
-	int x, wait=100;
+	int x, wait=500;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
