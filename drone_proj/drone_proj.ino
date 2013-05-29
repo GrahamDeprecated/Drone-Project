@@ -11,8 +11,6 @@
 */
 
 #include <stdlib.h>
-#include <istream>
-#include <char_traits.h>
 #include <string>
 #include <map>
 #include <vector>
