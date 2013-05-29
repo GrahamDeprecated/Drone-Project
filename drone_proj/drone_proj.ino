@@ -126,6 +126,13 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		return ret;
 	}
 #else
+
+#define A4 440
+#define A3 220
+	struct note { int freq; int time; note(int hz, int ms) { freq=hz; time=ms; } };
+	note one (A4,10000);
+	note two (A3,10000);
+
 	void setup()
 	{
 		pins.setio(31,false)->setio(35,false)->setio(39,false)->setio(43,false);
@@ -133,11 +140,16 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		Serial.print((char)27);
 		Serial.print("[2J");
 		Serial.println("Startup");
-		tone(4,440);
+		tone(4,one.freq,one.time);
+		tone(4,two.freq,two.time);
+		tone(4,one.freq,one.time);
+		tone(4,two.freq,two.time);
+		tone(4,one.freq,one.time);
+		tone(4,two.freq,two.time);
 	}
 
 	char nextval[10];
-	int x, wait=8;
+	int x, wait=16;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
