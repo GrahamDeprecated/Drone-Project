@@ -133,10 +133,11 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		Serial.print((char)27);
 		Serial.print("[2J");
 		Serial.println("Startup");
+		tone(4,440);
 	}
 
 	char nextval[10];
-	int x, wait=2;
+	int x, wait=4;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
