@@ -126,7 +126,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		return ret;
 	}
 #else
-	int wait=1000;
+	int wait=10000;
 	void setup()
 	{
 		pins.setio(31,false)->setio(35,false)->setio(39,false)->setio(43,false);
@@ -147,7 +147,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			pins.set(39,(nextval[1] == 49));
 			pins.set(35,(nextval[2] == 49));
 			pins.set(31,(nextval[3] == 49));
-			Serial.println("Written data part 1");
+			Serial.println("Written data part 1: "+nextval[0]+nextval[1]+nextval[2]+nextval[3]);
 			delayMicroseconds(wait);
 			pins.set(43,false);
 			pins.set(39,false);
@@ -159,7 +159,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			pins.set(39,(nextval[5] == 49));
 			pins.set(35,(nextval[6] == 49));
 			pins.set(31,(nextval[7] == 49));
-			Serial.println("Written data part 2");
+			Serial.println("Written data part 2: "+nextval[4]+nextval[5]+nextval[6]+nextval[7]);
 			delayMicroseconds(wait);
 			pins.set(43,false);
 			pins.set(39,false);
