@@ -158,6 +158,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	int _tunepin;
 	int _tuneindex;
 	String _tunename;
+	int _tunetmpfreq;
 	std::map<String,tune> tunes;
 	std::vector<note> avect;
 	
@@ -166,7 +167,15 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		//Serial.println("Index: " + _tuneindex + (String)"  #notes: " + tunes[_tunename].notes.size() + "  total wait time: " + (tunes[_tunename].delay_ms * tunes[_tunename].notes[_tuneindex].time));
 		if (_tuneindex < tunes[_tunename].notes.size())
 		{
-			tone(_tunepin,tunes[_tunename].notes[_tuneindex].freq);
+			_tunetmpfreq=tunes[_tunename].notes[_tuneindex].freq;
+			if (_tunetmpfreq == 0)
+			{
+				noTone(_tunepin);
+			}
+			else
+			{
+				tone(_tunepin,_tunetmpfreq);
+			}
 			_tunetimer.after(tunes[_tunename].delay_ms * tunes[_tunename].notes[_tuneindex].time,tune_worker);
 			_tuneindex++;
 		}
@@ -190,6 +199,27 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		avect.push_back(note(note_G4,1));
 		avect.push_back(note(note_A4,1));
 		avect.push_back(note(note_G4,3));
+		// Bar 9:
+		avect.push_back(note(note_A4,1));
+		avect.push_back(note(note_G4,1));
+		avect.push_back(note(note_Gb4,1));
+		avect.push_back(note(note_G4,1));
+		avect.push_back(note(note_A4,2));
+		avect.push_back(note(note_G4,2));
+		avect.push_back(note(note_C4,6));
+		avect.push_back(note(0,2));
+		avect.push_back(note(note_G4,2));
+		avect.push_back(note(note_F4,1));
+		avect.push_back(note(note_E4,1));
+		// Bar 14:
+		avect.push_back(note(note_G4,2));
+		avect.push_back(note(note_F4,1));
+		avect.push_back(note(note_D4,1));
+		avect.push_back(note(note_F4,1));
+		avect.push_back(note(note_E4,1));
+		avect.push_back(note(note_E4,1));
+		avect.push_back(note(note_Eb4,1));
+		avect.push_back(note(note_E4,4));
 		tunes["Dad's Army"]=tune(250,avect);
 
 		_tunename=tune_name;
@@ -206,7 +236,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		Serial.print("[2J");
 		Serial.println("Startup");
 		playtune("Dad's Army",4);
-		for (int x=0; x < (14*100); x++)
+		for (int x=0; x < (30*100); x++)
 		{
 			_tunetimer.update();
 			delay(10);
@@ -216,7 +246,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 
 	char nextval[10];
-	int x, wait=50;
+	int x, wait=70;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
