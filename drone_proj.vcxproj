@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Users\Peter\Documents\GitHub\Drone; $(HOMEDRIVE)$(HOMEPATH)\Documents\GitHub; D:\boost\Win32\include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Peter\Documents\GitHub\Drone;C:\Users\Peter\Programs\avr-stl\include;D:\boost\Win32\include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -70,9 +70,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="drone_proj\notedefs.h" />
     <ClInclude Include="Visual Micro\.drone_proj.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="drone_proj\digi_write.ino" />
     <None Include="drone_proj\drone_proj.ino" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

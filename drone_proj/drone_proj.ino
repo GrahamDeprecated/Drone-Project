@@ -11,8 +11,10 @@
 */
 
 #include <stdlib.h>
-#include <map>
+#include <istream>
+#include <char_traits.h>
 #include <string>
+#include <map>
 #include <vector>
 #include "digi_write.h"
 #include "notedefs.h"
