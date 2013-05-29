@@ -130,8 +130,8 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 #define A4 440
 #define A3 220
 	struct note { int freq; int time; note(int hz, int ms) { freq=hz; time=ms; } };
-	note one (A4,10000);
-	note two (A3,10000);
+	note one (A4,1000);
+	note two (A3,1000);
 
 	void setup()
 	{
@@ -144,10 +144,11 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		tone(4,two.freq); delay(two.time);
 		tone(4,one.freq); delay(one.time);
 		tone(4,two.freq); delay(two.time);
+		noTone(4);
 	}
 
 	char nextval[10];
-	int x, wait=32;
+	int x, wait=100;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
