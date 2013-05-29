@@ -163,6 +163,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	
 	void tune_worker()
 	{
+		Serial.println("Index: " + _tuneindex + (String)"  #notes: " + tunes[_tunename].notes.size() + "  total wait time: " + (tunes[_tunename].delay_ms * tunes[_tunename].notes[_tuneindex].time));
 		if (_tuneindex < tunes[_tunename].notes.size())
 		{
 			tone(_tunepin,tunes[_tunename].notes[_tuneindex].freq);
@@ -205,7 +206,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		Serial.print("[2J");
 		Serial.println("Startup");
 		playtune("Dad's Army",4);
-		for (int x=0; x < 14*100; x++)
+		for (int x=0; x < (14*100); x++)
 		{
 			_tunetimer.update();
 		}
