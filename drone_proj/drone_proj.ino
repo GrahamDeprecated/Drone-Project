@@ -11,7 +11,11 @@
 */
 
 #include <stdlib.h>
+#include <map>
+#include <string>
+#include <vector>
 #include "digi_write.h"
+#include "notedefs.h"
 
 Shifter shifts2(SHIFT_SERIAL, SHIFT_LATCH, SHIFT_CLOCK, 1 /*Number of shift registers in chain*/);
 digi_pins pins(&shifts2,"0,1");
@@ -127,11 +131,87 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 #else
 
-#define A4 440
-#define A3 220
-	struct note { int freq; int time; note(int hz, int ms) { freq=hz; time=ms; } };
-	note one (A4,1000);
-	note two (A3,1000);
+/*// Minimal class to replace std::vector
+template<typename Data>
+class Vector {
+   size_t d_size; // Stores no. of actually stored objects
+   size_t d_capacity; // Stores allocated capacity
+   Data *d_data; // Stores data
+   public:
+     Vector() : d_size(0), d_capacity(0), d_data(0) {}; // Default constructor
+     Vector(Vector const &other) : d_size(other.d_size), d_capacity(other.d_capacity), d_data(0) { d_data = (Data *)malloc(d_capacity*sizeof(Data)); memcpy(d_data, other.d_data, d_size*sizeof(Data)); }; // Copy constuctor
+     ~Vector() { free(d_data); }; // Destructor
+     Vector &operator=(Vector const &other) { free(d_data); d_size = other.d_size; d_capacity = other.d_capacity; d_data = (Data *)malloc(d_capacity*sizeof(Data)); memcpy(d_data, other.d_data, d_size*sizeof(Data)); return *this; }; // Needed for memory management
+     void push_back(Data const &x) { if (d_capacity == d_size) resize(); d_data[d_size++] = x; }; // Adds new value. If needed, allocates more space
+     size_t size() const { return d_size; }; // Size getter
+     Data const &operator[](size_t idx) const { return d_data[idx]; }; // Const getter
+     Data &operator[](size_t idx) { return d_data[idx]; }; // Changeable getter
+   private:
+     void resize() { d_capacity = d_capacity ? d_capacity*2 : 1; Data *newdata = (Data *)malloc(d_capacity*sizeof(Data)); memcpy(newdata, d_data, d_size * sizeof(Data)); free(d_data); d_data = newdata; };// Allocates double the old space
+};*/
+
+	struct note
+	{
+		int freq;
+		int time;
+		note(int hz, int rel_time)
+		{
+			freq=hz;
+			time=rel_time;
+		}
+	};
+	struct tune
+	{
+		int delay_ms;
+		std::vector<note> notes;
+		tune(int ms_between, std::vector<note> thenotes)
+		{
+			delay_ms=ms_between;
+			notes=thenotes;
+		}
+	};
+	Timer _tunetimer;
+	int _tunepin;
+	int _tuneindex;
+	String _tunename;
+	std::map<String,tune> tunes;
+	std::vector<note> avect;
+	
+	void tune_worker()
+	{
+		if (_tuneindex < tunes[_tunename].notes.size())
+		{
+			tone(_tunepin,tunes[_tunename].notes[_tuneindex].freq);
+			_tunetimer.after(tunes[_tunename].notes[_tuneindex].time,tune_worker);
+			_tuneindex++;
+		}
+		else
+		{
+			noTone(_tunepin);
+			_tuneindex=0;
+		}
+	}
+	void playtune(String tune_name, int pin)
+	{
+		avect.push_back(note(note_A4,2));
+		avect.push_back(note(note_C4,1));
+		avect.push_back(note(note_D4,1));
+		avect.push_back(note(note_E4,2));
+		avect.push_back(note(note_E4,1));
+		avect.push_back(note(note_F4,1));
+		avect.push_back(note(note_A4,1));
+		avect.push_back(note(note_G4,1));
+		avect.push_back(note(note_A4,1));
+		avect.push_back(note(note_G4,1));
+		avect.push_back(note(note_A4,1));
+		avect.push_back(note(note_G4,3));
+		tunes["Dad's Army"]=tune(100,avect);
+
+		_tunename=tune_name;
+		_tunepin=pin;
+		_tuneindex=0;
+		tune_worker();
+	}
 
 	void setup()
 	{
@@ -140,15 +220,15 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		Serial.print((char)27);
 		Serial.print("[2J");
 		Serial.println("Startup");
-		tone(4,one.freq); delay(one.time);
-		tone(4,two.freq); delay(two.time);
-		tone(4,one.freq); delay(one.time);
-		tone(4,two.freq); delay(two.time);
-		noTone(4);
+		playtune("Dad's Army",4);
+		for (int x=0; x < 14*100; x++)
+		{
+			_tunetimer.update();
+		}
 	}
 
 	char nextval[10];
-	int x, wait=100;
+	int x, wait=50;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
