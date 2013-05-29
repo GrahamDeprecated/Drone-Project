@@ -10,9 +10,8 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <Arduino.h>
-#include <stdlib.h>
-#include <string>
 #include <iostream>
+#include <string>
 #include <map>
 #include <vector>
 #include "digi_write.h"
