@@ -126,7 +126,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		return ret;
 	}
 #else
-	int wait=0;
+	int wait=1000;
 	void setup()
 	{
 		pins.setio(31,false)->setio(35,false)->setio(39,false)->setio(43,false);
@@ -134,10 +134,6 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		Serial.print((char)27);
 		Serial.print("[2J");
 		Serial.println("Startup");
-		Serial.println("Delay (us): ");
-		String delay=Serial.readStringUntil('\n');
-		wait=delay.toInt();
-		Serial.println("Waiting "+wait+(String)" between transmits");
 	}
 
 	char nextval[10];
