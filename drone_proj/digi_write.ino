@@ -336,7 +336,7 @@ void			digi_pins::tune_worker()
 			tone(_tunepin, _notes[_tunetmpstr.substring(0, semi)]);
 		}
 		_tunetimer->after(_tune_delay_ms * _tunetmpstr.substring(semi +1).toInt(),tune_worker);
-		_tuneindex=tmpindex/*+ _tunetmpstr.length() -2*/;
+		_tuneindex=tmpindex + 1/*+ _tunetmpstr.length() -2*/;
 	}
 	else
 	{
