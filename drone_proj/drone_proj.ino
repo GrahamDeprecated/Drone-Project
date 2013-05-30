@@ -132,8 +132,8 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		return ret;
 	}
 #else
-	//#include <initializer_list> // Allows maps to be initialised using a list in curly braces
-	struct note
+	//#include <initializer_list> // Allows maps to be initialised using a list in curly braces   - can do if we find libc++ for avr...
+	/*struct note
 	{
 		int freq;
 		int time;
@@ -157,7 +157,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			delay_ms=ms_between;
 		}
 		tune() {} 
-	};
+	};*/
 	Timer _tunetimer;
 	unsigned char _tunepin;
 	typedef unsigned short ushort;
@@ -168,9 +168,142 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	String _tunetmpstr;
 	//std::map<String,tune> tunes;
 	//std::vector<note> avect;
-	std::map<String,String> tunes2={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}};
-	std::map<String,ushort> notes={{"A4",440}, {"C4",262}, {"D4",294}, {"E4",330}};
-	
+	std::map<String,String> tunes /*={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}}   - can do if we find libc++ for avr...*/;
+	std::map<String,ushort> notes  /*={{"A4",440}, {"C4",262}, {"D4",294}, {"E4",330}}   - can do if we find libc++ for avr...*/;
+	void tune_init()
+	{
+		tunes["Dad's Army"]=(String)"250 A4;2 C4;1 D4;1 E4;2 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1 A4;1 G4;1" +
+			/*Bar 9 :*/	" A4;1 G4;1 Gb4;1 G4;1 A4;1 G4;1 C4;1 RT;2 G4;2 F4;1 E4;1" +
+			/*Bar 14:*/ " G4;2 F4;1 D4;1 F4;1 E4;1 E4;1 Eb4;1 E4;4 A4;2 G4;1 Gb4;1 G4;2 A4;1 B4;1" +
+			/*Bar 19:*/ " D5;1 C5;1 C5;1 B4;1 C5;3 Ab4;1 A4;2 C4;1 D4;1 E4;1 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1" +
+			/*Bar 24:*/ " A4;1 G4;3 E5;1 D5;1 C5;1 B4;1 Bb4;2 E4;2 F4;5 RT;3";
+			#ifndef need_oct_4
+			#define need_oct_4
+			#endif
+			#ifndef need_oct_5
+			#define need_oct_5
+			#endif
+
+		// Only include required octaves
+		#ifdef need_oct_0
+		notes["C0"]=  16;
+		notes["Db0"]= 17;
+		notes["D0"]=  18;
+		notes["Eb0"]= 19;
+		notes["E0"]=  21;
+		notes["F0"]=  22;
+		notes["Gb0"]= 23;
+		notes["G0"]=  25;
+		notes["Ab0"]= 26;
+		notes["A0"]=  28;
+		notes["Bb0"]= 29;
+		notes["B0"]=  31;
+		#endif
+		#ifdef need_oct_1
+		notes["C1"]=  33;
+		notes["Db1"]= 35;
+		notes["D1"]=  38;
+		notes["Eb1"]= 39;
+		notes["E1"]=  41;
+		notes["F1"]=  44;
+		notes["Gb1"]= 46;
+		notes["G1"]=  49;
+		notes["Ab1"]= 52;
+		notes["A1"]=  55;
+		notes["Bb1"]= 58;
+		notes["B1"]=  62;
+		#endif
+		#ifdef need_oct_2
+		notes["C2"]=  65;
+		notes["Db2"]= 69;
+		notes["D2"]=  73;
+		notes["Eb2"]= 78;
+		notes["E2"]=  82;
+		notes["F2"]=  87;
+		notes["Gb2"]= 93;
+		notes["G2"]=  98;
+		notes["Ab2"]= 104;
+		notes["A2"]=  110;
+		notes["Bb2"]= 117;
+		notes["B2"]=  123;
+		#endif
+		#ifdef need_oct_3
+		notes["C3"]=  131;
+		notes["Db3"]= 139;
+		notes["D3"]=  147;
+		notes["Eb3"]= 156;
+		notes["E3"]=  165;
+		notes["F3"]=  175;
+		notes["Gb3"]= 185;
+		notes["G3"]=  196;
+		notes["Ab3"]= 208;
+		notes["A3"]=  220;
+		notes["Bb3"]= 233;
+		notes["B3"]=  247;
+		#endif
+		#ifdef need_oct_4
+		notes["C4"]=  262;
+		notes["Db4"]= 277;
+		notes["D4"]=  294;
+		notes["Eb4"]= 311;
+		notes["E4"]=  330;
+		notes["F4"]=  349;
+		notes["Gb4"]= 370;
+		notes["G4"]=  392;
+		notes["Ab4"]= 415;
+		notes["A4"]=  440;
+		notes["Bb4"]= 466;
+		notes["B4"]=  494;
+		#endif
+		#ifdef need_oct_5
+		notes["C5"]=  523;
+		notes["Db5"]= 554;
+		notes["D5"]=  587;
+		notes["Eb5"]= 622;
+		notes["E5"]=  660;
+		notes["F5"]=  698;
+		notes["Gb5"]= 740;
+		notes["G5"]=  784;
+		notes["Ab5"]= 831;
+		notes["A5"]=  880;
+		notes["Bb5"]= 932;
+		notes["B5"]=  988;
+		#endif
+		#ifdef need_oct_6
+		notes["C6"]=  1047;
+		notes["Db6"]= 1109;
+		notes["D6"]=  1175;
+		notes["Eb6"]= 1245;
+		notes["E6"]=  1319;
+		notes["F6"]=  1397;
+		notes["Gb6"]= 1480;
+		notes["G6"]=  1568;
+		notes["Ab6"]= 1661;
+		notes["A6"]=  1760;
+		notes["Bb6"]= 1865;
+		notes["B6"]=  1976;
+		#endif
+		#ifdef need_oct_7
+		notes["C7"]=  2093;
+		notes["Db7"]= 2217;
+		notes["D7"]=  2349;
+		notes["Eb7"]= 2489;
+		notes["E7"]=  2637;
+		notes["F7"]=  2794;
+		notes["Gb7"]= 2960;
+		notes["G7"]=  3136;
+		notes["Ab7"]= 3322;
+		notes["A7"]=  3520;
+		notes["Bb7"]= 3729;
+		notes["B7"]=  3951;
+		#endif
+		#ifdef need_oct_8
+		notes["C8"]=  4186;
+		notes["Db8"]= 4435;
+		notes["D8"]=  4699;
+		notes["Eb8"]= 4978;
+		#endif
+	}
 	void tune_worker()
 	{
 		//Serial.println("Index: " + _tuneindex + (String)"  #notes: " + tunes[_tunename].notes.size() + "  total wait time: " + (tunes[_tunename].delay_ms * tunes[_tunename].notes[_tuneindex].time));
@@ -194,20 +327,20 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			_tuneindex=0;
 		}*/
 
-		if (_tuneindex < tunes2[_tunename].length())
+		if ((_tuneindex+1) < tunes[_tunename].length())
 		{
-			ushort tmpindex=tunes2[_tunename].indexOf(' ', _tuneindex);
-			_tunetmpstr=tunes2[_tunename].substring(_tuneindex, tmpindex);
+			ushort tmpindex=tunes[_tunename].indexOf(' ', _tuneindex);
+			_tunetmpstr=tunes[_tunename].substring(_tuneindex, tmpindex);
 			ushort semi=_tunetmpstr.indexOf(";");
-			_tunetmpfreq=notes[_tunetmpstr.substring(0, semi)];
-
+			
 			Serial.println(_tunetmpstr.substring(0, semi) + " for " + _tunetmpstr.substring(semi +1));
-			if (_tunetmpfreq == 0)
+			if (_tunetmpstr.substring(0, semi) == "RT")
 			{
 				noTone(_tunepin);
 			}
 			else
 			{
+				_tunetmpfreq=notes[_tunetmpstr.substring(0, semi)];
 				tone(_tunepin,_tunetmpfreq);
 			}
 			_tunetimer.after(_tune_delay_ms * _tunetmpstr.substring(semi +1).toInt(),tune_worker);
@@ -221,77 +354,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 	void playtune(String tune_name, int pin)
 	{
-		//tunes2["Dad's Army"]="250 A4;2 C4;1 D4;1 E4;2 E4;1";
-		/*tunes["Dad's Army"]=tune(250); //Crotchets
-			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_C4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_D4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_E4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,3));
-			// Bar 9:
-			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_Gb4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_C4,6));
-			tunes["Dad's Army"].notes.push_back(note(0,2));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
-			// Bar 14:
-			tunes["Dad's Army"].notes.push_back(note(note_G4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_D4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_Eb4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_E4,4));
-			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_Gb4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_B4,1));
-			// Bar 19:
-			tunes["Dad's Army"].notes.push_back(note(note_D5,1));
-			tunes["Dad's Army"].notes.push_back(note(note_C5,1));
-			tunes["Dad's Army"].notes.push_back(note(note_C5,1));
-			tunes["Dad's Army"].notes.push_back(note(note_B4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_C5,3));
-			tunes["Dad's Army"].notes.push_back(note(note_Ab4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_C4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_D4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_E4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_E4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_F4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,1));
-			// Bar 24:
-			tunes["Dad's Army"].notes.push_back(note(note_A4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_G4,3));
-			tunes["Dad's Army"].notes.push_back(note(note_E5,1));
-			tunes["Dad's Army"].notes.push_back(note(note_D5,1));
-			tunes["Dad's Army"].notes.push_back(note(note_C5,1));
-			tunes["Dad's Army"].notes.push_back(note(note_B4,1));
-			tunes["Dad's Army"].notes.push_back(note(note_Bb4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_E4,2));
-			tunes["Dad's Army"].notes.push_back(note(note_F4,5));
-			tunes["Dad's Army"].notes.push_back(note(0,3));
-
-		tunes["God Save the Queen"]=tune(125); //Semi-quavers
+		/*tunes["God Save the Queen"]=tune(125); //Semi-quavers
 			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
 			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
 			tunes["God Save the Queen"].notes.push_back(note(note_F3,4));
@@ -372,20 +435,17 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
 			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
 			tunes["God Save the Queen"].notes.push_back(note(note_F3,12));*/
-		/*notes["A4"]=440;
-		notes["C4"]=262;
-		notes["D4"]=294;
-		notes["E4"]=330;*/
 
 		_tunename=tune_name;
 		_tunepin=pin;
-		_tuneindex=tunes2[_tunename].indexOf(' ') + 1;
-		_tune_delay_ms=tunes2[_tunename].substring(0, _tuneindex -1).toInt();
+		_tuneindex=tunes[_tunename].indexOf(' ') + 1;
+		_tune_delay_ms=tunes[_tunename].substring(0, _tuneindex -1).toInt();
 		tune_worker();
 	}
 
 	void setup()
 	{
+		tune_init();
 		pins.setio(31,false)->setio(35,false)->setio(39,false)->setio(43,false);
 		Serial.begin(9600);
 		Serial.print((char)27);
