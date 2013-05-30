@@ -303,7 +303,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 				tone(_tunepin, notes[_tunetmpstr.substring(0, semi)]);
 			}
 			_tunetimer.after(_tune_delay_ms * _tunetmpstr.substring(semi +1).toInt(),tune_worker);
-			_tuneindex=tmpindex+ _tunetmpstr.length();
+			_tuneindex=tmpindex+ _tunetmpstr.length() -1;
 		}
 		else
 		{
