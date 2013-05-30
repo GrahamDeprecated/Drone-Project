@@ -29,14 +29,6 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	String tmp="";
 	void newdata()
 	{
-		/*if ((pins.read(6) == pins.read(11)) && (pins.read(5) == pins.read(10)) && (pins.read(4) == pins.read(9)) && (pins.read(3) == pins.read(8)))
-		{
-			pins.set(13,true);
-		}
-		else
-		{
-			pins.set(13,false);
-		}*/
 		tmp+=(char)(48+pins.read(6));
 		tmp+=(char)(48+pins.read(5));
 		tmp+=(char)(48+pins.read(4));
