@@ -326,7 +326,7 @@ void			digi_pins::tune_worker()
 		ushort semi=_tunetmpstr.indexOf(";");
 			
 		//Serial.println(_tunetmpstr.substring(0, semi) + " for " + _tunetmpstr.substring(semi +1) + " index=" + _tuneindex + " adding:" + _tunetmpstr.length());
-		Serial.println((String)tmpindex + "  " + _tunetmpstr + "   " + semi + "   " + _tunetmpstr.substring(0, semi) + "   " + _tunetmpstr.substring(semi +1));
+		//Serial.println((String)tmpindex + "  " + _tunetmpstr + "   " + semi + "   " + _tunetmpstr.substring(0, semi) + "   " + _tunetmpstr.substring(semi +1));
 		if (_tunetmpstr.substring(0, semi) == "RT")
 		{
 			noTone(_tunepin);
