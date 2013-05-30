@@ -23,6 +23,7 @@
 	//#include <string>
 	#include <map>
 	//#include <initializer_list> // Allows maps to be initialised using a list in curly braces   - can do if we find libc++ for avr...
+	typedef unsigned short ushort;
 #endif
 class digi_pins
 {
@@ -49,7 +50,6 @@ class digi_pins
 		#ifdef need_tune_support
 			static Timer	*	_tunetimer;
 			static unsigned char _tunepin;
-			typedef unsigned short ushort;
 			static ushort		_tuneindex;
 			static ushort		_tune_delay_ms;
 			static String		_tunename;
