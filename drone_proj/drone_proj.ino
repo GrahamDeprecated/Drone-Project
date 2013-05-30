@@ -137,7 +137,6 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	unsigned char _tunepin;
 	typedef unsigned short ushort;
 	ushort _tuneindex;
-	ushort _tunetmpfreq;
 	ushort _tune_delay_ms;
 	String _tunename;
 	String _tunetmpstr;
@@ -159,8 +158,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		tunes["God Save the Queen"]=(String)"125 Eb3;4 Eb3;4 F3;4 D3;6 Eb3;2 F3;4 G3;4 G3;4 Ab3;4 G3;6 F3;2 Eb3;4" +
 			/*Bar 5 :*/ " F3;4 Eb3;4 D3;4 Eb3;4 Eb3;2 F3;2 G3;2 Ab3;2 Bb3;4 Bb3;4 Bb3;4 Bb3;6 Ab3;2 G3;4" +
 			/*Bar 9 :*/ " Ab3;4 Ab3;4 Ab3;4 Ab3;6 G3;2 Eb3;4 G3;4 Ab3;2 G3;2 Eb3;2 F3;2 G3;6 Ab3;2 Bb3;4" +
-			/*Bar 13:*/ " C4;2 Bb3;1 Ab3;1 G3;4 Eb3;4 F3;4 F3;2 Eb3;2 G3;2 Ab3;2 Bb3;4 Bb3;4 Bb3;4 Bb3;6 Ab3;2 G3;4 Ab3;4 Ab3;4 Ab3;4" +
-			/*Bar 17:*/ " Ab3;6 G3;2 Eb3;4 G3;4 Ab3;2 G3;2 Eb3;2 F3;2 G3;6 Ab3;2 Bb3;4 C4;2 Bb3;1 Ab3;1 G3;4 Eb3;4 F3;12";
+			/*Bar 13:*/ " C4;2 Bb3;1 Ab3;1 G3;4 Eb3;4 F3;12";
 			#ifndef need_oct_3
 			#define need_oct_3
 			#endif
@@ -302,11 +300,10 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			}
 			else
 			{
-				_tunetmpfreq=notes[_tunetmpstr.substring(0, semi)];
-				tone(_tunepin,_tunetmpfreq);
+				tone(_tunepin, notes[_tunetmpstr.substring(0, semi)]);
 			}
 			_tunetimer.after(_tune_delay_ms * _tunetmpstr.substring(semi +1).toInt(),tune_worker);
-			_tuneindex=tmpindex+1;
+			_tuneindex=tmpindex+ _tunetmpstr.length();
 		}
 		else
 		{
