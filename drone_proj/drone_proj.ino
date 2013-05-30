@@ -133,31 +133,6 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 #else
 	//#include <initializer_list> // Allows maps to be initialised using a list in curly braces   - can do if we find libc++ for avr...
-	/*struct note
-	{
-		int freq;
-		int time;
-		note(int hz, int rel_time)
-		{
-			freq=hz;
-			time=rel_time;
-		}
-	};
-	struct tune
-	{
-		int delay_ms;
-		std::vector<note> notes;
-		tune(int ms_between, std::vector<note> thenotes)
-		{
-			delay_ms=ms_between;
-			notes=thenotes;
-		}
-		tune(int ms_between)
-		{
-			delay_ms=ms_between;
-		}
-		tune() {} 
-	};*/
 	Timer _tunetimer;
 	unsigned char _tunepin;
 	typedef unsigned short ushort;
@@ -166,14 +141,12 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	ushort _tune_delay_ms;
 	String _tunename;
 	String _tunetmpstr;
-	//std::map<String,tune> tunes;
-	//std::vector<note> avect;
 	std::map<String,String> tunes /*={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}}   - can do if we find libc++ for avr...*/;
 	std::map<String,ushort> notes  /*={{"A4",440}, {"C4",262}, {"D4",294}, {"E4",330}}   - can do if we find libc++ for avr...*/;
 	void tune_init()
 	{
-		tunes["Dad's Army"]=(String)"250 A4;2 C4;1 D4;1 E4;2 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1 A4;1 G4;1" +
-			/*Bar 9 :*/	" A4;1 G4;1 Gb4;1 G4;1 A4;1 G4;1 C4;1 RT;2 G4;2 F4;1 E4;1" +
+		tunes["Dad's Army"]=(String)"250 A4;2 C4;1 D4;1 E4;2 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1 A4;1 G4;2" +
+			/*Bar 9 :*/	" A4;1 G4;1 Gb4;1 G4;1 A4;2 G4;2 C4;6 RT;2 G4;2 F4;1 E4;1" +
 			/*Bar 14:*/ " G4;2 F4;1 D4;1 F4;1 E4;1 E4;1 Eb4;1 E4;4 A4;2 G4;1 Gb4;1 G4;2 A4;1 B4;1" +
 			/*Bar 19:*/ " D5;1 C5;1 C5;1 B4;1 C5;3 Ab4;1 A4;2 C4;1 D4;1 E4;1 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1" +
 			/*Bar 24:*/ " A4;1 G4;3 E5;1 D5;1 C5;1 B4;1 Bb4;2 E4;2 F4;5 RT;3";
@@ -183,7 +156,6 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			#ifndef need_oct_5
 			#define need_oct_5
 			#endif
-
 		tunes["God Save the Queen"]=(String)"125 Eb3;4 Eb3;4 F3;4 D3;6 Eb3;2 F3;4 G3;4 G3;4 Ab3;4 G3;6 F3;2 Eb3;4" +
 			/*Bar 5 :*/ " F3;4 Eb3;4 D3;4 Eb3;4 Eb3;2 F3;2 G3;2 Ab3;2 Bb3;4 Bb3;4 Bb3;4 Bb3;6 Ab3;2 G3;4" +
 			/*Bar 9 :*/ " Ab3;4 Ab3;4 Ab3;4 Ab3;6 G3;2 Eb3;4 G3;4 Ab3;2 G3;2 Eb3;2 F3;2 G3;6 Ab3;2 Bb3;4" +
@@ -195,7 +167,6 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			#ifndef need_oct_4
 			#define need_oct_4
 			#endif
-
 		// Only include required octaves
 		#ifdef need_oct_0
 		notes["C0"]=  16;
@@ -377,7 +348,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 
 	char nextval[10];
-	int x, wait=400;
+	int x, wait=200;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
