@@ -132,7 +132,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		return ret;
 	}
 #else
-#include <initializer_list> // Allows maps to be initialised using a list in curly braces
+	#include <initializer_list> // Allows maps to be initialised using a list in curly braces
 	struct note
 	{
 		int freq;
