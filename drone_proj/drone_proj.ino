@@ -159,17 +159,22 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		tune() {} 
 	};
 	Timer _tunetimer;
-	int _tunepin;
-	int _tuneindex;
+	unsigned char _tunepin;
+	typedef unsigned short ushort;
+	ushort _tuneindex;
+	ushort _tunetmpfreq;
+	ushort _tune_delay_ms;
 	String _tunename;
-	int _tunetmpfreq;
-	std::map<String,tune> tunes;
-	std::vector<note> avect;
+	String _tunetmpstr;
+	//std::map<String,tune> tunes;
+	//std::vector<note> avect;
+	std::map<String,String> tunes2;
+	std::map<String,ushort> notes;
 	
 	void tune_worker()
 	{
 		//Serial.println("Index: " + _tuneindex + (String)"  #notes: " + tunes[_tunename].notes.size() + "  total wait time: " + (tunes[_tunename].delay_ms * tunes[_tunename].notes[_tuneindex].time));
-		if (_tuneindex < tunes[_tunename].notes.size())
+		/*if (_tuneindex < tunes[_tunename].notes.size())
 		{
 			_tunetmpfreq=tunes[_tunename].notes[_tuneindex].freq;
 			if (_tunetmpfreq == 0)
@@ -187,11 +192,37 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		{
 			noTone(_tunepin);
 			_tuneindex=0;
+		}*/
+
+		if (_tuneindex < tunes2[_tunename].length())
+		{
+			ushort tmpindex=tunes2[_tunename].indexOf(' ', _tuneindex);
+			_tunetmpstr=tunes2[_tunename].substring(_tuneindex, tmpindex);
+			ushort semi=_tunetmpstr.indexOf(";");
+			_tunetmpfreq=notes[_tunetmpstr.substring(0, semi)];
+
+			Serial.println(_tunetmpstr.substring(0, semi) + " for " + _tunetmpstr.substring(semi +1));
+			if (_tunetmpfreq == 0)
+			{
+				noTone(_tunepin);
+			}
+			else
+			{
+				tone(_tunepin,_tunetmpfreq);
+			}
+			_tunetimer.after(_tune_delay_ms * _tunetmpstr.substring(semi +1).toInt(),tune_worker);
+			_tuneindex=tmpindex+1;
+		}
+		else
+		{
+			noTone(_tunepin);
+			_tuneindex=0;
 		}
 	}
 	void playtune(String tune_name, int pin)
 	{
-		tunes["Dad's Army"]=tune(250); //Crotchets
+		tunes2["Dad's Army"]="250 A4;2 C4;1 D4;1 E4;2 E4;1";
+		/*tunes["Dad's Army"]=tune(250); //Crotchets
 			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
 			tunes["Dad's Army"].notes.push_back(note(note_C4,1));
 			tunes["Dad's Army"].notes.push_back(note(note_D4,1));
@@ -340,11 +371,16 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,1));
 			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
 			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,12));
-		
+			tunes["God Save the Queen"].notes.push_back(note(note_F3,12));*/
+		notes["A4"]=440;
+		notes["C4"]=262;
+		notes["D4"]=294;
+		notes["E4"]=330;
+
 		_tunename=tune_name;
 		_tunepin=pin;
-		_tuneindex=0;
+		_tuneindex=tunes2[_tunename].indexOf(' ') + 1;
+		_tune_delay_ms=tunes2[_tunename].substring(0, _tuneindex -1).toInt();
 		tune_worker();
 	}
 
@@ -361,12 +397,12 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			_tunetimer.update();
 			delay(10);
 		}
-		playtune("God Save the Queen",4);
+		/*playtune("God Save the Queen",4);
 		for (int x=0; x < (30*100); x++)
 		{
 			_tunetimer.update();
 			delay(10);
-		}
+		}*/
 		Serial.println("End of loop");
 		noTone(4);
 	}

@@ -15,11 +15,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="drone_proj\notedefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Visual Micro\.drone_proj.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="drone_proj\drone_proj.ino" />
+    <None Include="drone_proj\digi_write.ino" />
   </ItemGroup>
 </Project>
