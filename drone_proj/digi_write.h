@@ -16,6 +16,14 @@
 #include "Timer/Timer.h"
 #include "pindefs.h"
 
+#ifdef need_tune_support
+	#include <pnew.cpp>
+	#include <stl_config.h>
+	#include <iostream>
+	//#include <string>
+	#include <map>
+	//#include <initializer_list> // Allows maps to be initialised using a list in curly braces   - can do if we find libc++ for avr...
+#endif
 class digi_pins
 {
 	public:
@@ -39,12 +47,6 @@ class digi_pins
 		Shifter		*	_shifts;
 
 		#ifdef need_tune_support
-			#include <pnew.cpp>
-			#include <stl_config.h>
-			#include <iostream>
-			//#include <string>
-			#include <map>
-			//#include <initializer_list> // Allows maps to be initialised using a list in curly braces   - can do if we find libc++ for avr...
 			static Timer	*	_tunetimer;
 			static unsigned char _tunepin;
 			typedef unsigned short ushort;
