@@ -169,7 +169,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	//std::map<String,tune> tunes;
 	//std::vector<note> avect;
 	std::map<String,String> tunes2={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}};
-	std::map<String,ushort> notes;
+	std::map<String,ushort> notes={{"A4",440}, {"C4",262}, {"D4",294}, {"E4",330}};
 	
 	void tune_worker()
 	{
@@ -372,10 +372,10 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
 			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
 			tunes["God Save the Queen"].notes.push_back(note(note_F3,12));*/
-		notes["A4"]=440;
+		/*notes["A4"]=440;
 		notes["C4"]=262;
 		notes["D4"]=294;
-		notes["E4"]=330;
+		notes["E4"]=330;*/
 
 		_tunename=tune_name;
 		_tunepin=pin;
