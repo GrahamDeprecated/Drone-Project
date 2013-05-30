@@ -168,7 +168,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	String _tunetmpstr;
 	//std::map<String,tune> tunes;
 	//std::vector<note> avect;
-	std::map<String,String> tunes2;
+	std::map<String,String> tunes2={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}};
 	std::map<String,ushort> notes;
 	
 	void tune_worker()
@@ -221,7 +221,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 	void playtune(String tune_name, int pin)
 	{
-		tunes2["Dad's Army"]="250 A4;2 C4;1 D4;1 E4;2 E4;1";
+		//tunes2["Dad's Army"]="250 A4;2 C4;1 D4;1 E4;2 E4;1";
 		/*tunes["Dad's Army"]=tune(250); //Crotchets
 			tunes["Dad's Army"].notes.push_back(note(note_A4,2));
 			tunes["Dad's Army"].notes.push_back(note(note_C4,1));
