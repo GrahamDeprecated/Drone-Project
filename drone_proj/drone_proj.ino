@@ -372,7 +372,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 
 	char nextval[10];
-	int x, wait= 400;
+	int x, wait=400;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
