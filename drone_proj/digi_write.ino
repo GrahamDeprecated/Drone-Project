@@ -176,7 +176,7 @@ void			digi_pins::tune_init()
 		_tunes["Dad's Army"]=(String)"250 A4;2 C4;1 D4;1 E4;2 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1 A4;1 G4;2" +
 			/*Bar 9 :*/	" A4;1 G4;1 Gb4;1 G4;1 A4;2 G4;2 C4;6 RT;2 G4;2 F4;1 E4;1" +
 			/*Bar 14:*/ " G4;2 F4;1 D4;1 F4;1 E4;1 E4;1 Eb4;1 E4;4 A4;2 G4;1 Gb4;1 G4;2 A4;1 B4;1" +
-			/*Bar 19:*/ " D5;1 C5;1 C5;1 B4;1 C5;3 Ab4;1 A4;2 C4;1 D4;1 E4;1 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1" +
+			/*Bar 19:*/ " D5;1 C5;1 C5;1 B4;1 C5;3 Ab4;1 A4;2 C4;1 D4;1 E4;2 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1" +
 			/*Bar 24:*/ " A4;1 G4;3 E5;1 D5;1 C5;1 B4;1 Bb4;2 E4;2 F4;5 RT;3";
 			#ifndef need_oct_4
 			#define need_oct_4
@@ -188,8 +188,8 @@ void			digi_pins::tune_init()
 	#ifdef need_god_save_the_queen
 		_tunes["God Save the Queen"]=(String)"125 Eb3;4 Eb3;4 F3;4 D3;6 Eb3;2 F3;4 G3;4 G3;4 Ab3;4 G3;6 F3;2 Eb3;4" +
 			/*Bar 5 :*/ " F3;4 Eb3;4 D3;4 Eb3;4 Eb3;2 F3;2 G3;2 Ab3;2 Bb3;4 Bb3;4 Bb3;4 Bb3;6 Ab3;2 G3;4" +
-			/*Bar 9 :*/ " Ab3;4 Ab3;4 Ab3;4 Ab3;6 G3;2 Eb3;4 G3;4 Ab3;2 G3;2 Eb3;2 F3;2 G3;6 Ab3;2 Bb3;4" +
-			/*Bar 13:*/ " C4;2 Bb3;1 Ab3;1 G3;4 Eb3;4 F3;12";
+			/*Bar 9 :*/ " Ab3;4 Ab3;4 Ab3;4 Ab3;6 G3;2 F3;4 G3;4 Ab3;2 G3;2 F3;2 Eb3;2 G3;6 Ab3;2 Bb3;4" +
+			/*Bar 13:*/ " C4;2 Bb3;1 Ab3;1 G3;4 F3;4 Eb3;12";
 			#ifndef need_oct_3
 			#define need_oct_3
 			#endif
@@ -325,8 +325,6 @@ void			digi_pins::tune_worker()
 		_tunetmpstr=_tunes[_tunename].substring(_tuneindex, tmpindex);
 		ushort semi=_tunetmpstr.indexOf(";");
 			
-		//Serial.println(_tunetmpstr.substring(0, semi) + " for " + _tunetmpstr.substring(semi +1) + " index=" + _tuneindex + " adding:" + _tunetmpstr.length());
-		//Serial.println((String)tmpindex + "  " + _tunetmpstr + "   " + semi + "   " + _tunetmpstr.substring(0, semi) + "   " + _tunetmpstr.substring(semi +1));
 		if (_tunetmpstr.substring(0, semi) == "RT")
 		{
 			noTone(_tunepin);
