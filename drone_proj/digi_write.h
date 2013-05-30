@@ -26,11 +26,35 @@ class digi_pins
 		bool			read(short pin_id);
 		digi_pins	*	setio(short pin_id, bool input);
 		bool			interrupt(short pin, void (*func)(), short type);
+
+		#ifdef need_tune_support
+			void		tune_init();
+			static void	tune_worker();
+			void		playtune(String tune_name, int pin, Timer *timer);
+		#endif
 	private:
 		bool			_pinvals[NUM_PINS];
 		bool			_shift_change;
 		String			_no_changes;
 		Shifter		*	_shifts;
+
+		#ifdef need_tune_support
+			#include <pnew.cpp>
+			#include <stl_config.h>
+			#include <iostream>
+			//#include <string>
+			#include <map>
+			//#include <initializer_list> // Allows maps to be initialised using a list in curly braces   - can do if we find libc++ for avr...
+			static Timer	*	_tunetimer;
+			static unsigned char _tunepin;
+			typedef unsigned short ushort;
+			static ushort		_tuneindex;
+			static ushort		_tune_delay_ms;
+			static String		_tunename;
+			static String		_tunetmpstr;
+			static std::map<String,String> _tunes /*={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}}   - can do if we find libc++ for avr...*/;
+			static std::map<String,ushort> _notes  /*={{"A4",440}, {"C4",262}, {"D4",294}, {"E4",330}}   - can do if we find libc++ for avr...*/;
+		#endif
 };
 class digi_serial
 {

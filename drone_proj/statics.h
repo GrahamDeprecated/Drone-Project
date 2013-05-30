@@ -15,6 +15,17 @@ bool rf_yes[]={ true ,true ,true ,true };
 //#define rf_no	0x9 /*1001*/
 bool rf_no[]= { true ,false,false,true };
 
+#ifdef need_tune_support
+	Timer	*	digi_pins::_tunetimer;
+	unsigned char digi_pins::_tunepin;
+	ushort		digi_pins::_tuneindex;
+	ushort		digi_pins::_tune_delay_ms;
+	String		digi_pins::_tunename;
+	String		digi_pins::_tunetmpstr;
+	std::map<String,String> digi_pins::_tunes /*={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}}   - can do if we find libc++ for avr...*/;
+	std::map<String,ushort> digi_pins::_notes  /*={{"A4",440}, {"C4",262}, {"D4",294}, {"E4",330}}   - can do if we find libc++ for avr...*/;
+#endif
+
 digi_pins*	digi_serial::_pins;
 short		digi_serial::_tx_pin;
 short		digi_serial::_rx_pin;

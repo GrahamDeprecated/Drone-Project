@@ -10,12 +10,6 @@
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include <Arduino.h>
-#include <pnew.cpp>
-#include <stl_config.h>
-#include <iostream>
-#include <string>
-#include <map>
-#include <vector>
 #include "digi_write.h"
 #include "notedefs.h"
 
@@ -132,212 +126,24 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		return ret;
 	}
 #else
-	//#include <initializer_list> // Allows maps to be initialised using a list in curly braces   - can do if we find libc++ for avr...
-	Timer _tunetimer;
-	unsigned char _tunepin;
-	typedef unsigned short ushort;
-	ushort _tuneindex;
-	ushort _tune_delay_ms;
-	String _tunename;
-	String _tunetmpstr;
-	std::map<String,String> tunes /*={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}}   - can do if we find libc++ for avr...*/;
-	std::map<String,ushort> notes  /*={{"A4",440}, {"C4",262}, {"D4",294}, {"E4",330}}   - can do if we find libc++ for avr...*/;
-	void tune_init()
-	{
-		tunes["Dad's Army"]=(String)"250 A4;2 C4;1 D4;1 E4;2 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1 A4;1 G4;2" +
-			/*Bar 9 :*/	" A4;1 G4;1 Gb4;1 G4;1 A4;2 G4;2 C4;6 RT;2 G4;2 F4;1 E4;1" +
-			/*Bar 14:*/ " G4;2 F4;1 D4;1 F4;1 E4;1 E4;1 Eb4;1 E4;4 A4;2 G4;1 Gb4;1 G4;2 A4;1 B4;1" +
-			/*Bar 19:*/ " D5;1 C5;1 C5;1 B4;1 C5;3 Ab4;1 A4;2 C4;1 D4;1 E4;1 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1" +
-			/*Bar 24:*/ " A4;1 G4;3 E5;1 D5;1 C5;1 B4;1 Bb4;2 E4;2 F4;5 RT;3";
-			#ifndef need_oct_4
-			#define need_oct_4
-			#endif
-			#ifndef need_oct_5
-			#define need_oct_5
-			#endif
-		tunes["God Save the Queen"]=(String)"125 Eb3;4 Eb3;4 F3;4 D3;6 Eb3;2 F3;4 G3;4 G3;4 Ab3;4 G3;6 F3;2 Eb3;4" +
-			/*Bar 5 :*/ " F3;4 Eb3;4 D3;4 Eb3;4 Eb3;2 F3;2 G3;2 Ab3;2 Bb3;4 Bb3;4 Bb3;4 Bb3;6 Ab3;2 G3;4" +
-			/*Bar 9 :*/ " Ab3;4 Ab3;4 Ab3;4 Ab3;6 G3;2 Eb3;4 G3;4 Ab3;2 G3;2 Eb3;2 F3;2 G3;6 Ab3;2 Bb3;4" +
-			/*Bar 13:*/ " C4;2 Bb3;1 Ab3;1 G3;4 Eb3;4 F3;12";
-			#ifndef need_oct_3
-			#define need_oct_3
-			#endif
-			#ifndef need_oct_4
-			#define need_oct_4
-			#endif
-		// Only include required octaves
-		#ifdef need_oct_0
-		notes["C0"]=  16;
-		notes["Db0"]= 17;
-		notes["D0"]=  18;
-		notes["Eb0"]= 19;
-		notes["E0"]=  21;
-		notes["F0"]=  22;
-		notes["Gb0"]= 23;
-		notes["G0"]=  25;
-		notes["Ab0"]= 26;
-		notes["A0"]=  28;
-		notes["Bb0"]= 29;
-		notes["B0"]=  31;
-		#endif
-		#ifdef need_oct_1
-		notes["C1"]=  33;
-		notes["Db1"]= 35;
-		notes["D1"]=  38;
-		notes["Eb1"]= 39;
-		notes["E1"]=  41;
-		notes["F1"]=  44;
-		notes["Gb1"]= 46;
-		notes["G1"]=  49;
-		notes["Ab1"]= 52;
-		notes["A1"]=  55;
-		notes["Bb1"]= 58;
-		notes["B1"]=  62;
-		#endif
-		#ifdef need_oct_2
-		notes["C2"]=  65;
-		notes["Db2"]= 69;
-		notes["D2"]=  73;
-		notes["Eb2"]= 78;
-		notes["E2"]=  82;
-		notes["F2"]=  87;
-		notes["Gb2"]= 93;
-		notes["G2"]=  98;
-		notes["Ab2"]= 104;
-		notes["A2"]=  110;
-		notes["Bb2"]= 117;
-		notes["B2"]=  123;
-		#endif
-		#ifdef need_oct_3
-		notes["C3"]=  131;
-		notes["Db3"]= 139;
-		notes["D3"]=  147;
-		notes["Eb3"]= 156;
-		notes["E3"]=  165;
-		notes["F3"]=  175;
-		notes["Gb3"]= 185;
-		notes["G3"]=  196;
-		notes["Ab3"]= 208;
-		notes["A3"]=  220;
-		notes["Bb3"]= 233;
-		notes["B3"]=  247;
-		#endif
-		#ifdef need_oct_4
-		notes["C4"]=  262;
-		notes["Db4"]= 277;
-		notes["D4"]=  294;
-		notes["Eb4"]= 311;
-		notes["E4"]=  330;
-		notes["F4"]=  349;
-		notes["Gb4"]= 370;
-		notes["G4"]=  392;
-		notes["Ab4"]= 415;
-		notes["A4"]=  440;
-		notes["Bb4"]= 466;
-		notes["B4"]=  494;
-		#endif
-		#ifdef need_oct_5
-		notes["C5"]=  523;
-		notes["Db5"]= 554;
-		notes["D5"]=  587;
-		notes["Eb5"]= 622;
-		notes["E5"]=  660;
-		notes["F5"]=  698;
-		notes["Gb5"]= 740;
-		notes["G5"]=  784;
-		notes["Ab5"]= 831;
-		notes["A5"]=  880;
-		notes["Bb5"]= 932;
-		notes["B5"]=  988;
-		#endif
-		#ifdef need_oct_6
-		notes["C6"]=  1047;
-		notes["Db6"]= 1109;
-		notes["D6"]=  1175;
-		notes["Eb6"]= 1245;
-		notes["E6"]=  1319;
-		notes["F6"]=  1397;
-		notes["Gb6"]= 1480;
-		notes["G6"]=  1568;
-		notes["Ab6"]= 1661;
-		notes["A6"]=  1760;
-		notes["Bb6"]= 1865;
-		notes["B6"]=  1976;
-		#endif
-		#ifdef need_oct_7
-		notes["C7"]=  2093;
-		notes["Db7"]= 2217;
-		notes["D7"]=  2349;
-		notes["Eb7"]= 2489;
-		notes["E7"]=  2637;
-		notes["F7"]=  2794;
-		notes["Gb7"]= 2960;
-		notes["G7"]=  3136;
-		notes["Ab7"]= 3322;
-		notes["A7"]=  3520;
-		notes["Bb7"]= 3729;
-		notes["B7"]=  3951;
-		#endif
-		#ifdef need_oct_8
-		notes["C8"]=  4186;
-		notes["Db8"]= 4435;
-		notes["D8"]=  4699;
-		notes["Eb8"]= 4978;
-		#endif
-	}
-	void tune_worker()
-	{
-		if ((_tuneindex+1) < tunes[_tunename].length())
-		{
-			ushort tmpindex=tunes[_tunename].indexOf(' ', _tuneindex);
-			_tunetmpstr=tunes[_tunename].substring(_tuneindex, tmpindex);
-			ushort semi=_tunetmpstr.indexOf(";");
-			
-			Serial.println(_tunetmpstr.substring(0, semi) + " for " + _tunetmpstr.substring(semi +1));
-			if (_tunetmpstr.substring(0, semi) == "RT")
-			{
-				noTone(_tunepin);
-			}
-			else
-			{
-				tone(_tunepin, notes[_tunetmpstr.substring(0, semi)]);
-			}
-			_tunetimer.after(_tune_delay_ms * _tunetmpstr.substring(semi +1).toInt(),tune_worker);
-			_tuneindex=tmpindex+ _tunetmpstr.length() -1;
-		}
-		else
-		{
-			noTone(_tunepin);
-			_tuneindex=0;
-		}
-	}
-	void playtune(String tune_name, int pin)
-	{
-		_tunename=tune_name;
-		_tunepin=pin;
-		_tuneindex=tunes[_tunename].indexOf(' ') + 1;
-		_tune_delay_ms=tunes[_tunename].substring(0, _tuneindex -1).toInt();
-		tune_worker();
-	}
-
 	void setup()
 	{
-		tune_init();
 		pins.setio(31,false)->setio(35,false)->setio(39,false)->setio(43,false);
 		Serial.begin(9600);
 		Serial.print((char)27);
 		Serial.print("[2J");
 		Serial.println("Startup");
-		playtune("Dad's Army",4);
+		Timer atimer;
+		pins.playtune("Dad's Army",4,&atimer);
 		for (int x=0; x < (30*100); x++)
 		{
-			_tunetimer.update();
+			atimer.update();
 			delay(10);
 		}
-		playtune("God Save the Queen",4);
+		pins.playtune("God Save the Queen",4,&atimer);
 		for (int x=0; x < (30*100); x++)
 		{
-			_tunetimer.update();
+			atimer.update();
 			delay(10);
 		}
 		Serial.println("End of loop");
@@ -345,7 +151,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 
 	char nextval[10];
-	int x, wait=200;
+	int x, wait=100;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);

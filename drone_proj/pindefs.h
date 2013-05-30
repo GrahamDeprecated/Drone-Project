@@ -13,6 +13,9 @@
 #ifndef DRONE
 #define DRONE 0 /*0 for drone code, 1 for controller code*/
 #endif
+#define need_tune_support // Comment out to save space if not needed
+#define need_dads_army
+#define need_god_save_the_queen
 
 #if (DRONE == 0)
 

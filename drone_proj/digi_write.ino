@@ -74,11 +74,14 @@ void			int2bits(unsigned int start, int num_to_pass, bool *out, int offset)
 		_pinvals[x]=false; // Set all low
 	}
 	_no_changes=do_not_change+",";
-	//shifts=shift;
 	_shifts=shift;
 
 	_shifts->clear();
 	_shifts->write();
+
+	#ifdef need_tune_support
+		tune_init();
+	#endif
 }
 digi_pins	*	digi_pins::set(short pin_id, bool ishigh /*false=low*/, bool write_out)
 {
@@ -165,7 +168,190 @@ digi_pins	*	digi_pins::setio(short pin_id, bool input)
 	}
 	return this;
 }
-
+#ifdef need_tune_support
+void			digi_pins::tune_init()
+{
+	#ifdef need_dads_army
+		_tunes["Dad's Army"]=(String)"250 A4;2 C4;1 D4;1 E4;2 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1 A4;1 G4;2" +
+			/*Bar 9 :*/	" A4;1 G4;1 Gb4;1 G4;1 A4;2 G4;2 C4;6 RT;2 G4;2 F4;1 E4;1" +
+			/*Bar 14:*/ " G4;2 F4;1 D4;1 F4;1 E4;1 E4;1 Eb4;1 E4;4 A4;2 G4;1 Gb4;1 G4;2 A4;1 B4;1" +
+			/*Bar 19:*/ " D5;1 C5;1 C5;1 B4;1 C5;3 Ab4;1 A4;2 C4;1 D4;1 E4;1 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1" +
+			/*Bar 24:*/ " A4;1 G4;3 E5;1 D5;1 C5;1 B4;1 Bb4;2 E4;2 F4;5 RT;3";
+			#ifndef need_oct_4
+			#define need_oct_4
+			#endif
+			#ifndef need_oct_5
+			#define need_oct_5
+			#endif
+	#endif
+	#ifdef need_god_save_the_queen
+		_tunes["God Save the Queen"]=(String)"125 Eb3;4 Eb3;4 F3;4 D3;6 Eb3;2 F3;4 G3;4 G3;4 Ab3;4 G3;6 F3;2 Eb3;4" +
+			/*Bar 5 :*/ " F3;4 Eb3;4 D3;4 Eb3;4 Eb3;2 F3;2 G3;2 Ab3;2 Bb3;4 Bb3;4 Bb3;4 Bb3;6 Ab3;2 G3;4" +
+			/*Bar 9 :*/ " Ab3;4 Ab3;4 Ab3;4 Ab3;6 G3;2 Eb3;4 G3;4 Ab3;2 G3;2 Eb3;2 F3;2 G3;6 Ab3;2 Bb3;4" +
+			/*Bar 13:*/ " C4;2 Bb3;1 Ab3;1 G3;4 Eb3;4 F3;12";
+			#ifndef need_oct_3
+			#define need_oct_3
+			#endif
+			#ifndef need_oct_4
+			#define need_oct_4
+			#endif
+	#endif
+	// Only include required octaves
+	#ifdef need_oct_0
+	_notes["C0"]=  16;
+	_notes["Db0"]= 17;
+	_notes["D0"]=  18;
+	_notes["Eb0"]= 19;
+	_notes["E0"]=  21;
+	_notes["F0"]=  22;
+	_notes["Gb0"]= 23;
+	_notes["G0"]=  25;
+	_notes["Ab0"]= 26;
+	_notes["A0"]=  28;
+	_notes["Bb0"]= 29;
+	_notes["B0"]=  31;
+	#endif
+	#ifdef need_oct_1
+	_notes["C1"]=  33;
+	_notes["Db1"]= 35;
+	_notes["D1"]=  38;
+	_notes["Eb1"]= 39;
+	_notes["E1"]=  41;
+	_notes["F1"]=  44;
+	_notes["Gb1"]= 46;
+	_notes["G1"]=  49;
+	_notes["Ab1"]= 52;
+	_notes["A1"]=  55;
+	_notes["Bb1"]= 58;
+	_notes["B1"]=  62;
+	#endif
+	#ifdef need_oct_2
+	_notes["C2"]=  65;
+	_notes["Db2"]= 69;
+	_notes["D2"]=  73;
+	_notes["Eb2"]= 78;
+	_notes["E2"]=  82;
+	_notes["F2"]=  87;
+	_notes["Gb2"]= 93;
+	_notes["G2"]=  98;
+	_notes["Ab2"]= 104;
+	_notes["A2"]=  110;
+	_notes["Bb2"]= 117;
+	_notes["B2"]=  123;
+	#endif
+	#ifdef need_oct_3
+	_notes["C3"]=  131;
+	_notes["Db3"]= 139;
+	_notes["D3"]=  147;
+	_notes["Eb3"]= 156;
+	_notes["E3"]=  165;
+	_notes["F3"]=  175;
+	_notes["Gb3"]= 185;
+	_notes["G3"]=  196;
+	_notes["Ab3"]= 208;
+	_notes["A3"]=  220;
+	_notes["Bb3"]= 233;
+	_notes["B3"]=  247;
+	#endif
+	#ifdef need_oct_4
+	_notes["C4"]=  262;
+	_notes["Db4"]= 277;
+	_notes["D4"]=  294;
+	_notes["Eb4"]= 311;
+	_notes["E4"]=  330;
+	_notes["F4"]=  349;
+	_notes["Gb4"]= 370;
+	_notes["G4"]=  392;
+	_notes["Ab4"]= 415;
+	_notes["A4"]=  440;
+	_notes["Bb4"]= 466;
+	_notes["B4"]=  494;
+	#endif
+	#ifdef need_oct_5
+	_notes["C5"]=  523;
+	_notes["Db5"]= 554;
+	_notes["D5"]=  587;
+	_notes["Eb5"]= 622;
+	_notes["E5"]=  660;
+	_notes["F5"]=  698;
+	_notes["Gb5"]= 740;
+	_notes["G5"]=  784;
+	_notes["Ab5"]= 831;
+	_notes["A5"]=  880;
+	_notes["Bb5"]= 932;
+	_notes["B5"]=  988;
+	#endif
+	#ifdef need_oct_6
+	_notes["C6"]=  1047;
+	_notes["Db6"]= 1109;
+	_notes["D6"]=  1175;
+	_notes["Eb6"]= 1245;
+	_notes["E6"]=  1319;
+	_notes["F6"]=  1397;
+	_notes["Gb6"]= 1480;
+	_notes["G6"]=  1568;
+	_notes["Ab6"]= 1661;
+	_notes["A6"]=  1760;
+	_notes["Bb6"]= 1865;
+	_notes["B6"]=  1976;
+	#endif
+	#ifdef need_oct_7
+	_notes["C7"]=  2093;
+	_notes["Db7"]= 2217;
+	_notes["D7"]=  2349;
+	_notes["Eb7"]= 2489;
+	_notes["E7"]=  2637;
+	_notes["F7"]=  2794;
+	_notes["Gb7"]= 2960;
+	_notes["G7"]=  3136;
+	_notes["Ab7"]= 3322;
+	_notes["A7"]=  3520;
+	_notes["Bb7"]= 3729;
+	_notes["B7"]=  3951;
+	#endif
+	#ifdef need_oct_8
+	_notes["C8"]=  4186;
+	_notes["Db8"]= 4435;
+	_notes["D8"]=  4699;
+	_notes["Eb8"]= 4978;
+	#endif
+}
+void			digi_pins::tune_worker()
+{
+	if ((_tuneindex+1) < _tunes[_tunename].length())
+	{
+		ushort tmpindex=_tunes[_tunename].indexOf(' ', _tuneindex);
+		_tunetmpstr=_tunes[_tunename].substring(_tuneindex, tmpindex);
+		ushort semi=_tunetmpstr.indexOf(";");
+			
+		Serial.println(_tunetmpstr.substring(0, semi) + " for " + _tunetmpstr.substring(semi +1));
+		if (_tunetmpstr.substring(0, semi) == "RT")
+		{
+			noTone(_tunepin);
+		}
+		else
+		{
+			tone(_tunepin, _notes[_tunetmpstr.substring(0, semi)]);
+		}
+		_tunetimer->after(_tune_delay_ms * _tunetmpstr.substring(semi +1).toInt(),tune_worker);
+		_tuneindex=tmpindex+ _tunetmpstr.length() -1;
+	}
+	else
+	{
+		noTone(_tunepin);
+		_tuneindex=0;
+	}
+}
+void			digi_pins::playtune(String tune_name, int pin, Timer *timer)
+{
+	_tunename=tune_name;
+	_tunepin=pin;
+	_tunetimer=timer;
+	_tuneindex=_tunes[_tunename].indexOf(' ') + 1;
+	_tune_delay_ms=_tunes[_tunename].substring(0, _tuneindex -1).toInt();
+	tune_worker();
+}
+#endif
 
 				digi_serial::digi_serial(digi_pins* pins_class, short tx_pin, short rx_pin, short rx_inter, short tx_inter, bool activate_now)
 {
