@@ -184,6 +184,18 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			#define need_oct_5
 			#endif
 
+		tunes["God Save the Queen"]=(String)"125 Eb3;4 Eb3;4 F3;4 D3;6 Eb3;2 F3;4 G3;4 G3;4 Ab3;4 G3;6 F3;2 Eb3;4" +
+			/*Bar 5 :*/ " F3;4 Eb3;4 D3;4 Eb3;4 Eb3;2 F3;2 G3;2 Ab3;2 Bb3;4 Bb3;4 Bb3;4 Bb3;6 Ab3;2 G3;4" +
+			/*Bar 9 :*/ " Ab3;4 Ab3;4 Ab3;4 Ab3;6 G3;2 Eb3;4 G3;4 Ab3;2 G3;2 Eb3;2 F3;2 G3;6 Ab3;2 Bb3;4" +
+			/*Bar 13:*/ " C4;2 Bb3;1 Ab3;1 G3;4 Eb3;4 F3;4 F3;2 Eb3;2 G3;2 Ab3;2 Bb3;4 Bb3;4 Bb3;4 Bb3;6 Ab3;2 G3;4 Ab3;4 Ab3;4 Ab3;4" +
+			/*Bar 17:*/ " Ab3;6 G3;2 Eb3;4 G3;4 Ab3;2 G3;2 Eb3;2 F3;2 G3;6 Ab3;2 Bb3;4 C4;2 Bb3;1 Ab3;1 G3;4 Eb3;4 F3;12";
+			#ifndef need_oct_3
+			#define need_oct_3
+			#endif
+			#ifndef need_oct_4
+			#define need_oct_4
+			#endif
+
 		// Only include required octaves
 		#ifdef need_oct_0
 		notes["C0"]=  16;
@@ -306,27 +318,6 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 	void tune_worker()
 	{
-		//Serial.println("Index: " + _tuneindex + (String)"  #notes: " + tunes[_tunename].notes.size() + "  total wait time: " + (tunes[_tunename].delay_ms * tunes[_tunename].notes[_tuneindex].time));
-		/*if (_tuneindex < tunes[_tunename].notes.size())
-		{
-			_tunetmpfreq=tunes[_tunename].notes[_tuneindex].freq;
-			if (_tunetmpfreq == 0)
-			{
-				noTone(_tunepin);
-			}
-			else
-			{
-				tone(_tunepin,_tunetmpfreq);
-			}
-			_tunetimer.after(tunes[_tunename].delay_ms * tunes[_tunename].notes[_tuneindex].time,tune_worker);
-			_tuneindex++;
-		}
-		else
-		{
-			noTone(_tunepin);
-			_tuneindex=0;
-		}*/
-
 		if ((_tuneindex+1) < tunes[_tunename].length())
 		{
 			ushort tmpindex=tunes[_tunename].indexOf(' ', _tuneindex);
@@ -354,88 +345,6 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 	void playtune(String tune_name, int pin)
 	{
-		/*tunes["God Save the Queen"]=tune(125); //Semi-quavers
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_D3,6));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,6));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			// Bar 5:
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_D3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,6));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
-			// Bar 9:
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,6));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,6));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,4));
-			// Bar 13:
-			tunes["God Save the Queen"].notes.push_back(note(note_C4,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,1));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,1));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,6));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,4));
-			// Bar 17:
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,6));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,6));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_C4,2));
-			tunes["God Save the Queen"].notes.push_back(note(note_Bb3,1));
-			tunes["God Save the Queen"].notes.push_back(note(note_Ab3,1));
-			tunes["God Save the Queen"].notes.push_back(note(note_G3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_Eb3,4));
-			tunes["God Save the Queen"].notes.push_back(note(note_F3,12));*/
-
 		_tunename=tune_name;
 		_tunepin=pin;
 		_tuneindex=tunes[_tunename].indexOf(' ') + 1;
@@ -457,12 +366,12 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			_tunetimer.update();
 			delay(10);
 		}
-		/*playtune("God Save the Queen",4);
+		playtune("God Save the Queen",4);
 		for (int x=0; x < (30*100); x++)
 		{
 			_tunetimer.update();
 			delay(10);
-		}*/
+		}
 		Serial.println("End of loop");
 		noTone(4);
 	}
