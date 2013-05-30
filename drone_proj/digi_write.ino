@@ -169,6 +169,7 @@ digi_pins	*	digi_pins::setio(short pin_id, bool input)
 	return this;
 }
 #ifdef need_tune_support
+#include <pnew.cpp>
 void			digi_pins::tune_init()
 {
 	#ifdef need_dads_army

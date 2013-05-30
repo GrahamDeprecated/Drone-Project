@@ -17,7 +17,6 @@
 #include "pindefs.h"
 
 #ifdef need_tune_support
-	#include <pnew.cpp>
 	#include <stl_config.h>
 	#include <iostream>
 	//#include <string>
