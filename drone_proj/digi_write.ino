@@ -173,11 +173,23 @@ digi_pins	*	digi_pins::setio(short pin_id, bool input)
 void			digi_pins::tune_init()
 {
 	#ifdef need_dads_army
-		_tunes["Dad's Army"]=(String)"250 A4;2 C4;1 D4;1 E4;2 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1 A4;1 G4;2" +
-			/*Bar 9 :*/	" A4;1 G4;1 Gb4;1 G4;1 A4;2 G4;2 C4;6 RT;2 G4;2 F4;1 E4;1" +
-			/*Bar 14:*/ " G4;2 F4;1 D4;1 F4;1 E4;1 E4;1 Eb4;1 E4;4 A4;2 G4;1 Gb4;1 G4;2 A4;1 B4;1" +
-			/*Bar 19:*/ " D5;1 C5;1 C5;1 B4;1 C5;3 Ab4;1 A4;2 C4;1 D4;1 E4;2 E4;1 F4;1 A4;1 G4;1 A4;1 G4;1" +
-			/*Bar 24:*/ " A4;1 G4;3 E5;1 D5;1 C5;1 B4;1 Bb4;2 E4;2 F4;5 RT;3";
+		_tunes["Dad's Army"]=(String)"250 A5;2 C5;1 D5;1 E5;2 E5;1 F5;1 A5;1 G5;1 A5;1 G5;1 A5;1 G5;2" +
+			/*Bar 9 :*/	" A5;1 G5;1 Gb5;1 G5;1 A5;2 G5;2 C5;6 RT;2 G5;2 F5;1 E5;1" +
+			/*Bar 14:*/ " G5;2 F5;1 D5;1 F5;1 E5;1 E5;1 Eb5;1 E5;4 A5;2 G5;1 Gb5;1 G5;2 A5;1 B5;1" +
+			/*Bar 19:*/ " D6;1 C6;1 C6;1 B5;1 C6;3 Ab5;1 A5;2 C5;1 D5;1 E5;2 E5;1 F5;1 A5;1 G5;1 A5;1 G5;1" +
+			/*Bar 24:*/ " A5;1 G5;3 E6;1 D6;1 C6;1 B5;1 Bb5;2 E5;2 F5;5 RT;3";
+			#ifndef need_oct_5
+			#define need_oct_5
+			#endif
+			#ifndef need_oct_6
+			#define need_oct_6
+			#endif
+	#endif
+	#ifdef need_god_save_the_queen
+		_tunes["God Save the Queen"]=(String)"125 Eb4;4 Eb4;4 F4;4 D4;6 Eb4;2 F4;4 G4;4 G4;4 Ab4;4 G4;6 F4;2 Eb4;4" +
+			/*Bar 5 :*/ " F4;4 Eb4;4 D4;4 Eb4;4 Eb4;2 F4;2 G4;2 Ab4;2 Bb4;4 Bb4;4 Bb4;4 Bb4;6 Ab4;2 G4;4" +
+			/*Bar 9 :*/ " Ab4;4 Ab4;4 Ab4;4 Ab4;6 G4;2 F4;4 G4;4 Ab4;2 G4;2 F4;2 Eb4;2 G4;6 Ab4;2 Bb4;4" +
+			/*Bar 13:*/ " C5;2 Bb4;1 Ab4;1 G4;4 F4;4 Eb4;12";
 			#ifndef need_oct_4
 			#define need_oct_4
 			#endif
@@ -185,23 +197,11 @@ void			digi_pins::tune_init()
 			#define need_oct_5
 			#endif
 	#endif
-	#ifdef need_god_save_the_queen
-		_tunes["God Save the Queen"]=(String)"125 Eb3;4 Eb3;4 F3;4 D3;6 Eb3;2 F3;4 G3;4 G3;4 Ab3;4 G3;6 F3;2 Eb3;4" +
-			/*Bar 5 :*/ " F3;4 Eb3;4 D3;4 Eb3;4 Eb3;2 F3;2 G3;2 Ab3;2 Bb3;4 Bb3;4 Bb3;4 Bb3;6 Ab3;2 G3;4" +
-			/*Bar 9 :*/ " Ab3;4 Ab3;4 Ab3;4 Ab3;6 G3;2 F3;4 G3;4 Ab3;2 G3;2 F3;2 Eb3;2 G3;6 Ab3;2 Bb3;4" +
-			/*Bar 13:*/ " C4;2 Bb3;1 Ab3;1 G3;4 F3;4 Eb3;12";
-			#ifndef need_oct_3
-			#define need_oct_3
-			#endif
-			#ifndef need_oct_4
-			#define need_oct_4
-			#endif
-	#endif
 	#ifdef need_dambusters
-		_tunes["Dambusters"]=(String)"250 D5;4 G5;2 D5;2 D5;2 C5;1 B4;1 C5;2 D5;2 B4;4 D5;2 B4;2 B4;2 A4;1 G4;1 E4;2 A4;2" +
-			/*Bar 5 :*/ " G4;3 A4;1 B4;2 E5;2 D5;3 B4;1 D5;4 A4;2 D5;2 E5;1 Gb5;1 G5;2 Gb5;4" +
+		_tunes["Dambusters"]=(String)"250 D5;4 G5;2 D5;2 D5;2 C5;1 B4;1 C5;2 D5;2 B4;4 D5;2 B4;2 B4;2 A4;1 G4;1 F4;2 A4;2" +
+			/*Bar 5 :*/ " G4;3 A4;1 B4;2 E5;2 D5;3 B4;1 D5;4 A4;2 D5;2 E5;1 Gb5;1 G5;2 Gb5;8" +
 			/*Bar 9 :*/ " D5;4 G5;2 D5;2 D5;2 C5;1 B4;1 C5;2 D5;2 B4;4 E5;2 B4;2 B4;2 A4;1 G4;1 Gb4;2 A4;2" +
-			/*Bar 13:*/ " G4;2 G4;2 A4;2 B4;2 C5;2 G5;2 Gb5;2 E5;2 B4;4 A4;4 G4;4";
+			/*Bar 13:*/ " G4;2 G4;2 A4;2 B4;2 C5;2 G5;2 Gb5;2 E5;2 B4;4 A4;4 G4;8";
 			#ifndef need_oct_5
 			#define need_oct_5
 			#endif
