@@ -129,6 +129,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		Serial.print("Startup. Enter delay time: ");
 		//int y,n=Serial.readBytesUntil('\n',delayms,5);
 		//for (y=0; (delayms[y]-48) >= 0 && (delayms[y]-48) < 10; y++) {};
+		Serial.setTimeout(4294967295); // Max possible
 		wait=(/*(String)delayms*/  Serial.readStringUntil('\n')).toInt();
 		Serial.println(wait);
 
