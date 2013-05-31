@@ -117,13 +117,21 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		return ret;
 	}
 #else
+	int wait;
 	void setup()
 	{
 		pins.setio(31,false)->setio(35,false)->setio(39,false)->setio(43,false);
 		Serial.begin(9600);
 		Serial.print((char)27);
 		Serial.print("[2J");
-		Serial.println("Startup");
+
+		char delayms[5];
+		Serial.print("Startup. Enter delay time:");
+		int y,n=Serial.readBytesUntil('\n',delayms,5);
+		//for (y=0; (delayms[y]-48) >= 0 && (delayms[y]-48) < 10; y++) {};
+		wait=((String)delayms).toInt();
+		Serial.println(wait);
+
 		Timer atimer;
 		pins.playtune("Dad's Army",4,&atimer);
 		for (int x=0; x < (30*100); x++)
@@ -148,7 +156,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 
 	char nextval[10];
-	int x, wait=230;
+	int x;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
