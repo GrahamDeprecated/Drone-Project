@@ -138,6 +138,12 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 			atimer.update();
 			delay(10);
 		}
+		pins.playtune("Dambusters",4,&atimer);
+		for (int x=0; x < (30*100); x++)
+		{
+			atimer.update();
+			delay(10);
+		}
 		Serial.println("End of loop");
 		noTone(4);
 	}

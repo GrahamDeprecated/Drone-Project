@@ -197,6 +197,27 @@ void			digi_pins::tune_init()
 			#define need_oct_4
 			#endif
 	#endif
+	#ifdef need_dambusters
+		_tunes["Dambusters"]=(String)"250 D5;4 G5;2 D5;2 D5;2 C5;1 B4;1 C5;2 D5;2 B4;4 D5;2 B4;2 B4;2 A4;1 G4;1 E4;2 A4;2" +
+			/*Bar 5 :*/ " G4;3 A4;1 B4;2 E5;2 D5;3 B4;1 D5;4 A4;2 D5;2 E5;1 Gb5;1 G5;2 Gb5;4" +
+			/*Bar 9 :*/ " D5;4 G5;2 D5;2 D5;2 C5;1 B4;1 C5;2 D5;2 B4;4 E5;2 B4;2 B4;2 A4;1 G4;1 Gb4;2 A4;2" +
+			/*Bar 13:*/ " G4;2 G4;2 A4;2 B4;2 C5;2 G5;2 Gb5;2 E5;2 B4;4 A4;4 G4;4";
+			#ifndef need_oct_5
+			#define need_oct_5
+			#endif
+			#ifndef need_oct_4
+			#define need_oct_4
+			#endif
+	#endif
+	/* An example:
+	#ifdef need_tune_name
+		_tunes["Tune name"]=(String)"gap_between line;1" +
+			/*Bar xy:*//* " line;2";
+			#ifndef need_oct_n
+			#define need_oct_n
+			#endif
+	#endif
+	*/
 	// Only include required octaves
 	#ifdef need_oct_0
 	_notes["C0"]=  16;
