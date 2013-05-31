@@ -149,30 +149,34 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 
 	char nextval[10];
-	int x, wait=200;
+	int x, wait=250;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);
 		if (x >= 8)
 		{
+			Serial.println(millis());
 			pins.set(43,(nextval[0] == 49));
 			pins.set(39,(nextval[1] == 49));
 			pins.set(35,(nextval[2] == 49));
 			pins.set(31,(nextval[3] == 49));
 			Serial.println("Written data part 1: "+(String)(nextval[0]-48)+(String)(nextval[1]-48)+(String)(nextval[2]-48)+(String)(nextval[3]-48));
 			delay(wait);
+			Serial.println(millis());
 			pins.set(43,false);
 			pins.set(39,false);
 			pins.set(35,false);
 			pins.set(31,false);
 
 			delay(wait);
+			Serial.println(millis());
 			pins.set(43,(nextval[4] == 49));
 			pins.set(39,(nextval[5] == 49));
 			pins.set(35,(nextval[6] == 49));
 			pins.set(31,(nextval[7] == 49));
 			Serial.println("Written data part 2: "+(String)(nextval[4]-48)+(String)(nextval[5]-48)+(String)(nextval[6]-48)+(String)(nextval[7]-48));
 			delay(wait);
+			Serial.println(millis());
 			pins.set(43,false);
 			pins.set(39,false);
 			pins.set(35,false);

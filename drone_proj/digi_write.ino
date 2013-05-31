@@ -198,7 +198,7 @@ void			digi_pins::tune_init()
 			#endif
 	#endif
 	#ifdef need_dambusters
-		_tunes["Dambusters"]=(String)"250 D5;4 G5;2 D5;2 D5;2 C5;1 B4;1 C5;2 D5;2 B4;4 D5;2 B4;2 B4;2 A4;1 G4;1 F4;2 A4;2" +
+		_tunes["Dambusters"]=(String)"250 D5;4 G5;2 D5;2 D5;2 C5;1 B4;1 C5;2 D5;2 B4;4 D5;2 B4;2 B4;2 A4;1 G4;1 Gb4;2 A4;2" +
 			/*Bar 5 :*/ " G4;3 A4;1 B4;2 E5;2 D5;3 B4;1 D5;4 A4;2 D5;2 E5;1 Gb5;1 G5;2 Gb5;8" +
 			/*Bar 9 :*/ " D5;4 G5;2 D5;2 D5;2 C5;1 B4;1 C5;2 D5;2 B4;4 E5;2 B4;2 B4;2 A4;1 G4;1 Gb4;2 A4;2" +
 			/*Bar 13:*/ " G4;2 G4;2 A4;2 B4;2 C5;2 G5;2 Gb5;2 E5;2 B4;4 A4;4 G4;8";
