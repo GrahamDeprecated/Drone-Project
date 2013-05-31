@@ -53,6 +53,7 @@ class digi_pins
 			static ushort		_tune_delay_ms;
 			static String		_tunename;
 			static String		_tunetmpstr;
+			static bool			_play_tone;
 			static std::map<String,String> _tunes /*={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}}   - can do if we find libc++ for avr...*/;
 			static std::map<String,ushort> _notes  /*={{"A4",440}, {"C4",262}, {"D4",294}, {"E4",330}}   - can do if we find libc++ for avr...*/;
 		#endif

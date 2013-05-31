@@ -11,7 +11,6 @@
 */
 #include <Arduino.h>
 #include "digi_write.h"
-#include "notedefs.h"
 
 Shifter shifts2(SHIFT_SERIAL, SHIFT_LATCH, SHIFT_CLOCK, 1 /*Number of shift registers in chain*/);
 digi_pins pins(&shifts2,"0,1");
@@ -149,7 +148,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 	}
 
 	char nextval[10];
-	int x, wait=250;
+	int x, wait=230;
 	void loop()
 	{
 		x=Serial.readBytesUntil('\n',nextval,10);

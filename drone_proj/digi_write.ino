@@ -219,6 +219,14 @@ void			digi_pins::tune_init()
 	#endif
 	*/
 	// Only include required octaves
+	// These frequency definitions come from www.phy.mtu.edu/~suits/notefreqs.html
+	/* Middle C = C4:	--------
+						--------
+						--------
+						--------
+						--------
+						  -C4-
+						*/
 	#ifdef need_oct_0
 	_notes["C0"]=  16;
 	_notes["Db0"]= 17;
@@ -340,41 +348,51 @@ void			digi_pins::tune_init()
 }
 void			digi_pins::tune_worker()
 {
-	if ((_tuneindex+1) < _tunes[_tunename].length())
+	if (_play_tone)
 	{
-		ushort tmpindex=_tunes[_tunename].indexOf(' ', _tuneindex);
-		_tunetmpstr=_tunes[_tunename].substring(_tuneindex, tmpindex);
-		ushort semi=_tunetmpstr.indexOf(";");
+		if ((_tuneindex+1) < _tunes[_tunename].length())
+		{
+			ushort tmpindex=_tunes[_tunename].indexOf(' ', _tuneindex);
+			_tunetmpstr=_tunes[_tunename].substring(_tuneindex, tmpindex);
+			ushort semi=_tunetmpstr.indexOf(";");
 			
-		if (_tunetmpstr.substring(0, semi) == "RT")
+			if (_tunetmpstr.substring(0, semi) == "RT")
+			{
+				noTone(_tunepin);
+			}
+			else
+			{
+				tone(_tunepin, _notes[_tunetmpstr.substring(0, semi)]);
+			}
+			if (tmpindex >= _tunes[_tunename].length())
+			{
+				_tuneindex=_tunes[_tunename].length();
+			}
+			else
+			{
+				_tuneindex=tmpindex + 1;
+			}
+			_tunetimer->after((_tune_delay_ms * _tunetmpstr.substring(semi +1).toInt()) - 10,tune_worker);
+		}
+		else
 		{
 			noTone(_tunepin);
-		}
-		else
-		{
-			tone(_tunepin, _notes[_tunetmpstr.substring(0, semi)]);
-		}
-		_tunetimer->after(_tune_delay_ms * _tunetmpstr.substring(semi +1).toInt(),tune_worker);
-		if (tmpindex >= _tunes[_tunename].length())
-		{
-			_tuneindex=_tunes[_tunename].length();
-		}
-		else
-		{
-			_tuneindex=tmpindex + 1;
+			_tuneindex=0;
 		}
 	}
 	else
 	{
 		noTone(_tunepin);
-		_tuneindex=0;
+		_tunetimer->after(10,tune_worker);
 	}
+	_play_tone=!_play_tone;
 }
 void			digi_pins::playtune(String tune_name, int pin, Timer *timer)
 {
 	_tunename=tune_name;
 	_tunepin=pin;
 	_tunetimer=timer;
+	_play_tone=true;
 	_tuneindex=_tunes[_tunename].indexOf(' ') + 1;
 	_tune_delay_ms=_tunes[_tunename].substring(0, _tuneindex -1).toInt();
 	tune_worker();

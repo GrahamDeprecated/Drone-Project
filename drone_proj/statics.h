@@ -22,6 +22,7 @@ bool rf_no[]= { true ,false,false,true };
 	ushort		digi_pins::_tune_delay_ms;
 	String		digi_pins::_tunename;
 	String		digi_pins::_tunetmpstr;
+	bool		digi_pins::_play_tone;
 	std::map<String,String> digi_pins::_tunes /*={{"Dad's Army", "250 A4;2 C4;1 D4;1 E4;2 E4;1"}}   - can do if we find libc++ for avr...*/;
 	std::map<String,ushort> digi_pins::_notes  /*={{"A4",440}, {"C4",262}, {"D4",294}, {"E4",330}}   - can do if we find libc++ for avr...*/;
 #endif
