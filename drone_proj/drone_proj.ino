@@ -45,8 +45,9 @@ digi_pins pins(&shifts2,"0,1");
 		//if (tmp.length() == 8)
 		for (short y=0; y < 8; y++)
 			{
-				Serial.print(48+data[y]);
+				Serial.print(data[y]);
 			}
+		Serial.println("   pos: " + data_pos);
 		if (data_pos == 7)
 		{
 			Serial.println("  Done receiving");
