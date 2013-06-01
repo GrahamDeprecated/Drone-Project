@@ -55,12 +55,19 @@ digi_pins pins(&shifts2,"0,1");
 
 		//lcd.write_row("Primed",false) -> write_row("Turn on Drone",true);
 		//delay(2000);
-		pins.setio(6,true)->setio(5,true)->setio(4,true)->setio(3,true)->setio(2,true)->setio(11,true)->setio(10,true)->setio(9,true)->setio(8,true)->interrupt(2,newdata,RISING);
-		pins.setio(13,false);
 		Serial.begin(9600);
 		Serial.print((char)27);
 		Serial.print("[2J");
 		Serial.println("Startup");
+		if (pins.setio(6,true)->setio(5,true)->setio(4,true)->setio(3,true)->setio(2,true)->setio(11,true)->setio(10,true)->setio(9,true)->setio(8,true)->interrupt(2,newdata,RISING))
+		{
+			Serial.println("Successfully attached interrupt");
+		}
+		else
+		{
+			Serial.println("Could not attach interrupt");
+		}
+		pins.setio(13,false);
 	}
 	/*void rf_is_up()
 	{
@@ -168,12 +175,12 @@ digi_pins pins(&shifts2,"0,1");
 			pins.set(35,(nextval[2] == 49));
 			pins.set(31,(nextval[3] == 49));
 			Serial.println("Written data part 1: "+(String)(nextval[0]-48)+(String)(nextval[1]-48)+(String)(nextval[2]-48)+(String)(nextval[3]-48));
-			delay(wait);
+			/*delay(wait);
 			Serial.println(millis());
 			pins.set(43,false);
 			pins.set(39,false);
 			pins.set(35,false);
-			pins.set(31,false);
+			pins.set(31,false);*/
 
 			delay(wait);
 			Serial.println(millis());
@@ -182,12 +189,12 @@ digi_pins pins(&shifts2,"0,1");
 			pins.set(35,(nextval[6] == 49));
 			pins.set(31,(nextval[7] == 49));
 			Serial.println("Written data part 2: "+(String)(nextval[4]-48)+(String)(nextval[5]-48)+(String)(nextval[6]-48)+(String)(nextval[7]-48));
-			delay(wait);
+			/*delay(wait);
 			Serial.println(millis());
 			pins.set(43,false);
 			pins.set(39,false);
 			pins.set(35,false);
-			pins.set(31,false);
+			pins.set(31,false);*/
 		}
 	}
 #endif
