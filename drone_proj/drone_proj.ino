@@ -25,18 +25,32 @@ digi_pins pins(&shifts2,"0,1");
 	// Default is left (false)
 	//bool joystick_t_f(digi_lcd *screen, digi_pins *pins, String top_message, String options);
 	void newdata();
-	String tmp="";
+	//String tmp="";
+	bool data[8];
+	char data_pos=0;
 	void newdata()
 	{
-		tmp+=(char)(48+pins.read(6));
-		tmp+=(char)(48+pins.read(5));
-		tmp+=(char)(48+pins.read(4));
-		tmp+=(char)(48+pins.read(3));
-		Serial.println(millis() + " newdata() executed");
-		if (tmp.length() == 8)
+		for (short n=0; n < 4; n++)
 		{
-			Serial.println(tmp + " Done receiving");
-			tmp="";
+			data[data_pos + n]=pins.read(6-n);
+		}
+		data_pos=data_pos+4;
+
+		//tmp+=(char)(48+pins.read(6));
+		//tmp+=(char)(48+pins.read(5));
+		//tmp+=(char)(48+pins.read(4));
+		//tmp+=(char)(48+pins.read(3));
+		//Serial.println(millis() + " newdata() executed");
+		tone(11,440,20);
+		//if (tmp.length() == 8)
+		if (data_pos == 7)
+		{
+			for (short y=0; y < 8; y++)
+			{
+				Serial.print(48+data[y]);
+			}
+			Serial.println("  Done receiving");
+			//tmp="";
 		}
 	}
 
@@ -59,7 +73,7 @@ digi_pins pins(&shifts2,"0,1");
 		Serial.print((char)27);
 		Serial.print("[2J");
 		Serial.println("Startup");
-		if (pins.setio(6,true)->setio(5,true)->setio(4,true)->setio(3,true)->setio(2,true)->setio(11,true)->setio(10,true)->setio(9,true)->setio(8,true)->interrupt(2,newdata,RISING))
+		if (pins.setio(6,true)->setio(5,true)->setio(4,true)->setio(3,true)->setio(2,true)->interrupt(2,newdata,RISING))
 		{
 			Serial.println("Successfully attached interrupt");
 		}
@@ -67,7 +81,8 @@ digi_pins pins(&shifts2,"0,1");
 		{
 			Serial.println("Could not attach interrupt");
 		}
-		pins.setio(13,false);
+		pins.setio(13,false)->setio(11,false);
+		tone(11,440,20);
 	}
 	/*void rf_is_up()
 	{
@@ -93,7 +108,7 @@ digi_pins pins(&shifts2,"0,1");
 		lcd.write_row((String)num + "V " + mil + "s",false); delay(10);
 
 		batt._timer.update();*/
-		delayMicroseconds(250);
+		//delayMicroseconds(250);
 	}
 
 	/*bool joystick_t_f(digi_lcd *screen, digi_pins *pins, String top_message, String options)
