@@ -111,6 +111,8 @@ digi_pins pins(&shifts2,"0,1");
 
 		batt._timer.update();*/
 		//delayMicroseconds(250);
+		tone(11,440,20);
+		delay(1000);
 	}
 
 	/*bool joystick_t_f(digi_lcd *screen, digi_pins *pins, String top_message, String options)
