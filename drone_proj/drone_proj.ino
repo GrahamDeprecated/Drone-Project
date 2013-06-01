@@ -14,16 +14,16 @@
 
 Shifter shifts2(SHIFT_SERIAL, SHIFT_LATCH, SHIFT_CLOCK, 1 /*Number of shift registers in chain*/);
 digi_pins pins(&shifts2,"0,1");
-digi_rf rf(&pins, RF_IN_BIT_1, RF_IN_BIT_2, RF_IN_BIT_3, RF_IN_BIT_4, RF_IN_INTER, RF_OUT_BIT_1, RF_OUT_BIT_2, RF_OUT_BIT_3, RF_OUT_BIT_4);
-digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
+//digi_rf rf(&pins, RF_IN_BIT_1, RF_IN_BIT_2, RF_IN_BIT_3, RF_IN_BIT_4, RF_IN_INTER, RF_OUT_BIT_1, RF_OUT_BIT_2, RF_OUT_BIT_3, RF_OUT_BIT_4);
+//digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 
 #if (DRONE == 1)
-	digi_batt batt(&pins,BATT_ALERT);
-	digi_lcd lcd(&pins,&batt,LCD_REG_SELECT,LCD_ENABLE,LCD_D4,LCD_D5,LCD_D6,LCD_D7);
-	void rf_is_up();
-	void launch();
+	//digi_batt batt(&pins,BATT_ALERT);
+	//digi_lcd lcd(&pins,&batt,LCD_REG_SELECT,LCD_ENABLE,LCD_D4,LCD_D5,LCD_D6,LCD_D7);
+	//void rf_is_up();
+	//void launch();
 	// Default is left (false)
-	bool joystick_t_f(digi_lcd *screen, digi_pins *pins, String top_message, String options);
+	//bool joystick_t_f(digi_lcd *screen, digi_pins *pins, String top_message, String options);
 	void newdata();
 	String tmp="";
 	void newdata()
@@ -32,6 +32,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		tmp+=(char)(48+pins.read(5));
 		tmp+=(char)(48+pins.read(4));
 		tmp+=(char)(48+pins.read(3));
+		Serial.println(millis() + " newdata() executed");
 		if (tmp.length() == 8)
 		{
 			Serial.println(tmp + " Done receiving");
@@ -61,7 +62,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		Serial.print("[2J");
 		Serial.println("Startup");
 	}
-	void rf_is_up()
+	/*void rf_is_up()
 	{
 		com.activate();
 		lcd.write_row("Connected",false) -> write_row("Press to launch",true);
@@ -74,7 +75,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		String haslaunched;
 		com.read(&haslaunched,8);
 		lcd.write_row("Restrictions Enabled",false) -> write_row("Manual Control",true);
-	}
+	}*/
 
 	void loop()
 	{
@@ -85,9 +86,10 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		lcd.write_row((String)num + "V " + mil + "s",false); delay(10);
 
 		batt._timer.update();*/
+		delayMicroseconds(250);
 	}
 
-	bool joystick_t_f(digi_lcd *screen, digi_pins *pins, String top_message, String options)
+	/*bool joystick_t_f(digi_lcd *screen, digi_pins *pins, String top_message, String options)
 	{
 		screen->switch_data() ->write_row(top_message,false) ->write_row(options,true) ->setCursor(true,1) ->cursor() ->blink();
 		pinMode(JOYSTICK_1_CLICK,INPUT);
@@ -96,12 +98,12 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		while (1)
 		{
 			an=analogRead(JOYSTICK_1_H);
-			if (an >= 816 /* 4V / 0.0049 */)
+			if (an >= 816 /* 4V / 0.0049 *//*)
 			{
 				screen->setCursor(13,true);
 				ret=true;
 			}
-			else if (an <= 204 /* 1V / 0.0049 */)
+			else if (an <= 204 /* 1V / 0.0049 *//*)
 			{
 				screen->setCursor(1,true);
 				ret=false;
@@ -115,7 +117,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		}
 		screen->switch_data() ->noCursor() ->noBlink();
 		return ret;
-	}
+	}*/
 #else
 	int wait;
 	void setup()
@@ -125,15 +127,12 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		Serial.print((char)27);
 		Serial.print("[2J");
 
-		//char delayms[5];
 		Serial.print("Startup. Enter delay time: ");
-		//int y,n=Serial.readBytesUntil('\n',delayms,5);
-		//for (y=0; (delayms[y]-48) >= 0 && (delayms[y]-48) < 10; y++) {};
 		Serial.setTimeout(4294967295); // Max possible
-		wait=(/*(String)delayms*/  Serial.readStringUntil('\n')).toInt();
+		wait=(Serial.readStringUntil('\n')).toInt();
 		Serial.println(wait);
 
-		Timer atimer;
+		/*Timer atimer;
 		pins.playtune("Dad's Army",4,&atimer);
 		for (int x=0; x < (30*100); x++)
 		{
@@ -151,7 +150,7 @@ digi_serial com(&pins, RF_OUT_BIT_1, RF_IN_BIT_1, RF_IN_INTER);
 		{
 			atimer.update();
 			delay(10);
-		}
+		}*/
 		Serial.println("End of loop");
 		noTone(4);
 	}

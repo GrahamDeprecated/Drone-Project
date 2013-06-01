@@ -11,7 +11,7 @@
 */
 
 #ifndef DRONE
-#define DRONE 0 /*0 for drone code, 1 for controller code*/
+#define DRONE 1 /*0 for drone code, 1 for controller code*/
 #endif
 
 #if (DRONE == 0)
@@ -57,7 +57,7 @@
 
 	#define RAND_SEED_PIN 15 /*analog*/
 
-	#define ARD_INTERRUPTS "2,3,18,19,20,21" //end in ","
+	#define ARD_INTERRUPTS "2,3,18,19,20,21," //end in ","
 
 	#define SHIFT_SERIAL 50
 	#define SHIFT_CLOCK  51
