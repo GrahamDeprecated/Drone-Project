@@ -43,12 +43,12 @@ digi_pins pins(&shifts2,"0,1");
 		//Serial.println(millis() + " newdata() executed");
 		tone(11,440,20);
 		//if (tmp.length() == 8)
-		/*for (short y=0; y < 8; y++)
+		for (short y=0; y < 4; y++)
 			{
-				Serial.print(data[y]);
+				Serial.print(/*data[y]*/pins.read(6-y));
 			}
 		Serial.println("   pos: " + (short)data_pos);
-		if (data_pos == 7)
+		/*if (data_pos == 7)
 		{
 			Serial.println("  Done receiving");
 			data_pos=0;
