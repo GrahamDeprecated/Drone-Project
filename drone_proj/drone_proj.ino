@@ -48,7 +48,7 @@ digi_pins pins(&shifts2,"0,1");
 				Serial.print(/*data[y]*//*pins.read(6-y));
 			}
 		Serial.println("   pos: " + data_pos);*/
-		if (data_pos == 7)
+		if (data_pos == 8)
 		{
 			for (short y=0; y < 8; y++)
 			{
