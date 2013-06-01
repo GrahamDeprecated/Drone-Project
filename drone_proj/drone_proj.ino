@@ -191,12 +191,12 @@ digi_pins pins(&shifts2,"0,1");
 			pins.set(35,(nextval[2] == 49));
 			pins.set(31,(nextval[3] == 49));
 			Serial.println("Written data part 1: "+(String)(nextval[0]-48)+(String)(nextval[1]-48)+(String)(nextval[2]-48)+(String)(nextval[3]-48));
-			/*delay(wait);
+			delay(wait);
 			Serial.println(millis());
 			pins.set(43,false);
 			pins.set(39,false);
 			pins.set(35,false);
-			pins.set(31,false);*/
+			pins.set(31,false);
 
 			delay(wait);
 			Serial.println(millis());
@@ -205,12 +205,12 @@ digi_pins pins(&shifts2,"0,1");
 			pins.set(35,(nextval[6] == 49));
 			pins.set(31,(nextval[7] == 49));
 			Serial.println("Written data part 2: "+(String)(nextval[4]-48)+(String)(nextval[5]-48)+(String)(nextval[6]-48)+(String)(nextval[7]-48));
-			/*delay(wait);
+			delay(wait);
 			Serial.println(millis());
 			pins.set(43,false);
 			pins.set(39,false);
 			pins.set(35,false);
-			pins.set(31,false);*/
+			pins.set(31,false);
 		}
 	}
 #endif
