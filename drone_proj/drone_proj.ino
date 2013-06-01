@@ -30,11 +30,11 @@ digi_pins pins(&shifts2,"0,1");
 	char data_pos=0;
 	void newdata()
 	{
-		for (short n=0; n < 4; n++)
+		/*for (short n=0; n < 4; n++)
 		{
 			data[data_pos + n]=pins.read(6-n);
 		}
-		data_pos=data_pos+4;
+		data_pos=data_pos+4;*/
 
 		//tmp+=(char)(48+pins.read(6));
 		//tmp+=(char)(48+pins.read(5));
@@ -43,7 +43,7 @@ digi_pins pins(&shifts2,"0,1");
 		//Serial.println(millis() + " newdata() executed");
 		tone(11,440,20);
 		//if (tmp.length() == 8)
-		for (short y=0; y < 8; y++)
+		/*for (short y=0; y < 8; y++)
 			{
 				Serial.print(data[y]);
 			}
@@ -53,7 +53,7 @@ digi_pins pins(&shifts2,"0,1");
 			Serial.println("  Done receiving");
 			data_pos=0;
 			//tmp="";
-		}
+		}*/
 	}
 
 	void setup()
