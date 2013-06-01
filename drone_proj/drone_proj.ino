@@ -47,7 +47,7 @@ digi_pins pins(&shifts2,"0,1");
 			{
 				Serial.print(data[y]);
 			}
-		Serial.println("   pos: " + data_pos);
+		Serial.println("   pos: " + (short)data_pos);
 		if (data_pos == 7)
 		{
 			Serial.println("  Done receiving");
