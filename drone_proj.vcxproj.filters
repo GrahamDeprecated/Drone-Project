@@ -15,10 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="drone_proj\notedefs.h">
+    <ClInclude Include="Visual Micro\.drone_proj.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Visual Micro\.drone_proj.vsarduino.h">
+    <ClInclude Include="drone_proj\LCD_defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="drone_proj\digi_write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="drone_proj\pindefs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="drone_proj\statics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

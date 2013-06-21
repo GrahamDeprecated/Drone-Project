@@ -41,7 +41,7 @@ digi_pins pins(&shifts2,"0,1");
 		//tmp+=(char)(48+pins.read(4));
 		//tmp+=(char)(48+pins.read(3));
 		//Serial.println(millis() + " newdata() executed");
-		tone(11,440,20);
+		tone(11,880,20);
 		//if (tmp.length() == 8)
 		/*for (short y=0; y < 4; y++)
 			{
